@@ -102,6 +102,7 @@ body {
 /* Bild im Carousel mittig darstellen */
 .carousel-inner img {
     margin: auto;
+    /*padding: 30px;*/
 }
 
 /* Pfeile der Carousels schwarz */
@@ -121,17 +122,36 @@ body {
 }
 
 /* Darstellen der Bilder im Carousel, auf verschiedenen Geräten */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
+    .carousel-inner > .carousel-item > a > img {
+        height: 9.5rem;
+        width: auto;
+    }
+
+    .section {
+        margin-bottom: 3rem;
+    }
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
     .carousel-inner > .carousel-item > a > img {
         height: 12.5rem;
         width: auto;
     }
+
+    .section {
+        margin-bottom: 4rem;
+    }
 }
 
-@media (max-width: 992px) {
+@media (min-width: 992px) and (max-width: 1199px) {
     .carousel-inner > .carousel-item > a > img {
-        height: 15.65rem;
+        height: 14.65rem;
         width: auto;
+    }
+
+    .section {
+        margin-bottom: 5rem;
     }
 }
 

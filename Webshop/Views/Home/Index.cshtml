@@ -2,146 +2,181 @@
     ViewData["Title"] = "Home Page";
 }
 
-
-    <div class="jumbotron mt-5">
-        <h3 style="color: white;" class="text-center">
-            Wir haben alles was du brauchst, was wir nicht haben brauchst du nicht!
-        </h3>
-        <a href="#">
-            <p style="color: red;" class="text-center">
-                Zu unseren Top Produkten
-            </p>
-        </a>
-    </div>
-
-    
     <section class="section">
-        <h4 class="mt-5 mb-5">Eine Auswahl unserer Lieblingshandys</h4>
-        <div id="smartphoneCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/smartphones/samsung-glxy-z-flip.jpg" class="d-block" alt="Samsung Galaxy Flip">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Samsung Galaxy Flip</h5>
-                            @*<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>*@
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/smartphones/huawei-p30-lite.jpg" class="d-block" alt="Huawei P30 Lite">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Huawei P30 Lite</h5>
-                            @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>*@
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/smartphones/iphone-13.jpg" class="d-block" alt="Apple iphone 13">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Apple iPhone 13</h5>
-                            @*<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>*@
-                        </div>
-                    </a>
-                </div>
-            </div>
-            <a class="carousel-control-prev" href="#smartphoneCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#smartphoneCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
+        <div class="jumbotron mt-5">
+            <h3 style="color: white;" class="text-center">
+                Wir haben alles was du brauchst, was wir nicht haben brauchst du nicht!
+            </h3>
+            <a href="#">
+                <p style="color: red;" class="text-center">
+                    Zu unseren Top Produkten
+                </p>
             </a>
         </div>
     </section>
 
-    <section class="section">
-        <h4 class="mb-5">Eine Auswahl unserer Lieblingstablets</h4>
 
-        <div id="tabletCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/tablets/huawei-matepad-pro.jpg" class="d-block" alt="Huawei MatePad Pro">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Huawei MatePad Pro</h5>
-                            @*<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>*@
-                        </div>
+    <section class="section">
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-5">
+                <h4 class="mb-5">Smartphones</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </p>
+            </div>
+
+            <div id="smartphoneCarousel" class="carousel slide col-sm-12 col-md-8 col-lg-7 d-flex align-items-center" data-ride="carousel">
+                <div class="carousel-inner mt-3 mb-3">
+                    <div class="carousel-item active">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/smartphones/samsung-glxy-z-flip.jpg" class="d-block" alt="Samsung Galaxy Flip">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Samsung Galaxy Flip</h5>
+                                @*<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/smartphones/huawei-p30-lite.jpg" class="d-block" alt="Huawei P30 Lite">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Huawei P30 Lite</h5>
+                                @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/smartphones/iphone-13.jpg" class="d-block" alt="Apple iphone 13">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Apple iPhone 13</h5>
+                                @*<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <a class="carousel-control-prev" href="#smartphoneCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
                     </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/tablets/ipad-pro-5.jpg" class="d-block" alt="Apple iPad Pro 5">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Apple iPad Pro 5</h5>
-                            @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>*@
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/tablets/samsung-glxy-tab-s7-fe.jpg" class="d-block" alt="Samsung Galaxy Tab FE">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Samsung Galaxy Tab FE</h5>
-                            @*<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>*@
-                        </div>
+                    <a class="carousel-control-next" href="#smartphoneCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
                     </a>
                 </div>
             </div>
-            <a class="carousel-control-prev" href="#tabletCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#tabletCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
         </div>
     </section>
 
     <section class="section">
-        <h4 class="mb-5">Eine Auswahl unserer Lieblingsnotebooks</h4>
-
-        <div id="notebookCarousel" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/notebooks/acer-aspire-5-a515-44.jpg" class="d-block" alt="Acer Aspire 5">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Acer Aspire 5</h5>
-                            @*<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>*@
-                        </div>
+        <div class="row">
+            <div id="tabletCarousel" class="carousel slide  col-sm-12 col-md-8 col-lg-7 d-flex align-items-center" data-ride="carousel">
+                <div class="carousel-inner mt-3 mb-3">
+                    <div class="carousel-item active">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/tablets/huawei-matepad-pro.jpg" class="d-block" alt="Huawei MatePad Pro">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Huawei MatePad Pro</h5>
+                                @*<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/tablets/ipad-pro-5.jpg" class="d-block" alt="Apple iPad Pro 5">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Apple iPad Pro 5</h5>
+                                @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/tablets/samsung-glxy-tab-s7-fe.jpg" class="d-block" alt="Samsung Galaxy Tab FE">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Samsung Galaxy Tab FE</h5>
+                                @*<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <a class="carousel-control-prev" href="#tabletCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
                     </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/notebooks/lenovo-tp-x1-yoga-g2.jpg" class="d-block" alt="Lenovo TP X1 Yoga G2">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Lenovo TP X1 Yoga G2</h5>
-                            @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>*@
-                        </div>
-                    </a>
-                </div>
-                <div class="carousel-item">
-                    <a href="../Controllers/HomeController/Login">
-                        <img src="~/src/images/notebooks/apple-macbook-pro-2019.jpg" class="d-block" alt="Apple MacBook Pro 2019">
-                        <div class="carousel-caption d-none d-md-block text-left" style="color: black">
-                            <h5>Apple MacBook Pro 2019</h5>
-                            @*<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>*@
-                        </div>
+                    <a class="carousel-control-next" href="#tabletCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
                     </a>
                 </div>
             </div>
-            <a class="carousel-control-prev" href="#notebookCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#notebookCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
+
+            <div class="col-sm-12 col-md-4 col-lg-5">
+                <h4 class="mb-5">Tablets</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <div class="row">
+            <div class="col-sm-12 col-md-4 col-lg-5">
+                <h4 class="mb-5">Notebooks</h4>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
+                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore
+                    eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia
+                    deserunt mollit anim id est laborum.
+                </p>
+            </div>
+
+            <div id="notebookCarousel" class="carousel slide col-sm-12 col-md-8 col-lg-7 d-flex align-items-center" data-ride="carousel">
+                <div class="carousel-inner mt-3 mb-3">
+                    <div class="carousel-item active">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/notebooks/acer-aspire-5-a515-44.jpg" class="d-block" alt="Acer Aspire 5">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Acer Aspire 5</h5>
+                                @*<p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/notebooks/lenovo-tp-x1-yoga-g2.jpg" class="d-block" alt="Lenovo TP X1 Yoga G2">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Lenovo TP X1 Yoga G2</h5>
+                                @*<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="../Controllers/HomeController/Login">
+                            <img src="~/src/images/notebooks/apple-macbook-pro-2019.jpg" class="d-block" alt="Apple MacBook Pro 2019">
+                            <div class="carousel-caption d-none d-md-block text-left" style="color: black">
+                                <h5>Apple MacBook Pro 2019</h5>
+                                @*<p>Praesent commodo cursus magna, vel scelerisque nisl consectetur.</p>*@
+                            </div>
+                        </a>
+                    </div>
+                    <a class="carousel-control-prev" href="#notebookCarousel" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#notebookCarousel" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+            </div>
         </div>
     </section>
