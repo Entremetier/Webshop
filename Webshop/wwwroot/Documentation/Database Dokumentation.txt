@@ -1,0 +1,7 @@
+Update-database -> in PM-Console eingeben
+
+Alternativ zu Update-database
+
+Scaffold-DbContext "Server=PCDC53A0F88E97;Database=lapWebshop; Persist Security Info=True; User ID=SA;Password=Admin2019$;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+
+-> das wird aber alle Anpassungen in den Models überschreiben
