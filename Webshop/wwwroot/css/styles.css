@@ -46,6 +46,14 @@
     filter: invert(100%);
 }*/
 
+.btn-outline-primary{
+    border-color: black;
+}
+
+.btn-outline-primary:hover {
+    border-color: red;
+}
+
 /* Darstellen der Bilder im Carousel, auf verschiedenen Geräten */
 @media (max-width: 767px) {
     .carousel-inner > .carousel-item > a > img {
