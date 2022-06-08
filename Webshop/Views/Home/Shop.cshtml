@@ -33,23 +33,22 @@
     <tbody>
         @foreach (var item in Model)
         {
-            <tr>
-                <td>
-                    <a href="#">
-                        <img src="~/src/images/notebooks/default.jpg" style="height: 250px; width:auto" />
-                        @*@Html.DisplayFor(modelItem => item.ImagePath)*@
-                    </a>
+            <tr style="height:25rem">
+                <td class="align-middle text-center">
+                        <a href="#">
+                            <img src="@item.ImagePath" asp-append-version="true" alt="Test" style="height: 250px; width:auto" />
+                        </a>
                 </td>
-                <td class="pt-5">
-                    <b style="font-size: 2rem">
-                        @Html.DisplayFor(modelItem => item.Manufacturer.Name)
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                </b> <br>
-                @Html.DisplayFor(modelItem => item.NetUnitPrice) €<br>
-                @*@Html.DisplayFor(modelItem => item.Category.Name)*@
-                <form method="post" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
-                    <input type="submit" value="Mehr anzeigen" class=" btn btn-info mt-5">
-                </form>
+                <td class="pt-5 align-middle">
+                        <b style="font-size: 1.5rem">
+                            @Html.DisplayFor(modelItem => item.Manufacturer.Name)
+                            @Html.DisplayFor(modelItem => item.ProductName)
+                        </b> <br>
+                        @Html.DisplayFor(modelItem => item.NetUnitPrice) €<br>
+                        @*@Html.DisplayFor(modelItem => item.Category.Name)*@
+                        <form method="post" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                            <input type="submit" value="Mehr anzeigen" class=" btn btn-info mt-5">
+                        </form>
             </td>
             @*            <td>
                     <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

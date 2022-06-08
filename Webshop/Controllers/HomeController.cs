@@ -40,8 +40,22 @@ namespace Webshop.Controllers
             }
 
             ViewBag.ProductsCount = products.Count();
+            //ViewBag.Path = 
 
             return View(products);
+        }
+
+        public IActionResult Details(int id)
+        {
+            Product product = ctx.Products.Include(m => m.Manufacturer).SingleOrDefault(p => p.Id == id);
+
+            // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
+            // bestehen würden
+            List<Category> categoryAndTaxRate = ctx.Categories.ToList();
+
+            product.NetUnitPrice = CalcPrice(product, categoryAndTaxRate);
+
+            return View(product);
         }
 
         private decimal CalcPrice(Product product, List<Category> categoryAndTaxRate)
