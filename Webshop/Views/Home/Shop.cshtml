@@ -6,53 +6,11 @@
 
 <h4 class="mb-5 mt-5">Ergebnis: @ViewBag.ProductsCount Produkte</h4>
 
-@*<p>
-        <a asp-action="Create">Create New</a>
-    </p>*@
-@*<table class="table">
-            <thead>
-                <tr>
-                    <th>
-                        @Html.DisplayNameFor(model => model.ProductName)
-                    </th>
-                    <th>
-                        @Html.DisplayNameFor(model => model.NetUnitPrice)
-                    </th>
-                    <th>
-                        Image
-                    </th>
-                    <th scope="col">
-                        @Html.DisplayNameFor(model => model.Category)
-                    </th>
-                    <th scope="col">
-                        @Html.DisplayNameFor(model => model.Manufacturer)
-                    </th>
-                    <th scope="col"></th>
-                </tr>
-            </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr style="height:25rem">
-                    <td class="align-middle text-center">
-                        <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
-                            <img src="@item.ImagePath" asp-append-version="true" alt="Test" id="productListImage" />
-                        </a>
-                    </td>
-                    <td class="align-middle">
-                        <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration" id="productListStyle">
-                            <b style="font-size: 1.5rem">
-                                @Html.DisplayFor(modelItem => item.Manufacturer.Name)
-                                @Html.DisplayFor(modelItem => item.ProductName)
-                            </b> <br>
-                            <p style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice) €</p><br>
-                            <span>Mehr anzeigen...</span>
-                        </a>
-                    </td>
-                </tr>
-                }
-            </tbody>
-    </table>*@
+<div class="row">
+    <div>
+        <select name="products" class="form-control" asp-items="@ViewBag.filters"></select>
+    </div>
+</div>
 
 @foreach (var item in Model)
 {
@@ -65,7 +23,7 @@
                 </a>
             </div>
             <div class="offset-md-2 offset-lg-1 col-md-5 col-lg-6 d-flex align-items-center">
-                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration d-block" id="productListStyle">
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration d-block">
                     <b style="font-size: 1.5rem">
                         @Html.DisplayFor(modelItem => item.Manufacturer.Name)
                         @Html.DisplayFor(modelItem => item.ProductName)

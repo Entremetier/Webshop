@@ -4,8 +4,18 @@
 
 /* Allgemein
 -------------------------------------------------- */
+body {
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    color: #000;
+}
+
+a{
+    color: #000 !important;
+}
+
 .noTextDecoration:hover {
     text-decoration: none;
+    color: #A9A9A9 !important;
 }
 
 .section {
@@ -19,9 +29,6 @@
     background-image: url(../src/images/jumbotron/abstract-1920.jpg);
     background-size: cover;
     height: 25rem;
-    /*display: flex;
-    align-items: center;
-    justify-content: center;*/
 }
 
 /* Bild im Carousel mittig darstellen */
@@ -51,10 +58,6 @@
     filter: invert(100%);
 }*/
 
-#productListStyle {
-    font-family: 'Kdam Thmor Pro', sans-serif;
-    color: #000;
-}
 
 #productListImage {
     height: 13rem;
@@ -63,6 +66,10 @@
 
 .productListTd{
     width: 200px;
+}
+
+#productDetailsImage{
+    height: 20rem;
 }
 
 /* Darstellungen auf verschiedenen Geräten */
@@ -84,6 +91,10 @@
         height: 9.5rem;
         width: auto;
     }
+
+    #productDetailsImage {
+        height: 12rem;
+    }
 }
 
 @media (min-width: 768px) and (max-width: 991px) {
@@ -101,8 +112,12 @@
     }
 
     #productListImage {
-        height: 10.5rem;
+        height: 14rem;
         width: auto;
+    }
+
+    #productDetailsImage {
+        height: 10.5rem;
     }
 }
 

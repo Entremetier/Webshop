@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
@@ -39,8 +40,16 @@ namespace Webshop.Controllers
                 product.NetUnitPrice = CalcPrice(product, categoryAndTaxRate);
             }
 
+            List<SelectListItem> filters = new()
+            {
+                new SelectListItem { Value = "1", Text = "Hersteller" },
+                new SelectListItem { Value = "2", Text = "Kategorie" },
+                new SelectListItem { Value = "3", Text = "Produktname" }
+            };
+
+            ViewBag.filters = filters;
             ViewBag.ProductsCount = products.Count();
-            //ViewBag.Path = 
+            
 
             return View(products);
         }
@@ -54,6 +63,8 @@ namespace Webshop.Controllers
             List<Category> categoryAndTaxRate = ctx.Categories.ToList();
 
             product.NetUnitPrice = CalcPrice(product, categoryAndTaxRate);
+
+            ViewBag.ImagePath = product.ImagePath;
 
             return View(product);
         }
