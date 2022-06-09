@@ -4,7 +4,6 @@
 
 /* Allgemein
 -------------------------------------------------- */
-
 .noTextDecoration:hover {
     text-decoration: none;
 }
@@ -30,6 +29,12 @@
     margin: auto;
 }
 
+/* Standardgröße Image im Carousel*/
+.carousel-inner > .carousel-item > a > img {
+    height: 18.75rem;
+    width: auto;
+}
+
 /* Pfeile der Carousels schwarz */
 /*.carousel-control-prev-icon {
     width: 40px;
@@ -46,15 +51,21 @@
     filter: invert(100%);
 }*/
 
-.btn-outline-primary{
-    border-color: black;
+#productListStyle {
+    font-family: 'Kdam Thmor Pro', sans-serif;
+    color: #000;
 }
 
-.btn-outline-primary:hover {
-    border-color: red;
+#productListImage {
+    height: 13rem;
+    width: auto;
 }
 
-/* Darstellen der Bilder im Carousel, auf verschiedenen Geräten */
+.productListTd{
+    width: 200px;
+}
+
+/* Darstellungen auf verschiedenen Geräten */
 @media (max-width: 767px) {
     .carousel-inner > .carousel-item > a > img {
         height: 9.5rem;
@@ -67,6 +78,11 @@
 
     .bigScreen {
         display: none;
+    }
+
+    #productListImage {
+        height: 9.5rem;
+        width: auto;
     }
 }
 
@@ -82,6 +98,11 @@
 
     .smallScreen {
         display: none;
+    }
+
+    #productListImage {
+        height: 10.5rem;
+        width: auto;
     }
 }
 
@@ -101,11 +122,6 @@
 }
 
 @media (min-width: 1200px) {
-    .carousel-inner > .carousel-item > a > img {
-        height: 18.75rem;
-        width: auto;
-    }
-
     .smallScreen {
         display: none;
     }

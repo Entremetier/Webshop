@@ -1,61 +1,83 @@
 ﻿@model IEnumerable<Webshop.Models.Product>
 
 @{
-    ViewData["Title"] = "Shop";
+    ViewData["Title"] = "Tron";
 }
 
-<h2 class="mb-5">Ergebnis: @ViewBag.ProductsCount Produkte</h2>
+<h4 class="mb-5 mt-5">Ergebnis: @ViewBag.ProductsCount Produkte</h4>
 
 @*<p>
         <a asp-action="Create">Create New</a>
     </p>*@
-<table class="table">
-    @*    <thead>
-            <tr>
-                <th>
-                    @Html.DisplayNameFor(model => model.ProductName)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.NetUnitPrice)
-                </th>
-                <th>
-                    Image
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Category)
-                </th>
-                <th>
-                    @Html.DisplayNameFor(model => model.Manufacturer)
-                </th>
-                <th></th>
-            </tr>
-        </thead>*@
-    <tbody>
-        @foreach (var item in Model)
-        {
-            <tr style="height:25rem">
-                <td class="align-middle text-center">
-                        <a href="#">
-                            <img src="@item.ImagePath" asp-append-version="true" alt="Test" style="height: 250px; width:auto" />
+@*<table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProductName)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.NetUnitPrice)
+                    </th>
+                    <th>
+                        Image
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Category)
+                    </th>
+                    <th scope="col">
+                        @Html.DisplayNameFor(model => model.Manufacturer)
+                    </th>
+                    <th scope="col"></th>
+                </tr>
+            </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr style="height:25rem">
+                    <td class="align-middle text-center">
+                        <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                            <img src="@item.ImagePath" asp-append-version="true" alt="Test" id="productListImage" />
                         </a>
-                </td>
-                <td class="align-middle">
+                    </td>
+                    <td class="align-middle">
+                        <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration" id="productListStyle">
+                            <b style="font-size: 1.5rem">
+                                @Html.DisplayFor(modelItem => item.Manufacturer.Name)
+                                @Html.DisplayFor(modelItem => item.ProductName)
+                            </b> <br>
+                            <p style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice) €</p><br>
+                            <span>Mehr anzeigen...</span>
+                        </a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+    </table>*@
+
+@foreach (var item in Model)
+{
+    <hr/>
+    <div class="container">
+        <div class="row" style="height:20rem">
+            <div class="col-md-5 d-flex justify-content-center align-items-center mb-3">
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
+                    <img src="@item.ImagePath" asp-append-version="true" alt="Test" id="productListImage" />
+                </a>
+            </div>
+            <div class="offset-md-2 offset-lg-1 col-md-5 col-lg-6 d-flex align-items-center">
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration d-block" id="productListStyle">
                     <b style="font-size: 1.5rem">
-                    @Html.DisplayFor(modelItem => item.Manufacturer.Name)
-                    @Html.DisplayFor(modelItem => item.ProductName)
-                    </b> <br>
-                    <span style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice) €</span><br>
-                    @*@Html.DisplayFor(modelItem => item.Category.Name)*@
-                    <form method="post" asp-controller="Home" asp-action="Details" asp-route-id="@item.Id">
-                        <input type="submit" value="Mehr anzeigen" class="btn btn-outline-primary mt-5">
-                    </form>
-            </td>
-            @*            <td>
-                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-                </td>*@
-        </tr>
-    }
-    </tbody>
-</table>
+                        @Html.DisplayFor(modelItem => item.Manufacturer.Name)
+                        @Html.DisplayFor(modelItem => item.ProductName)
+                    </b> 
+                    <br/>
+                    <span style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice)&nbsp;€</span>
+                </a>
+                <br />
+                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration" id="productListStyle">
+                    <span>Mehr anzeigen...</span>
+                </a>
+            </div>
+        </div>
+    </div>
+}

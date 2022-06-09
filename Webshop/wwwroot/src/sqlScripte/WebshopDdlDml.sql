@@ -1,4 +1,4 @@
- drop database lapWebshop;
+-- drop database lapWebshop;
 
 create database lapWebshop;
 
