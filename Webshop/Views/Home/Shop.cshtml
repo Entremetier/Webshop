@@ -71,10 +71,8 @@
                         @Html.DisplayFor(modelItem => item.ProductName)
                     </b> 
                     <br/>
-                    <span style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice)&nbsp;€</span>
-                </a>
-                <br />
-                <a asp-controller="Home" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration" id="productListStyle">
+                    <p style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice)&nbsp;€</p>
+                    <br />
                     <span>Mehr anzeigen...</span>
                 </a>
             </div>
