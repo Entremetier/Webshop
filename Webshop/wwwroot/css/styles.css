@@ -58,18 +58,20 @@ a{
     filter: invert(100%);
 }*/
 
-
+/* ShopView */
 #productListImage {
     height: 13rem;
     width: auto;
 }
 
-.productListTd{
-    width: 200px;
-}
-
+/* DetailsView */
 #productDetailsImage{
     height: 20rem;
+}
+
+body > div > main > div:nth-child(1) > div > form > span > select {
+    border-color: #6265e4 !important;
+    box-shadow: 0 0 5px rgba(98, 101, 228, 1) !important;
 }
 
 /* Darstellungen auf verschiedenen Geräten */

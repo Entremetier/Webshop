@@ -47,7 +47,7 @@ namespace Webshop.Controllers
                 new SelectListItem { Value = "3", Text = "Produktname" }
             };
 
-            ViewBag.filters = filters;
+            ViewBag.Filters = filters;
             ViewBag.ProductsCount = products.Count();
             
 
@@ -56,14 +56,25 @@ namespace Webshop.Controllers
 
         public IActionResult Details(int id)
         {
+            // Menge die ein Kunde maximal in den Warenkorb legen kann
+            int amount = 10;
+
             Product product = ctx.Products.Include(m => m.Manufacturer).SingleOrDefault(p => p.Id == id);
 
-            // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
+            // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre, da zwei offene DB Verbindungen
             // bestehen würden
             List<Category> categoryAndTaxRate = ctx.Categories.ToList();
 
             product.NetUnitPrice = CalcPrice(product, categoryAndTaxRate);
 
+            List<SelectListItem> itemAmount = new List<SelectListItem>();
+
+            for (int i = 1; i <= amount; i++)
+            {
+                itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+            }
+
+            ViewBag.ItemAmount = itemAmount;
             ViewBag.ImagePath = product.ImagePath;
 
             return View(product);
