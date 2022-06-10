@@ -10,9 +10,9 @@
 </h1>
 <span style="font-size: 1.2rem">Preis:&nbsp;@Html.DisplayFor(model => model.NetUnitPrice)&nbsp;€</span>
 
-<div class="col-5 offset-7 row input-group">
+<div class="row justify-content-end mr-2 mt-3">
         <span class="pt-2 mr-3">Menge:</span>
-        <select asp-items="@ViewBag.ItemAmount" name="itemAmount" class="form-control d-inline" style="width: 1rem"></select>
+        <select asp-items="@ViewBag.ItemAmount" name="itemAmount" class="form-control d-inline btn btn-outline-dark" style="width: 4rem"></select>
         <form action="../Controllers/Home/Warenkorb" method="post" class="ml-3">
             <input type="button" name="addToCartButton" value="In den Warenkorb legen" class="btn btn-outline-dark" />
         </form>

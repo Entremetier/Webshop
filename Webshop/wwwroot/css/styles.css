@@ -79,10 +79,16 @@ a {
     height: 20rem;
 }
 
-body > div > main > div:nth-child(1) > div > form > span > select {
+/* TODO: Farbe in den DropDowns ändern wenn man drüber hovert*/
+/*.form-control:active{
+    background-color: #A9A9A9 !important;
+
+}*/
+
+/*body > div > main > div:nth-child(1) > div > form > span > select {
     border-color: #6265e4 !important;
     box-shadow: 0 0 5px rgba(98, 101, 228, 1) !important;
-}
+}*/
 
 /* Darstellungen auf verschiedenen Geräten */
 @media (max-width: 767px) {
