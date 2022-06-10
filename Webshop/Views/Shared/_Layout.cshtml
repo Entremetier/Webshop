@@ -16,7 +16,10 @@
     <header>
         <nav class="navbar fixed-top navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Tron-Webshop</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <img src="~/icons8-tron-64.png" width="30" height="30" alt="Tron Logo">
+                    &nbsp;Tron-Webshop
+                </a>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
@@ -27,7 +30,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Startseite</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Product" asp-action="Shop">Shop</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Shop">Shop</a>
                         </li>
                     </ul>
                     <ul class="navbar-nav ml-auto">
@@ -35,7 +38,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Login">Login</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Register">Registrieren</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Create">Registrieren</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="ShoppingCart">Warenkorb</a>

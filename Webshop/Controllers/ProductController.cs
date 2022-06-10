@@ -19,33 +19,6 @@ namespace Webshop.Controllers
             _context = context;
         }
 
-        public IActionResult Shop()
-        {
-            var products = _context.Products.Include(p => p.Category).Include(m => m.Manufacturer);
-
-            // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
-            // bestehen würden
-            List<Category> categoryAndTaxRate = _context.Categories.ToList();
-
-            foreach (var product in products)
-            {
-                product.NetUnitPrice = CalculateProductPrice.CalcPrice(product, categoryAndTaxRate);
-            }
-
-            List<SelectListItem> filters = new()
-            {
-                new SelectListItem { Value = "1", Text = "Hersteller" },
-                new SelectListItem { Value = "2", Text = "Kategorie" },
-                new SelectListItem { Value = "3", Text = "Produktname" }
-            };
-
-            ViewBag.Filters = filters;
-            ViewBag.ProductsCount = products.Count();
-
-
-            return View(products);
-        }
-
         // GET: Products/Details/5
         //public async Task<IActionResult> Details(int? id)
         //{
@@ -66,6 +39,7 @@ namespace Webshop.Controllers
         //    return View(product);
         //}
 
+        // Get Product Details
         public IActionResult Details(int? id)
         {
             if (id == null)
@@ -76,7 +50,9 @@ namespace Webshop.Controllers
             // Menge die ein Kunde maximal in den Warenkorb legen kann
             int amount = 10;
 
-            Product product = _context.Products.Include(m => m.Manufacturer).SingleOrDefault(p => p.Id == id);
+            Product product = _context.Products.
+                Include(m => m.Manufacturer).
+                FirstOrDefault(p => p.Id == id);
 
             if (product == null)
             {
@@ -102,7 +78,7 @@ namespace Webshop.Controllers
             return View(product);
         }
 
-        // GET: Products/Create
+        // GET: Product/Create
         //public IActionResult Create()
         //{
         //    ViewData["CategoryId"] = new SelectList(_context.Categories, "Id", "Name");
@@ -110,7 +86,7 @@ namespace Webshop.Controllers
         //    return View();
         //}
 
-        //// POST: Products/Create
+        //// POST: Product/Create
         //// To protect from overposting attacks, enable the specific properties you want to bind to.
         //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
@@ -128,7 +104,7 @@ namespace Webshop.Controllers
         //    return View(product);
         //}
 
-        //// GET: Products/Edit/5
+        //// GET: Product/Edit/5
         //public async Task<IActionResult> Edit(int? id)
         //{
         //    if (id == null)
@@ -146,7 +122,7 @@ namespace Webshop.Controllers
         //    return View(product);
         //}
 
-        //// POST: Products/Edit/5
+        //// POST: Product/Edit/5
         //// To protect from overposting attacks, enable the specific properties you want to bind to.
         //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         //[HttpPost]
@@ -183,7 +159,7 @@ namespace Webshop.Controllers
         //    return View(product);
         //}
 
-        //// GET: Products/Delete/5
+        //// GET: Product/Delete/5
         //public async Task<IActionResult> Delete(int? id)
         //{
         //    if (id == null)
@@ -203,7 +179,7 @@ namespace Webshop.Controllers
         //    return View(product);
         //}
 
-        //// POST: Products/Delete/5
+        //// POST: Product/Delete/5
         //[HttpPost, ActionName("Delete")]
         //[ValidateAntiForgeryToken]
         //public async Task<IActionResult> DeleteConfirmed(int id)

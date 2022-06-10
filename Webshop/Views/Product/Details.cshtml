@@ -22,7 +22,7 @@
 
 <div class="row" style="height:20rem">
     <div class="col-12 d-inline-flex justify-content-center align-items-center">
-        <img src="@ViewBag.ImagePath" asp-append-version="true" alt="Test" id="productDetailsImage" />
+        <img src="@ViewBag.ImagePath" asp-append-version="true" alt="@Html.DisplayFor(model => model.Manufacturer.Name) @Html.DisplayFor(model => model.ProductName)" id="productDetailsImage" />
     </div>
 </div>
 <div class="container">
@@ -33,7 +33,7 @@
     </div>
     <div class="row">
         @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
-        <a asp-action="Shop" class="noTextDecoration">Zurück zur Übersicht</a>
+        <a asp-controller="Home" asp-action="Shop" class="noTextDecoration">Zurück zur Übersicht</a>
     </div>
 </div>
 

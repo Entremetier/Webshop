@@ -8,12 +8,12 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
+using Webshop.Services;
 
 namespace Webshop.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
         private readonly lapWebshopContext _context;
 
         public HomeController(lapWebshopContext context)
@@ -21,14 +21,36 @@ namespace Webshop.Controllers
             _context = context;
         }
 
-        //public HomeController(ILogger<HomeController> logger)
-        //{
-        //    _logger = logger;
-        //}
-
         public IActionResult Index()
         {
             return View();
+        }
+
+        public IActionResult Shop()
+        {
+            var products = _context.Products.Include(p => p.Category).Include(m => m.Manufacturer);
+
+            // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
+            // bestehen würden
+            List<Category> categoryAndTaxRate = _context.Categories.ToList();
+
+            foreach (var product in products)
+            {
+                product.NetUnitPrice = CalculateProductPrice.CalcPrice(product, categoryAndTaxRate);
+            }
+
+            List<SelectListItem> filters = new()
+            {
+                new SelectListItem { Value = "1", Text = "Hersteller" },
+                new SelectListItem { Value = "2", Text = "Kategorie" },
+                new SelectListItem { Value = "3", Text = "Produktname" }
+            };
+
+            ViewBag.Filters = filters;
+            ViewBag.ProductsCount = products.Count();
+
+
+            return View(products);
         }
 
         public IActionResult Impressum()
