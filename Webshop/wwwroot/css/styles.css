@@ -6,11 +6,11 @@
 -------------------------------------------------- */
 body {
     font-family: 'Kdam Thmor Pro', sans-serif;
-    color: #000;
+    color: #343a40;
 }
 
-a{
-    color: #000 !important;
+a {
+    color: #343a40 !important;
 }
 
 .noTextDecoration:hover {
@@ -20,6 +20,16 @@ a{
 
 .section {
     margin-bottom: 10rem;
+}
+
+/* Navbar */
+
+.navbar-nav .nav-item > .nav-link {
+    color: #343a40 !important;
+}
+
+.navbar-nav .nav-item > .nav-link:hover {
+    color: #A9A9A9 !important;
 }
 
 /* Index
