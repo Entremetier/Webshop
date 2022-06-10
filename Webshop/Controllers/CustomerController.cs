@@ -53,7 +53,7 @@ namespace Webshop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,FirstName,LastName,Email,Street,Zip,City,PwHash,Salt")] Customer customer)
+        public async Task<IActionResult> Create([Bind("Id, Title, FirstName, LastName, Email, Street, Zip, City, Password")] Customer customer)
         {
             if (ModelState.IsValid)
             {
