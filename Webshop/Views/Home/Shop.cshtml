@@ -21,6 +21,8 @@
                     <img src="@item.ImagePath" asp-append-version="true" alt="@item.Manufacturer.Name @item.ProductName" id="productListImage" />
                 </a>
             </div>
+            @* Durch d-flex (display flex) werden die direkten kindelemente darin zu flex items und können mit weiteren flex eigenschaften weiter bearbeitet werden. Flex-column gibt an das
+                sie als Spalte untereinander dargestellt werden sollen. *@
             <div class="offset-md-2 offset-lg-1 d-flex flex-column justify-content-center">
                 <div>
                     <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration ">
