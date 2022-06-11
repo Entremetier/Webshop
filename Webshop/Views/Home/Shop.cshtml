@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="row">
-        <h4 class="mb-5 mt-5">Ergebnis: @ViewBag.ProductsCount Produkte</h4>
+        <h4 class="mb-5">Ergebnis: @ViewBag.ProductsCount Produkte</h4>
         <select name="products" class="form-control btn btn-outline-dark" asp-items="@ViewBag.Filters"></select>
     </div>
 </div>
@@ -15,23 +15,31 @@
 {
     <hr />
     <div class="container">
-        <div class="row" style="height:20rem">
+        <div class="row" style="height:23rem">
             <div class="col-md-5 d-flex justify-content-center align-items-center mb-3">
                 <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id">
                     <img src="@item.ImagePath" asp-append-version="true" alt="@item.Manufacturer.Name @item.ProductName" id="productListImage" />
                 </a>
             </div>
-            <div class="offset-md-2 offset-lg-1 col-md-5 col-lg-6 d-flex align-items-center">
-                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration d-block">
-                    <b style="font-size: 1.5rem">
-                        @Html.DisplayFor(modelItem => item.Manufacturer.Name)
-                        @Html.DisplayFor(modelItem => item.ProductName)
-                    </b>
-                    <br />
+            <div class="offset-md-2 offset-lg-1 d-flex flex-column justify-content-center">
+                <div>
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration ">
+                        <b style="font-size: 1.5rem">
+                            @Html.DisplayFor(modelItem => item.Manufacturer.Name)
+                            @Html.DisplayFor(modelItem => item.ProductName)
+                        </b>
+                        <br />
+                    </a>
+                </div>
+                <div>
                     <p style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice)&nbsp;€</p>
-                    <br />
-                    <span>Mehr anzeigen...</span>
-                </a>
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration">
+                        <p>Mehr anzeigen...</p>
+                    </a>
+                    <form action="../Controllers/Home/Warenkorb" method="post">
+                        <input type="button" name="addToCartButton" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
+                    </form>
+                </div>
             </div>
         </div>
     </div>
