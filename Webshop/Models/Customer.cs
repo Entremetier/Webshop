@@ -25,8 +25,8 @@ namespace Webshop.Models
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "E-Mail angeben")]
-        [EmailAddress]
-        //[RegularExpression("(?:[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*|\"(?:[\\x01 -\\x08\\x0b\\x0c\\x0e -\\x1f\\x21\\x23 -\\x5b\\x5d -\\x7f] |\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])*\")@(?:(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?|\\[(?:(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\\.){3}(?:25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?|[a-z0-9-]*[a-z0-9]:(?:[\\x01-\\x08\\x0b\\x0c\\x0e-\\x1f\\x21-\\x5a\\x53-\\x7f]|\\[\\x01-\\x09\\x0b\\x0c\\x0e-\\x7f])+)\\])")]
+        // Nur minimale Validierung der E-Mail, besser wäre es eine Mail an die Adresse zu schicken wo der User einen bestätigungslink drücken muss.
+        [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Straße und Hausnummer angeben")]
@@ -38,6 +38,13 @@ namespace Webshop.Models
 
         [Required(ErrorMessage = "Stadt angeben")]
         public string City { get; set; }
+
+        [Required(ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
+        [MinLength(8)]
+        public string Password { get; set; }
+
+        //[Required(ErrorMessage = "Passwort muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben haben")]
+        //public string ConfirmPassword { get; set; }
 
         public string PwHash { get; set; }
 
