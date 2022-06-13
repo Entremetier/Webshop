@@ -50,9 +50,9 @@ namespace Webshop.Controllers
             // Menge die ein Kunde maximal in den Warenkorb legen kann
             int amount = 10;
 
-            Product product = _context.Products.
-                Include(m => m.Manufacturer).
-                FirstOrDefault(p => p.Id == id);
+            Product product = _context.Products
+                .Include(m => m.Manufacturer)
+                .FirstOrDefault(p => p.Id == id);
 
             if (product == null)
             {
