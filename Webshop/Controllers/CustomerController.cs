@@ -55,16 +55,16 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Customer customer, string password)
         {
-            if (ModelState.IsValid)
-            {
+            //if (ModelState.IsValid)
+            //{
                 customer.PwHash = password;
                 customer.Salt = "abc123";
 
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            }
-            return View(customer);
+            //}
+            //return View(customer);
         }
 
         // GET: Customer/Edit/5

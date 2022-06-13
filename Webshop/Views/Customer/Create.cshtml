@@ -41,12 +41,12 @@
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input class="form-control" type="password" id="passwordOne" name="password" placeholder="Passwort" />
-                <span asp-validation-for="Password" class="text-danger" id="passwordMessageOne"></span>
+                <input class="form-control" type="password" name="password" placeholder="Passwort" />
+                <span asp-validation-for="PwHash" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input class="form-control" type="password" id="passwordTwo" placeholder="Passwort wiederholen" />
-                <span class="text-danger" id="passwordMessageTwo"></span>
+                <input class="form-control" type="password" placeholder="Passwort wiederholen" />
+                <span class="text-danger"></span>
             </div>
             <div class="form-group text-center">
                 <input type="submit" value="Registrieren" class="btn btn-outline-dark" id="registerBtn" />
