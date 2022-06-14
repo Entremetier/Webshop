@@ -66,12 +66,12 @@ namespace Webshop.Controllers
                 return View(customer);
             }
 
+            // Im Model überprüfen ob die Einschränkungen bei den Feldern eingehalten wurden (z.B. max Länge von Feldern)
             if (ModelState.IsValid)
             {
-                await UserAccountService.RegisterUserAsync(customer, password);
-                //_context.Add(customer);
-                //await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                UserAccountService userAccountService = new UserAccountService(_context);
+                await userAccountService.RegisterUserAsync(customer, password);
+                return RedirectToAction("Home/Shop");
             }
             return View(customer);
         }
