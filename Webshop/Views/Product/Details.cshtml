@@ -1,7 +1,7 @@
 ﻿@model Webshop.Models.Product
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = @Html.DisplayFor(model => model.ProductName);
 }
 
 <h1>
