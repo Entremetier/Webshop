@@ -67,6 +67,7 @@ namespace Webshop.Controllers
             }
 
             // Im Model überprüfen ob die Einschränkungen bei den Feldern eingehalten wurden (z.B. max Länge von Feldern)
+            // Wenn nicht wird die View mit customer und Fehlern angezeigt 
             if (ModelState.IsValid)
             {
                 UserAccountService userAccountService = new UserAccountService(_context);
@@ -77,17 +78,19 @@ namespace Webshop.Controllers
         }
 
         // GET: Customer/Login
-        //public async Task <IActionResult> Login()
-        //{
-        //    return View();
-        //}
+        [HttpGet]
+        public IActionResult Login()
+        {
+            return View();
+        }
 
-        //// POST: Customer/Login
-        //public async Task<IActionResult> Login(string email, string password)
-        //{
+        // POST: Customer/Login
+        [HttpPost]
+        public IActionResult Login(string email, string password)
+        {
 
-        //    return View();
-        //}
+            return View();
+        }
 
         // GET: Customer/Edit/5
         public async Task<IActionResult> Edit(int? id)
