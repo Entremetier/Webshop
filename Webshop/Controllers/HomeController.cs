@@ -14,9 +14,9 @@ namespace Webshop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly lapWebshopContext _context;
+        private readonly LapWebshopContext _context;
 
-        public HomeController(lapWebshopContext context)
+        public HomeController(LapWebshopContext context)
         {
             _context = context;
         }

@@ -6,16 +6,20 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Webshop.Models;
+using Webshop.Services;
 
 namespace Webshop.Controllers
 {
     public class CustomerController : Controller
     {
         private readonly LapWebshopContext _context;
+        private readonly UserAccountService _userAccountService;
 
-        public CustomerController(LapWebshopContext context)
+
+        public CustomerController(LapWebshopContext context, UserAccountService userAccountService)
         {
             _context = context;
+            _userAccountService = userAccountService;
         }
 
         // GET: Customer
@@ -64,28 +68,26 @@ namespace Webshop.Controllers
 
             if (ModelState.IsValid)
             {
-                //customer.PwHash = password;
-                //customer.Salt = "abc123";
-
-                _context.Add(customer);
-                await _context.SaveChangesAsync();
+                await UserAccountService.RegisterUserAsync(customer, password);
+                //_context.Add(customer);
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(customer);
         }
 
         // GET: Customer/Login
-        public async Task <IActionResult> Login()
-        {
-            return View();
-        }
+        //public async Task <IActionResult> Login()
+        //{
+        //    return View();
+        //}
 
-        // POST: Customer/Login
-        public async Task<IActionResult> Login(string email, string password)
-        {
+        //// POST: Customer/Login
+        //public async Task<IActionResult> Login(string email, string password)
+        //{
 
-            return View();
-        }
+        //    return View();
+        //}
 
         // GET: Customer/Edit/5
         public async Task<IActionResult> Edit(int? id)

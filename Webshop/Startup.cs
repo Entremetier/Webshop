@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
+using Webshop.Services;
 
 namespace Webshop
 {
@@ -23,8 +25,21 @@ namespace Webshop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<UserAccountService>();
             services.AddDbContext<LapWebshopContext>();
             services.AddControllersWithViews();
+
+            //Fügt notwendige Klassen für Authorization und Authentication hinzu
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(opts =>
+                {
+                    // Login Path
+                    opts.LoginPath = "/Home/Login";
+                    // Zeit wann der Cookie abläuft
+                    opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                    // kann der Cookie, nach der Hälfte, seiner Zeitspanne erneuert werden
+                    opts.SlidingExpiration = true;
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

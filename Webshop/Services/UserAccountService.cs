@@ -17,7 +17,7 @@ namespace Webshop.Services
             _context = context;
         }
 
-        public async Task RegisterUserAsync(string email, string password)
+        public async Task RegisterUserAsync(Customer customer, string password)
         {
             // 1. Validierung(en)
 
@@ -32,20 +32,20 @@ namespace Webshop.Services
             var hash = HashUtf8PasswordWithSha256AndSalt(password, saltBytes);
 
             // 3. Benutzerdaten inkl. Hash und Salt in DB speichern 
-            var customer = new Customer
+            var newCustomer = new Customer
             {
-                //Email = email,
-                //Title = "Herr",
-                //FirstName = "Hans",
-                //LastName = "Muster",
-                //City = "Faketown",
-                //Street = "Fakestreet 123",
-                //Zip = "1234",
-                //PwHash = hash.ToString(),
-                //Salt = saltBytes.ToString()
+                Email = customer.Email,
+                Title = customer.Title,
+                FirstName = customer.FirstName,
+                LastName = customer.LastName,
+                City = customer.City,
+                Street = customer.Street,
+                Zip = customer.Zip,
+                PwHash = hash,
+                Salt = saltBytes
             };
 
-            _context.Customers.Add(customer);
+            _context.Customers.Add(newCustomer);
             await _context.SaveChangesAsync();
         }
 
@@ -59,11 +59,11 @@ namespace Webshop.Services
 
             //      Falls geladen werden konnte:
             // 2. Login-Passwort mit gespeichertem Salt hashen
-            //var hash = HashUtf8PasswordWithSha256AndSalt(password, customer.Salt);
+            var hash = HashUtf8PasswordWithSha256AndSalt(password, customer.Salt);
 
             // 3. Hashes verlgeichen
             //      Falls gleich --> return Customer
-            //if (hash.SequenceEqual(customer.PwHash)) return customer;
+            if (hash.SequenceEqual(customer.PwHash)) return customer;
             //      Falls nicht gleich --> darf sich nicht anmelden --> return null
             else return null;
         }
