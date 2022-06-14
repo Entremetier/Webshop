@@ -1,8 +1,8 @@
--- drop database lapWebshop;
+-- drop database LapWebshop;
 
-create database lapWebshop;
+create database LapWebshop;
 
-use lapWebshop;
+use LapWebshop;
 
 -- nvarchar unterstuetzt Unicodezeichen, braucht aber doppelten Speicherplatz im Gegensatz zu varchar
 create table Category(
@@ -25,11 +25,16 @@ FirstName nvarchar(50) not null,
 LastName nvarchar(50) not null,
 Email nvarchar(50) not null,
 Street nvarchar(80) not null,
-Zip int not null,
+Zip char(4) not null,
 City nvarchar(50) not null,
-PwHash nvarchar(max) not null,
-Salt nvarchar(max) not null,
+PwHash varbinary(max) not null,
+Salt varbinary(max) not null,
 );
+
+-- Customer Zip from int to char(4)
+--alter table Customer
+--alter column Zip char(4);
+
 
 create table Product(
 Id int identity(1,1) primary key,
@@ -49,7 +54,7 @@ CustomerId int not null,
 PriceTotal decimal(7,2) not null,
 DateOrdered DateTime not null,
 Street nvarchar(80) not null,
-Zip int not null,
+Zip char(4) not null,
 City nvarchar(50) not null,
 FirstName nvarchar(50) not null,
 LastName nvarchar(50) not null,

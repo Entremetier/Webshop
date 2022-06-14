@@ -11,38 +11,39 @@ namespace Webshop.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly lapWebshopContext _context;
+        private readonly LapWebshopContext _context;
 
-        public CustomerController(lapWebshopContext context)
+        public CustomerController(LapWebshopContext context)
         {
             _context = context;
         }
 
         // GET: Customer
-        public async Task<IActionResult> Index()
-        {
-            return View(await _context.Customers.ToListAsync());
-        }
+        //public async Task<IActionResult> Index()
+        //{
+        //    return View(await _context.Customers.ToListAsync());
+        //}
 
-        // GET: Customer/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Customer/Details/5
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+        //    var customer = await _context.Customers
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (customer == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(customer);
-        }
+        //    return View(customer);
+        //}
 
         // GET: Customer/Create
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -53,18 +54,37 @@ namespace Webshop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Customer customer, string password)
+        public async Task<IActionResult> Create(Customer customer, string password, string confirmPassword)
         {
-            //if (ModelState.IsValid)
-            //{
-                customer.PwHash = password;
-                customer.Salt = "abc123";
+            if (confirmPassword != password)
+            {
+                ViewBag.ErrorMessage = "Passwörter müssen übereinstimmen";
+                return View(customer);
+            }
+
+            if (ModelState.IsValid)
+            {
+                //customer.PwHash = password;
+                //customer.Salt = "abc123";
 
                 _context.Add(customer);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
-            //}
-            //return View(customer);
+            }
+            return View(customer);
+        }
+
+        // GET: Customer/Login
+        public async Task <IActionResult> Login()
+        {
+            return View();
+        }
+
+        // POST: Customer/Login
+        public async Task<IActionResult> Login(string email, string password)
+        {
+
+            return View();
         }
 
         // GET: Customer/Edit/5

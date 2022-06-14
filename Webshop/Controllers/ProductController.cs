@@ -12,9 +12,9 @@ namespace Webshop.Controllers
 {
     public class ProductController : Controller
     {
-        private readonly lapWebshopContext _context;
+        private readonly LapWebshopContext _context;
 
-        public ProductController(lapWebshopContext context)
+        public ProductController(LapWebshopContext context)
         {
             _context = context;
         }

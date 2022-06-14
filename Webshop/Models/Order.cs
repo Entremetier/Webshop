@@ -17,7 +17,7 @@ namespace Webshop.Models
         public decimal PriceTotal { get; set; }
         public DateTime DateOrdered { get; set; }
         public string Street { get; set; }
-        public int Zip { get; set; }
+        public string Zip { get; set; }
         public string City { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

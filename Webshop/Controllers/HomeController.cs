@@ -28,7 +28,9 @@ namespace Webshop.Controllers
 
         public IActionResult Shop()
         {
-            var products = _context.Products.Include(p => p.Category).Include(m => m.Manufacturer);
+            var products = _context.Products
+                .Include(p => p.Category)
+                .Include(m => m.Manufacturer);
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden

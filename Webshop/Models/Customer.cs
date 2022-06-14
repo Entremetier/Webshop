@@ -34,7 +34,7 @@ namespace Webshop.Models
 
         [Required(ErrorMessage = "Postleizahl angeben")]
         [RegularExpression("^\\d{4}$", ErrorMessage = "Bitte eine gültige österreichische Postleitzahl angeben")]
-        public int Zip { get; set; }
+        public string Zip { get; set; }
 
         [Required(ErrorMessage = "Stadt angeben")]
         public string City { get; set; }
@@ -46,9 +46,9 @@ namespace Webshop.Models
         //[Required(ErrorMessage = "Passwort muss mindestens 8 Zeichen, eine Zahl, einen Groß- und einen Kleinbuchstaben haben")]
         //public string ConfirmPassword { get; set; }
 
-        public string PwHash { get; set; }
+        public byte[] PwHash { get; set; }
 
-        public string Salt { get; set; }
+        public byte[] Salt { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
     }
