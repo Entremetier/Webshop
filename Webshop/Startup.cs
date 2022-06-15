@@ -34,7 +34,7 @@ namespace Webshop
                 .AddCookie(opts =>
                 {
                     // Login Path
-                    opts.LoginPath = "/Home/Login";
+                    opts.LoginPath = "/Customer/Login";
                     // Zeit wann der Cookie abläuft
                     opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
                     // kann der Cookie, nach der Hälfte, seiner Zeitspanne erneuert werden

@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -86,10 +89,26 @@ namespace Webshop.Controllers
 
         // POST: Customer/Login
         [HttpPost]
-        public IActionResult Login(string email, string password)
+        public async Task<IActionResult> Login(string email, string password)
         {
+            UserAccountService userAccountService = new UserAccountService(_context);
 
-            return View();
+            //In der Datenbank prüfen ob es den Benutzer gibt und ob das Passwort stimmt
+            var user = await userAccountService.CanUserLogInAsync(email, password);
+
+            if (user is null) return RedirectToAction("Index", "Home");
+
+            UserSignIn userSign = new UserSignIn();
+
+            // Mit email und user.Id die IdentityClaims (Behauptungen) des Users holen und Cookie mitgeben
+            ClaimsIdentity claimsIdentity = userSign.GetClaimsIdentity(email, user.Id);
+
+            //Die Claims wandern in eine Identity, welche wir für den Principal (den Rechteinhaber) benötigen
+            ClaimsPrincipal claimsPrincipal = userSign.GetClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+
+            return RedirectToAction("Shop", "Home");
         }
 
         // GET: Customer/Edit/5
