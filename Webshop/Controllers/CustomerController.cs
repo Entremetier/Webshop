@@ -111,6 +111,13 @@ namespace Webshop.Controllers
             return RedirectToAction("Shop", "Home");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+            return RedirectToAction("Index", "Home");
+        }
+
         // GET: Customer/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
