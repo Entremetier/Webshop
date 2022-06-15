@@ -43,11 +43,22 @@ namespace Webshop.Controllers
 
             List<SelectListItem> filters = new()
             {
+                new SelectListItem { Value = "0", Text = "Auswählen" },
                 new SelectListItem { Value = "1", Text = "Hersteller" },
                 new SelectListItem { Value = "2", Text = "Kategorie" },
                 new SelectListItem { Value = "3", Text = "Produktname" }
             };
 
+            var manufacturers = _context.Manufacturers.Select(val => val.Name);
+
+            List<SelectListItem> manufacturer = new List<SelectListItem>();
+
+            foreach (var item in manufacturers)
+            {
+                manufacturer.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
+            }
+
+            ViewBag.Manufacturers = manufacturer;
             ViewBag.Filters = filters;
             ViewBag.ProductsCount = products.Count();
 
