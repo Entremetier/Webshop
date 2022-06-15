@@ -19,9 +19,7 @@ namespace Webshop.Services
 
         public async Task RegisterUserAsync(Customer customer, string password)
         {
-            // 1. Validierung(en)
-
-            // 2. Salt erzeugen
+            // 1. Salt erzeugen
 
             var saltBytes = new byte[256 / 8];
             var rng = RandomNumberGenerator.Create(); 
@@ -31,7 +29,7 @@ namespace Webshop.Services
             //Password Hashen
             var hash = HashUtf8PasswordWithSha256AndSalt(password, saltBytes);
 
-            // 3. Benutzerdaten inkl. Hash und Salt in DB speichern 
+            // 2. Benutzerdaten inkl. Hash und Salt in DB speichern 
             var newCustomer = new Customer
             {
                 Email = customer.Email,

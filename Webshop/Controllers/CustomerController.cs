@@ -61,13 +61,9 @@ namespace Webshop.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Customer customer, string password, string confirmPassword)
+        public async Task<IActionResult> Create(Customer customer, string password)
         {
-            if (confirmPassword != password)
-            {
-                ViewBag.ErrorMessage = "Passwörter müssen übereinstimmen";
-                return View(customer);
-            }
+            //TODO: Kontrollieren ob es den User schon in der DB gibt
 
             // Im Model überprüfen ob die Einschränkungen bei den Feldern eingehalten wurden (z.B. max Länge von Feldern)
             // Wenn nicht wird die View mit customer und Fehlern angezeigt 

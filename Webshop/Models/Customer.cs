@@ -43,6 +43,10 @@ namespace Webshop.Models
         [MinLength(8, ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
         public byte[] PwHash { get; set; }
 
+        [Required(ErrorMessage = "Passwort wiederholen")]
+        [Compare("PwHash", ErrorMessage = "Passwörter müssen übereinstimmen")]
+        public byte[] ConfirmPassword { get; set; }
+
         public byte[] Salt { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }

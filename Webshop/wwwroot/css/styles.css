@@ -31,12 +31,6 @@ a {
     color: #A9A9A9 !important;
 }
 
-/* DDL Background ListItem */
-select > option:nth-child(3) {
-    background-color: red !important;
-}
-
-/*body > div > main > div.row.justify-content-end.mr-2.mt-3 > select > option:nth-child(1)*/
 /* Index
 -------------------------------------------------- */
 .jumbotron {
