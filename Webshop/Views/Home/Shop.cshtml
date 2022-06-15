@@ -5,24 +5,24 @@
 }
 
 <div class="container">
-    <div class="row">
-        <h4 class="mb-5">Ergebnis: @ViewBag.ProductsCount Produkte</h4>
-    </div>
     <div class="row justify-content-center">
-        <span class="mb-3"><b>Suchen und filtern:&nbsp;</b></span>
+        <h5 class="mb-3">Suchen und filtern</h5>
     </div>
     <div class="row text-center justify-content-center">
-        <form action="../Controllers/Home/Warenkorb" method="post">
-            <div class="row d-flex flex-row justify-content-center col-12">
-                <select name="products" class="form-control btn btn-outline-dark col-4 mr-3 text-left" asp-items="@ViewBag.Category"></select>
-                <select name="products" class="form-control btn btn-outline-dark col-4 mr-3 text-left" asp-items="@ViewBag.Manufacturers"></select>
+        <form action="../Controllers/Home/Warenkorb" method="post" class="col-12">
+            <div class="row d-flex flex-row justify-content-center">
+                <select name="products" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Category"></select>
+                <select name="products" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Manufacturers"></select>
                 <input type="text" name="searchValue" value="" class="form-control col-4" placeholder="Suchbegriff" />
             </div>
-            <div class="row d-flex flex-row justify-content-center col-12 mt-3">
-                <input type="button" name="searchButton" value="Suchen" class="btn btn-outline-dark col-3 mr-3" />
-                <input type="button" name="clearFilterButton" value="Filter zurücksetzen" class="btn btn-outline-danger col-3" />
+            <div class="row d-flex flex-row justify-content-center mt-3">
+                <input type="button" name="searchButton" value="Suchen" class="btn btn-outline-dark col-2 mr-3" />
+                <input type="button" name="clearFilterButton" value="Filter zurücksetzen" class="btn btn-outline-danger col-2" />
             </div>
         </form>
+    </div>
+    <div class="row mt-3">
+        <h5 class="mb-5">Ergebnis: @ViewBag.ProductsCount Produkte</h5>
     </div>
 </div>
 
