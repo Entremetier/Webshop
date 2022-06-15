@@ -7,8 +7,22 @@
 <div class="container">
     <div class="row">
         <h4 class="mb-5">Ergebnis: @ViewBag.ProductsCount Produkte</h4>
-        <select name="products" class="form-control btn btn-outline-dark" asp-items="@ViewBag.Filters"></select>
-        <select name="products" class="form-control btn btn-outline-dark" asp-items="@ViewBag.Manufacturers"></select>
+    </div>
+    <div class="row justify-content-center">
+        <span class="mb-3"><b>Suchen und filtern:&nbsp;</b></span>
+    </div>
+    <div class="row text-center justify-content-center">
+        <form action="../Controllers/Home/Warenkorb" method="post">
+            <div class="row d-flex flex-row justify-content-center col-12">
+                <select name="products" class="form-control btn btn-outline-dark col-4 mr-3 text-left" asp-items="@ViewBag.Category"></select>
+                <select name="products" class="form-control btn btn-outline-dark col-4 mr-3 text-left" asp-items="@ViewBag.Manufacturers"></select>
+                <input type="text" name="searchValue" value="" class="form-control col-4" placeholder="Suchbegriff" />
+            </div>
+            <div class="row d-flex flex-row justify-content-center col-12 mt-3">
+                <input type="button" name="searchButton" value="Suchen" class="btn btn-outline-dark col-3 mr-3" />
+                <input type="button" name="clearFilterButton" value="Filter zurücksetzen" class="btn btn-outline-danger col-3" />
+            </div>
+        </form>
     </div>
 </div>
 

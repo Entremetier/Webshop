@@ -69,8 +69,7 @@ namespace Webshop.Controllers
             // Wenn nicht wird die View mit customer und Fehlern angezeigt 
             if (ModelState.IsValid)
             {
-                UserAccountService userAccountService = new UserAccountService(_context);
-                await userAccountService.RegisterUserAsync(customer, password);
+                await _userAccountService.RegisterUserAsync(customer, password);
                 return RedirectToAction("Home/Shop");
             }
             return View(customer);
@@ -87,10 +86,8 @@ namespace Webshop.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
-            UserAccountService userAccountService = new UserAccountService(_context);
-
             //In der Datenbank prüfen ob es den Benutzer gibt und ob das Passwort stimmt
-            var user = await userAccountService.CanUserLogInAsync(email, password);
+            var user = await _userAccountService.CanUserLogInAsync(email, password);
 
             if (user is null) return RedirectToAction("Index", "Home");
 

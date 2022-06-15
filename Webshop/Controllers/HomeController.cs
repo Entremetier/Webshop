@@ -41,25 +41,29 @@ namespace Webshop.Controllers
                 product.NetUnitPrice = CalculateProductPrice.CalcPrice(product, categoryAndTaxRate);
             }
 
-            List<SelectListItem> filters = new()
-            {
-                new SelectListItem { Value = "0", Text = "Auswählen" },
-                new SelectListItem { Value = "1", Text = "Hersteller" },
-                new SelectListItem { Value = "2", Text = "Kategorie" },
-                new SelectListItem { Value = "3", Text = "Produktname" }
-            };
-
             var manufacturers = _context.Manufacturers.Select(val => val.Name);
 
             List<SelectListItem> manufacturer = new List<SelectListItem>();
+            manufacturer.Add(new SelectListItem { Value = "0", Text = "Alle Hersteller" });
 
             foreach (var item in manufacturers)
             {
                 manufacturer.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
             }
 
+            var categories = _context.Categories.Select(val => val.Name);
+
+            List<SelectListItem> allCategories = new List<SelectListItem>();
+
+            allCategories.Add(new SelectListItem { Value = "0", Text = "Alle Kategorien" });
+
+            foreach (var item in categories)
+            {
+                allCategories.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
+            }
+
             ViewBag.Manufacturers = manufacturer;
-            ViewBag.Filters = filters;
+            ViewBag.Category = allCategories;
             ViewBag.ProductsCount = products.Count();
 
 
