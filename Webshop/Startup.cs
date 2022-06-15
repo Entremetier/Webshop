@@ -37,7 +37,7 @@ namespace Webshop
                     opts.LoginPath = "/Customer/Login";
                     // Zeit wann der Cookie abläuft
                     opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
-                    // kann der Cookie, nach der Hälfte, seiner Zeitspanne erneuert werden
+                    // der Cookie kann, nach der Hälfte, seiner Zeitspanne erneuert werden
                     opts.SlidingExpiration = true;
                 });
         }
@@ -53,10 +53,13 @@ namespace Webshop
             {
                 app.UseExceptionHandler("/Home/Error");
             }
+            app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
 
+            // Authentifizierung einbinden
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
