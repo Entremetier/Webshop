@@ -20,7 +20,7 @@ namespace Webshop.Services
         {
             IQueryable<Product> products = null;
 
-            // cat und man können "0" sein wenn im DDL "Alle Kategorien/Hersteller" ausgewählt wird
+            // categorie und manufacturer können "0" sein wenn im DDL "Alle Kategorien/Hersteller" ausgewählt wird
             if (categorie == "0")
             {
                 categorie = null;

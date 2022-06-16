@@ -36,6 +36,8 @@ namespace Webshop.Controllers
 
         public IActionResult Shop(string? searchString, string? categorie, string? manufacturer)
         {
+            //TODO: Filter speichern und ausführen wenn man zurück zur Liste geht
+            //TODO: Filter löschen einbauen
             // Produktliste befüllen
             IQueryable<Product> products = _filter.FilterList(searchString, categorie, manufacturer);
 
