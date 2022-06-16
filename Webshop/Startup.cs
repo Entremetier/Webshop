@@ -27,6 +27,7 @@ namespace Webshop
         {
             services.AddScoped<UserAccountService>();
             services.AddScoped<UserSignIn>();
+            services.AddScoped<Filter>();
             services.AddDbContext<LapWebshopContext>();
             services.AddControllersWithViews();
 

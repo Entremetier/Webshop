@@ -15,10 +15,12 @@ namespace Webshop.Controllers
     public class HomeController : Controller
     {
         private readonly LapWebshopContext _context;
+        private readonly Filter _filter;
 
-        public HomeController(LapWebshopContext context)
+        public HomeController(LapWebshopContext context, Filter filter)
         {
             _context = context;
+            _filter = filter;
         }
 
         public IActionResult Index()
@@ -29,7 +31,7 @@ namespace Webshop.Controllers
         public IActionResult Shop(string? searchString, string? cat, string? man)
         {
             // Produktliste befüllen
-            IQueryable<Product> products = FilterList(searchString, cat, man);
+            IQueryable<Product> products = _filter.FilterList(searchString, cat, man);
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden
@@ -66,76 +68,7 @@ namespace Webshop.Controllers
 
 
             return View(products);
-        }
-
-        public IQueryable<Product> FilterList(string searchString, string cat, string man)
-        {
-            IQueryable<Product> products = null;
-
-            if (cat == "0")
-            {
-                cat = null;
-            }
-
-            if (man == "0")
-            {
-                man = null;
-            }
-
-            if (searchString == null && cat != null && man == null)
-            {
-                products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat);
-            }
-            else if (searchString != null && cat != null && man == null)
-            {
-                products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat && p.Description.Contains(searchString));
-            }
-            else if (searchString == null && cat == null && man != null)
-            {
-                products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Manufacturer.Name == man);
-            }
-            else if (searchString != null && cat == null && man != null)
-            {
-                products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Description.Contains(searchString) && p.Manufacturer.Name == man);
-            }
-            else if (searchString == null && cat != null && man != null)
-            {
-                products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat && p.Manufacturer.Name == man);
-            }
-            else if (searchString != null && cat != null && man != null)
-            {
-                products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat && p.Description.Contains(searchString) && p.Manufacturer.Name == man);
-            }
-            else
-            {
-                // Wenn die Liste beim Start befüllt wird oder bei der Suche keine Parameter angegben werden
-                products = _context.Products
-                    .Include(p => p.Category)
-                    .Include(p => p.Manufacturer);
-            }
-
-            int count = products.Count();
-
-            return products;
-        }
+        }        
 
         public IActionResult Impressum()
         {
