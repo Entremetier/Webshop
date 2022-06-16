@@ -41,7 +41,8 @@ namespace Webshop.Models
         public byte[] PwHash { get; set; }
 
         [Required(ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
-        [MinLength(8, ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
+        [RegularExpression("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$", ErrorMessage ="Passwort muss aus mindestens 8 Zeichen, einer Zahl, " +
+            "einem Groß-, einem Kleinbuchstaben und einem Sonderzeichen bestehen")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Passwort wiederholen")]

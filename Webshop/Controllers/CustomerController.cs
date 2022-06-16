@@ -89,7 +89,11 @@ namespace Webshop.Controllers
             //In der Datenbank prüfen ob es den Benutzer gibt und ob das Passwort stimmt
             var user = await _userAccountService.CanUserLogInAsync(email, password);
 
-            if (user is null) return RedirectToAction("Index", "Home");
+            if (user is null)
+            {
+                TempData["LoginFailed"] = "E-Mail oder Passwort ist falsch!";
+                return RedirectToAction("Login");
+            }
 
             UserSignIn userSign = new UserSignIn();
 
