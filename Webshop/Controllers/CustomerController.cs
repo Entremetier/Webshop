@@ -17,12 +17,13 @@ namespace Webshop.Controllers
     {
         private readonly LapWebshopContext _context;
         private readonly UserAccountService _userAccountService;
+        private readonly UserSignIn _userSignIn;
 
-
-        public CustomerController(LapWebshopContext context, UserAccountService userAccountService)
+        public CustomerController(LapWebshopContext context, UserAccountService userAccountService, UserSignIn userSignIn)
         {
             _context = context;
             _userAccountService = userAccountService;
+            _userSignIn = userSignIn;
         }
 
         // GET: Customer
@@ -95,13 +96,11 @@ namespace Webshop.Controllers
                 return RedirectToAction("Login");
             }
 
-            UserSignIn userSign = new UserSignIn();
-
             // Mit email und user.Id die IdentityClaims (Behauptungen) des Users holen und Cookie mitgeben
-            ClaimsIdentity claimsIdentity = userSign.GetClaimsIdentity(email, user.Id);
+            ClaimsIdentity claimsIdentity = _userSignIn.GetClaimsIdentity(email, user.Id);
 
-            //Die Claims wandern in eine Identity, welche wir für den Principal (den Rechteinhaber) benötigen
-            ClaimsPrincipal claimsPrincipal = userSign.GetClaimsPrincipal(claimsIdentity);
+            //Die Claims wandern in eine Identity, welche für den Principal (den Rechteinhaber) benötigt wird
+            ClaimsPrincipal claimsPrincipal = _userSignIn.GetClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
@@ -116,88 +115,88 @@ namespace Webshop.Controllers
         }
 
         // GET: Customer/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Edit(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var customer = await _context.Customers.FindAsync(id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
-            return View(customer);
-        }
+        //    var customer = await _context.Customers.FindAsync(id);
+        //    if (customer == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return View(customer);
+        //}
 
-        // POST: Customer/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,FirstName,LastName,Email,Street,Zip,City,PwHash,Salt")] Customer customer)
-        {
-            if (id != customer.Id)
-            {
-                return NotFound();
-            }
+        //// POST: Customer/Edit/5
+        //// To protect from overposting attacks, enable the specific properties you want to bind to.
+        //// For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("Id,Title,FirstName,LastName,Email,Street,Zip,City,PwHash,Salt")] Customer customer)
+        //{
+        //    if (id != customer.Id)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(customer);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CustomerExists(customer.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(customer);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(customer);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!CustomerExists(customer.Id))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(customer);
+        //}
 
-        // GET: Customer/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Customer/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var customer = await _context.Customers
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (customer == null)
-            {
-                return NotFound();
-            }
+        //    var customer = await _context.Customers
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (customer == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(customer);
-        }
+        //    return View(customer);
+        //}
 
-        // POST: Customer/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var customer = await _context.Customers.FindAsync(id);
-            _context.Customers.Remove(customer);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //// POST: Customer/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var customer = await _context.Customers.FindAsync(id);
+        //    _context.Customers.Remove(customer);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
-        private bool CustomerExists(int id)
-        {
-            return _context.Customers.Any(e => e.Id == id);
-        }
+        //private bool CustomerExists(int id)
+        //{
+        //    return _context.Customers.Any(e => e.Id == id);
+        //}
     }
 }

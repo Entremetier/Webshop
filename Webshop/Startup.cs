@@ -26,6 +26,7 @@ namespace Webshop
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<UserAccountService>();
+            services.AddScoped<UserSignIn>();
             services.AddDbContext<LapWebshopContext>();
             services.AddControllersWithViews();
 
