@@ -19,7 +19,8 @@ namespace Webshop.Services
         {
             List<SelectListItem> allManufacturer = new List<SelectListItem>();
 
-            var manufacturers = _context.Manufacturers.Select(m => m.Name);
+            // Alle Hersteller, alphabetisch geordnet
+            var manufacturers = _context.Manufacturers.Select(m => m.Name).OrderBy(m => m);
 
             allManufacturer.Add(new SelectListItem { Value = "0", Text = "Alle Hersteller" });
 

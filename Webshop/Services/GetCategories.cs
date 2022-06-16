@@ -19,7 +19,8 @@ namespace Webshop.Services
         {
             List<SelectListItem> allCategories = new List<SelectListItem>();
 
-            var categories = _context.Categories.Select(c => c.Name);
+            // Alle Kategorien, alphabetisch geordnet
+            var categories = _context.Categories.Select(c => c.Name).OrderBy(c => c);
             allCategories.Add(new SelectListItem { Value = "0", Text = "Alle Kategorien" });
 
             foreach (var category in categories)

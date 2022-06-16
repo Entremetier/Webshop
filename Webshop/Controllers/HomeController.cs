@@ -63,7 +63,6 @@ namespace Webshop.Controllers
             ViewBag.Category = allCategories;
             ViewBag.ProductsCount = products.Count();
 
-
             return View(products);
         }        
 

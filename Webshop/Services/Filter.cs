@@ -82,13 +82,11 @@ namespace Webshop.Services
             }
             else
             {
-                // Wenn die Liste beim Start befüllt wird oder bei der Suche keine Parameter angegben werden
+                // Wenn die Liste beim Start befüllt wird oder bei der Suche keine Parameter angegeben werden
                 products = _context.Products
                     .Include(p => p.Category)
                     .Include(p => p.Manufacturer);
             }
-
-            int count = products.Count();
 
             return products;
         }
