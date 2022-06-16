@@ -1,4 +1,4 @@
-﻿@model Webshop.Models.Customer
+﻿@model Webshop.Models.CustomerLogin
 
 @{
     ViewData["Title"] = "Registrieren";
@@ -41,13 +41,13 @@
                 <span asp-validation-for="City" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input asp-for="PwHash" class="form-control" type="password" placeholder="Passwort" />
-                <span asp-validation-for="PwHash" class="text-danger"></span>
+                <input asp-for="Password" class="form-control" type="password" placeholder="Passwort" />
+                <span asp-validation-for="Password" class="text-danger"></span>
             </div>
-            @*<div class="form-group">
+            <div class="form-group">
                 <input class="form-control" type="password" placeholder="Passwort wiederholen" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-            </div>*@
+            </div>
             <div class="form-group text-center">
                 <input type="submit" value="Registrieren" class="btn btn-outline-dark" id="registerBtn" />
             </div>

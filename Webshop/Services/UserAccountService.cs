@@ -17,7 +17,7 @@ namespace Webshop.Services
             _context = context;
         }
 
-        public async Task RegisterUserAsync(Customer customer, string password)
+        public async Task RegisterUserAsync(CustomerLogin customer, string password)
         {
             // 1. Salt erzeugen
 

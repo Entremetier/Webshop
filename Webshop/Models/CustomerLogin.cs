@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-
-#nullable disable
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    public partial class Customer
+    public class CustomerLogin
     {
-        public Customer()
+        public CustomerLogin()
         {
             Orders = new HashSet<Order>();
         }
@@ -41,7 +41,11 @@ namespace Webshop.Models
 
         [Required(ErrorMessage = "123Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
         [MinLength(8, ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
-        public byte[] PwHash { get; set; }
+        public string Password { get; set; }
+
+        [Required(ErrorMessage = "Passwort wiederholen")]
+        [Compare("PwHash", ErrorMessage = "Passwörter müssen übereinstimmen")]
+        public string ConfirmPassword { get; set; }
 
         public byte[] Salt { get; set; }
 
