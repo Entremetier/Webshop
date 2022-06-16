@@ -38,7 +38,7 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public IActionResult Shop(string? searchString, string? categorie, string? manufacturer)
+        public IActionResult Shop(string searchString, string categorie, string manufacturer)
         {
             //TODO: Filter speichern und ausführen wenn man zurück zur Liste geht
             //TODO: Filter löschen einbauen

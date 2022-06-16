@@ -93,7 +93,12 @@ a {
 }*/
 
 /* Darstellungen auf verschiedenen Geräten */
-@media (max-width: 767px) {
+@media (min-width: 374px) and (max-width: 575.9px) {
+    .smallScreenBottomMargin {
+        margin-bottom: 0.8rem;
+    }
+}
+@media (min-width: 576px) and (max-width: 767px) {
     .carousel-inner > .carousel-item > a > img {
         height: 9.5rem;
         width: auto;
