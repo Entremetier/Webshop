@@ -71,7 +71,7 @@ namespace Webshop.Services
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Category.Name == categorie && p.Description.Contains(searchString) && p.Manufacturer.Name == manufacturer);
+                    .Where(p => p.Category.Name == categorie && p.Manufacturer.Name == manufacturer && p.ProductName.Contains(searchString));
             }
             else if (searchString != null && categorie == null && manufacturer == null)
             {
