@@ -26,10 +26,10 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public IActionResult Shop(string? searchString)
+        public IActionResult Shop(string? searchString, string? cat, string? man)
         {
             // Produktliste befüllen
-            IQueryable<Product> products = FilterList(searchString);
+            IQueryable<Product> products = FilterList(searchString, cat, man);
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden
@@ -42,12 +42,12 @@ namespace Webshop.Controllers
 
             var manufacturers = _context.Manufacturers.Select(val => val.Name);
 
-            List<SelectListItem> manufacturer = new List<SelectListItem>();
-            manufacturer.Add(new SelectListItem { Value = "0", Text = "Alle Hersteller" });
+            List<SelectListItem> allManufacturer = new List<SelectListItem>();
+            allManufacturer.Add(new SelectListItem { Value = "0", Text = "Alle Hersteller" });
 
             foreach (var item in manufacturers)
             {
-                manufacturer.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
+                allManufacturer.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
             }
 
             var categories = _context.Categories.Select(val => val.Name);
@@ -60,7 +60,7 @@ namespace Webshop.Controllers
                 allCategories.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
             }
 
-            ViewBag.Manufacturers = manufacturer;
+            ViewBag.Manufacturers = allManufacturer;
             ViewBag.Category = allCategories;
             ViewBag.ProductsCount = products.Count();
 
@@ -68,22 +68,68 @@ namespace Webshop.Controllers
             return View(products);
         }
 
-        public IQueryable<Product> FilterList(string searchString)
+        public IQueryable<Product> FilterList(string searchString, string cat, string man)
         {
-            // List<Product> products = new List<Product>();
             IQueryable<Product> products = null;
 
-            if (searchString == null)
+            if (cat == "0")
+            {
+                cat = null;
+            }
+
+            if (man == "0")
+            {
+                man = null;
+            }
+
+            if (searchString == null && cat != null && man == null)
             {
                 products = _context.Products
+                    .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Include(m => m.Manufacturer);
+                    .Where(p => p.Category.Name == cat);
+            }
+            else if (searchString != null && cat != null && man == null)
+            {
+                products = _context.Products
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.Category)
+                    .Where(p => p.Category.Name == cat && p.Description.Contains(searchString));
+            }
+            else if (searchString == null && cat == null && man != null)
+            {
+                products = _context.Products
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.Category)
+                    .Where(p => p.Manufacturer.Name == man);
+            }
+            else if (searchString != null && cat == null && man != null)
+            {
+                products = _context.Products
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.Category)
+                    .Where(p => p.Description.Contains(searchString) && p.Manufacturer.Name == man);
+            }
+            else if (searchString == null && cat != null && man != null)
+            {
+                products = _context.Products
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.Category)
+                    .Where(p => p.Category.Name == cat && p.Manufacturer.Name == man);
+            }
+            else if (searchString != null && cat != null && man != null)
+            {
+                products = _context.Products
+                    .Include(p => p.Manufacturer)
+                    .Include(p => p.Category)
+                    .Where(p => p.Category.Name == cat && p.Description.Contains(searchString) && p.Manufacturer.Name == man);
             }
             else
             {
+                // Wenn die Liste beim Start befüllt wird oder bei der Suche keine Parameter angegben werden
                 products = _context.Products
-                    .Include(m => m.Manufacturer)
-                    .Where(x => x.Manufacturer.Name == searchString);
+                    .Include(p => p.Category)
+                    .Include(p => p.Manufacturer);
             }
 
             int count = products.Count();

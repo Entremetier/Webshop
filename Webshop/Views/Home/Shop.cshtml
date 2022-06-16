@@ -11,8 +11,8 @@
     <div class="row text-center justify-content-center">
         <form asp-controller="Home" asp-action="Shop" method="post" class="col-12">
             <div class="row d-flex flex-row justify-content-center">
-                <select name="products" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Category"></select>
-                <select name="products" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Manufacturers"></select>
+                <select name="cat" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Category"></select>
+                <select name="man" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Manufacturers"></select>
                 <input type="text" name="searchString" value="" class="form-control col-4" placeholder="Suchbegriff" />
             </div>
             <div class="row d-flex flex-row justify-content-center mt-3">
