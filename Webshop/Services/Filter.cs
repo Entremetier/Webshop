@@ -16,64 +16,64 @@ namespace Webshop.Services
             _context = context;
         }
 
-        public IQueryable<Product> FilterList(string searchString, string cat, string man)
+        public IQueryable<Product> FilterList(string searchString, string categorie, string manufacturer)
         {
             IQueryable<Product> products = null;
 
             // cat und man können "0" sein wenn im DDL "Alle Kategorien/Hersteller" ausgewählt wird
-            if (cat == "0")
+            if (categorie == "0")
             {
-                cat = null;
+                categorie = null;
             }
 
-            if (man == "0")
+            if (manufacturer == "0")
             {
-                man = null;
+                manufacturer = null;
             }
 
-            if (searchString == null && cat != null && man == null)
+            if (searchString == null && categorie != null && manufacturer == null)
             {
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat);
+                    .Where(p => p.Category.Name == categorie);
             }
-            else if (searchString != null && cat != null && man == null)
+            else if (searchString != null && categorie != null && manufacturer == null)
             {
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat && p.Description.Contains(searchString));
+                    .Where(p => p.Category.Name == categorie && p.Description.Contains(searchString));
             }
-            else if (searchString == null && cat == null && man != null)
+            else if (searchString == null && categorie == null && manufacturer != null)
             {
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Manufacturer.Name == man);
+                    .Where(p => p.Manufacturer.Name == manufacturer);
             }
-            else if (searchString != null && cat == null && man != null)
+            else if (searchString != null && categorie == null && manufacturer != null)
             {
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Description.Contains(searchString) && p.Manufacturer.Name == man);
+                    .Where(p => p.Description.Contains(searchString) && p.Manufacturer.Name == manufacturer);
             }
-            else if (searchString == null && cat != null && man != null)
+            else if (searchString == null && categorie != null && manufacturer != null)
             {
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat && p.Manufacturer.Name == man);
+                    .Where(p => p.Category.Name == categorie && p.Manufacturer.Name == manufacturer);
             }
-            else if (searchString != null && cat != null && man != null)
+            else if (searchString != null && categorie != null && manufacturer != null)
             {
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Category.Name == cat && p.Description.Contains(searchString) && p.Manufacturer.Name == man);
+                    .Where(p => p.Category.Name == categorie && p.Description.Contains(searchString) && p.Manufacturer.Name == manufacturer);
             }
-            else if (searchString != null && cat == null && man == null)
+            else if (searchString != null && categorie == null && manufacturer == null)
             {
                 products = _context.Products
                     .Include(p => p.Manufacturer)

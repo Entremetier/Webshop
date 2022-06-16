@@ -8,7 +8,7 @@ namespace Webshop.Services
 {
     public class CalculateProductPrice
     {
-        public static decimal CalcPrice(Product product, List<Category> categoryAndTaxRate)
+        public decimal CalcPrice(Product product, List<Category> categoryAndTaxRate)
         {
             decimal price = 0;
 

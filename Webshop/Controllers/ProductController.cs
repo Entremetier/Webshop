@@ -13,10 +13,12 @@ namespace Webshop.Controllers
     public class ProductController : Controller
     {
         private readonly LapWebshopContext _context;
+        private readonly CalculateProductPrice _calculateProductPrice;
 
-        public ProductController(LapWebshopContext context)
+        public ProductController(LapWebshopContext context, CalculateProductPrice calculateProductPrice)
         {
             _context = context;
+            _calculateProductPrice = calculateProductPrice;
         }
 
         // GET: Products/Details/5
@@ -63,7 +65,7 @@ namespace Webshop.Controllers
             // bestehen würden
             List<Category> categoryAndTaxRate = _context.Categories.ToList();
 
-            product.NetUnitPrice = CalculateProductPrice.CalcPrice(product, categoryAndTaxRate);
+            product.NetUnitPrice = _calculateProductPrice.CalcPrice(product, categoryAndTaxRate);
 
             List<SelectListItem> itemAmount = new List<SelectListItem>();
 

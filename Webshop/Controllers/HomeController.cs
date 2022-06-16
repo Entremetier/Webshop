@@ -16,11 +16,17 @@ namespace Webshop.Controllers
     {
         private readonly LapWebshopContext _context;
         private readonly Filter _filter;
+        private readonly GetManufacturers _getManufacturers;
+        private readonly GetCategories _getCategories;
+        private readonly CalculateProductPrice _calculateProductPrice;
 
-        public HomeController(LapWebshopContext context, Filter filter)
+        public HomeController(LapWebshopContext context, Filter filter, GetManufacturers getManufacturers, GetCategories getCategories, CalculateProductPrice calculateProductPrice)
         {
             _context = context;
             _filter = filter;
+            _getManufacturers = getManufacturers;
+            _getCategories = getCategories;
+            _calculateProductPrice = calculateProductPrice;
         }
 
         public IActionResult Index()
@@ -28,39 +34,24 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public IActionResult Shop(string? searchString, string? cat, string? man)
+        public IActionResult Shop(string? searchString, string? categorie, string? manufacturer)
         {
             // Produktliste befüllen
-            IQueryable<Product> products = _filter.FilterList(searchString, cat, man);
+            IQueryable<Product> products = _filter.FilterList(searchString, categorie, manufacturer);
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden
             List<Category> categoryAndTaxRate = _context.Categories.ToList();
 
+            // Bruttopreis für alle Produkte berechnen
             foreach (var product in products)
             {
-                product.NetUnitPrice = CalculateProductPrice.CalcPrice(product, categoryAndTaxRate);
+                product.NetUnitPrice = _calculateProductPrice.CalcPrice(product, categoryAndTaxRate);
             }
 
-            var manufacturers = _context.Manufacturers.Select(val => val.Name);
-
-            List<SelectListItem> allManufacturer = new List<SelectListItem>();
-            allManufacturer.Add(new SelectListItem { Value = "0", Text = "Alle Hersteller" });
-
-            foreach (var item in manufacturers)
-            {
-                allManufacturer.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
-            }
-
-            var categories = _context.Categories.Select(val => val.Name);
-
-            List<SelectListItem> allCategories = new List<SelectListItem>();
-            allCategories.Add(new SelectListItem { Value = "0", Text = "Alle Kategorien" });
-
-            foreach (var item in categories)
-            {
-                allCategories.Add(new SelectListItem { Value = item.ToString(), Text = item.ToString() });
-            }
+            // Die DDL`s befüllen
+            List<SelectListItem> allManufacturer = _getManufacturers.GetAllManufacturers();
+            List<SelectListItem> allCategories = _getCategories.GetAllCategories();
 
             ViewBag.Manufacturers = allManufacturer;
             ViewBag.Category = allCategories;
