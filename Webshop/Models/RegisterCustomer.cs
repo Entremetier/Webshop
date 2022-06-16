@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    public class CustomerLogin
+    public class RegisterCustomer
     {
-        public CustomerLogin()
+        public RegisterCustomer()
         {
             Orders = new HashSet<Order>();
         }
@@ -38,16 +38,18 @@ namespace Webshop.Models
 
         [Required(ErrorMessage = "Stadt angeben")]
         public string City { get; set; }
+        public byte[] PwHash { get; set; }
 
-        [Required(ErrorMessage = "123Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
+        [Required(ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
         [MinLength(8, ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
         public string Password { get; set; }
 
         [Required(ErrorMessage = "Passwort wiederholen")]
-        [Compare("PwHash", ErrorMessage = "Passwörter müssen übereinstimmen")]
+        [Compare("Password", ErrorMessage = "Passwörter müssen übereinstimmen")]
         public string ConfirmPassword { get; set; }
 
         public byte[] Salt { get; set; }
+
 
         public virtual ICollection<Order> Orders { get; set; }
     }

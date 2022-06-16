@@ -1,4 +1,4 @@
-﻿@model Webshop.Models.CustomerLogin
+﻿@model Webshop.Models.RegisterCustomer
 
 @{
     ViewData["Title"] = "Registrieren";
@@ -10,7 +10,7 @@
 
 <div class="row">
     <div class="col-md-6 col-sm-12 d-block mx-auto">
-        <form asp-action="Create">
+        <form asp-action="Register">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <input asp-for="Title" class="form-control" placeholder="Anrede" />
@@ -45,7 +45,7 @@
                 <span asp-validation-for="Password" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input class="form-control" type="password" placeholder="Passwort wiederholen" />
+                <input asp-for="ConfirmPassword" class="form-control" type="password" placeholder="Passwort wiederholen" />
                 <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
             </div>
             <div class="form-group text-center">

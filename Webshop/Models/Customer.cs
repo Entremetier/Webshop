@@ -39,7 +39,7 @@ namespace Webshop.Models
         [Required(ErrorMessage = "Stadt angeben")]
         public string City { get; set; }
 
-        [Required(ErrorMessage = "123Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
+        [Required(ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
         [MinLength(8, ErrorMessage = "Passwort muss aus mindestens 8 Zeichen, einer Zahl, einem Groß- und einem Kleinbuchstaben bestehen")]
         public byte[] PwHash { get; set; }
 
