@@ -20,7 +20,11 @@ namespace Webshop.Controllers
         private readonly GetCategories _getCategories;
         private readonly CalculateProductPrice _calculateProductPrice;
 
-        public HomeController(LapWebshopContext context, Filter filter, GetManufacturers getManufacturers, GetCategories getCategories, CalculateProductPrice calculateProductPrice)
+        public HomeController(LapWebshopContext context, 
+            Filter filter, 
+            GetManufacturers getManufacturers, 
+            GetCategories getCategories, 
+            CalculateProductPrice calculateProductPrice)
         {
             _context = context;
             _filter = filter;
