@@ -9,20 +9,20 @@
         <h5 class="mb-3">Suchen und filtern</h5>
     </div>
     <div class="row text-center justify-content-center">
-        <form action="../Controllers/Home/Warenkorb" method="post" class="col-12">
+        <form asp-controller="Home" asp-action="Shop" method="post" class="col-12">
             <div class="row d-flex flex-row justify-content-center">
                 <select name="products" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Category"></select>
                 <select name="products" class="form-control btn btn-outline-dark col-2 mr-2 text-left" asp-items="@ViewBag.Manufacturers"></select>
-                <input type="text" name="searchValue" value="" class="form-control col-4" placeholder="Suchbegriff" />
+                <input type="text" name="searchString" value="" class="form-control col-4" placeholder="Suchbegriff" />
             </div>
             <div class="row d-flex flex-row justify-content-center mt-3">
-                <input type="button" name="searchButton" value="Suchen" class="btn btn-outline-dark col-2 mr-3" />
+                <input type="submit" name="searchButton" value="Suchen" class="btn btn-outline-dark col-2 mr-3" />
                 <input type="button" name="clearFilterButton" value="Filter zurücksetzen" class="btn btn-outline-danger col-2" />
             </div>
         </form>
     </div>
     <div class="row mt-3">
-        <h5 class="mb-5">Ergebnis: @ViewBag.ProductsCount Produkte</h5>
+        <h5 class="mb-5">Ergebnis: @ViewBag.ProductsCount Produkt(e)</h5>
     </div>
 </div>
 

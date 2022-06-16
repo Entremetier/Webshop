@@ -26,11 +26,10 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public IActionResult Shop()
+        public IActionResult Shop(string? searchString)
         {
-            var products = _context.Products
-                .Include(p => p.Category)
-                .Include(m => m.Manufacturer);
+            // Produktliste befüllen
+            IQueryable<Product> products = FilterList(searchString);
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden
@@ -54,7 +53,6 @@ namespace Webshop.Controllers
             var categories = _context.Categories.Select(val => val.Name);
 
             List<SelectListItem> allCategories = new List<SelectListItem>();
-
             allCategories.Add(new SelectListItem { Value = "0", Text = "Alle Kategorien" });
 
             foreach (var item in categories)
@@ -68,6 +66,29 @@ namespace Webshop.Controllers
 
 
             return View(products);
+        }
+
+        public IQueryable<Product> FilterList(string searchString)
+        {
+            // List<Product> products = new List<Product>();
+            IQueryable<Product> products = null;
+
+            if (searchString == null)
+            {
+                products = _context.Products
+                    .Include(p => p.Category)
+                    .Include(m => m.Manufacturer);
+            }
+            else
+            {
+                products = _context.Products
+                    .Include(m => m.Manufacturer)
+                    .Where(x => x.Manufacturer.Name == searchString);
+            }
+
+            int count = products.Count();
+
+            return products;
         }
 
         public IActionResult Impressum()
