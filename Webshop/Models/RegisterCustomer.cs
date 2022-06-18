@@ -16,20 +16,25 @@ namespace Webshop.Models
         public int Id { get; set; }
 
         [Required(ErrorMessage = "Anrede angeben")]
+        [MaxLength(10, ErrorMessage = "Maximal 10 Zeichen")]
         public string Title { get; set; }
 
         [Required(ErrorMessage = "Vornamen angeben")]
+        [MaxLength(50, ErrorMessage = "Maximal 50 Zeichen")]
         public string FirstName { get; set; }
 
         [Required(ErrorMessage = "Nachnamen angeben")]
+        [MaxLength(50, ErrorMessage = "Maximal 50 Zeichen")]
         public string LastName { get; set; }
 
         [Required(ErrorMessage = "E-Mail angeben")]
+        [MaxLength(50, ErrorMessage = "Maximal 50 Zeichen")]
         // Nur minimale Validierung der E-Mail, besser wäre es eine Mail an die Adresse zu schicken wo der User einen bestätigungslink drücken muss.
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Straße und Hausnummer angeben")]
+        [MaxLength(80, ErrorMessage = "Maximal 80 Zeichen")]
         public string Street { get; set; }
 
         [Required(ErrorMessage = "Postleizahl angeben")]
@@ -37,6 +42,7 @@ namespace Webshop.Models
         public string Zip { get; set; }
 
         [Required(ErrorMessage = "Stadt angeben")]
+        [MaxLength(50, ErrorMessage = "Maximal 50 Zeichen")]
         public string City { get; set; }
         public byte[] PwHash { get; set; }
 
