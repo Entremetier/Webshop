@@ -37,7 +37,7 @@ namespace Webshop.Controllers
         public async Task<IActionResult> Register(RegisterCustomer customer, string password)
         {
             // Schauen ob die angegebene Mailadresse schon in der DB ist
-            Customer existingCustomer = _context.Customers.FirstOrDefault(m => m.Email == customer.Email);
+            Customer existingCustomer = _context.Customers.FirstOrDefault(m => m.Email.Trim() == customer.Email.Trim());
 
             // Wenn es schon einen Customer mit der Mailadresse gibt eine Warnung ausgeben das er schon existiert
             if (existingCustomer != null)

@@ -32,13 +32,14 @@ namespace Webshop.Services
             // 2. Benutzerdaten inkl. Hash und Salt in DB speichern 
             var newCustomer = new Customer
             {
-                Email = customer.Email,
-                Title = customer.Title,
-                FirstName = customer.FirstName,
-                LastName = customer.LastName,
-                City = customer.City,
-                Street = customer.Street,
-                Zip = customer.Zip,
+                // Werte des neuen Users ohne führende und endende Leerzeichen übernehmen
+                Email = customer.Email.Trim(),
+                Title = customer.Title.Trim(),
+                FirstName = customer.FirstName.Trim(),
+                LastName = customer.LastName.Trim(),
+                City = customer.City.Trim(),
+                Street = customer.Street.Trim(),
+                Zip = customer.Zip.Trim(),
                 PwHash = hash,
                 Salt = saltBytes
             };

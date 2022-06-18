@@ -88,7 +88,7 @@ namespace Webshop.Controllers
         public async Task<IActionResult> Login(string email, string password)
         {
             //In der Datenbank prüfen ob es den Benutzer gibt und ob das Passwort stimmt
-            var user = await _userAccountService.CanUserLogInAsync(email, password);
+            var user = await _userAccountService.CanUserLogInAsync(email.Trim(), password.Trim());
 
             if (user is null)
             {
