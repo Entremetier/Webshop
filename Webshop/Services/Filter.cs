@@ -43,23 +43,9 @@ namespace Webshop.Services
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Category.Name == categorie && p.ProductName.Contains(searchString));
-
-                // Wenn die Liste keine Einträge hat wird das nächste if-Statement ausgeführt
-                if (!products.Any())
-                {
-                    products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == categorie && p.Description.Contains(searchString));
-                }
-                if (!products.Any())
-                {
-                    products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == categorie && p.Manufacturer.Name.Contains(searchString));
-                }
+                    .Where(p => p.Category.Name == categorie && p.ProductName.Contains(searchString) ||
+                    p.Category.Name == categorie && p.Manufacturer.Name.Contains(searchString) ||
+                    p.Category.Name == categorie && p.Description.Contains(searchString));                
             }
             else if (searchString == null && categorie == null && manufacturer != null)
             {
@@ -73,21 +59,9 @@ namespace Webshop.Services
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Description.Contains(searchString) && p.Manufacturer.Name == manufacturer);
-                if (!products.Any())
-                {
-                    products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Manufacturer.Name.Contains(searchString) && p.Manufacturer.Name == manufacturer);
-                }
-                if (!products.Any())
-                {
-                    products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.ProductName.Contains(searchString) && p.Manufacturer.Name == manufacturer);
-                }
+                    .Where(p => p.ProductName.Contains(searchString) && p.Manufacturer.Name == manufacturer ||
+                    p.Manufacturer.Name.Contains(searchString) && p.Manufacturer.Name == manufacturer ||
+                    p.Description.Contains(searchString) && p.Manufacturer.Name == manufacturer);
             }
             else if (searchString == null && categorie != null && manufacturer != null)
             {
@@ -101,21 +75,9 @@ namespace Webshop.Services
                 products = _context.Products
                     .Include(p => p.Manufacturer)
                     .Include(p => p.Category)
-                    .Where(p => p.Category.Name == categorie && p.Manufacturer.Name == manufacturer && p.ProductName.Contains(searchString));
-                if (!products.Any())
-                {
-                    products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == categorie && p.Manufacturer.Name == manufacturer && p.Manufacturer.Name.Contains(searchString));
-                }
-                if (!products.Any())
-                {
-                    products = _context.Products
-                    .Include(p => p.Manufacturer)
-                    .Include(p => p.Category)
-                    .Where(p => p.Category.Name == categorie && p.Manufacturer.Name == manufacturer && p.Description.Contains(searchString));
-                }
+                    .Where(p => p.Category.Name == categorie && p.Manufacturer.Name == manufacturer && p.ProductName.Contains(searchString) ||
+                    p.Category.Name == categorie && p.Manufacturer.Name == manufacturer && p.Manufacturer.Name.Contains(searchString) ||
+                    p.Category.Name == categorie && p.Manufacturer.Name == manufacturer && p.Description.Contains(searchString));
             }
             else if (searchString != null && categorie == null && manufacturer == null)
             {
