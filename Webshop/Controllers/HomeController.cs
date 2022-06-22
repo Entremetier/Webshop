@@ -20,6 +20,9 @@ namespace Webshop.Controllers
         private readonly GetCategories _getCategories;
         private readonly CalculateProductPrice _calculateProductPrice;
 
+        private List<Product> shoppingCart = new List<Product>();
+
+
         public HomeController(LapWebshopContext context, 
             Filter filter, 
             GetManufacturers getManufacturers, 
@@ -64,7 +67,23 @@ namespace Webshop.Controllers
             ViewBag.ProductsCount = products.Count();
 
             return View(products);
-        }        
+        }
+
+        public IActionResult ShoppingCart(string? amount, int id)
+        {
+            if (amount == null)
+            {
+                amount = "1";
+            }
+
+            int.TryParse(amount, out int amountInt);
+
+            var product = _context.Products.FirstOrDefault(x => x.Id == id);
+
+            shoppingCart.Add(product);
+
+            return View(shoppingCart);
+        }
 
         public IActionResult Impressum()
         {
