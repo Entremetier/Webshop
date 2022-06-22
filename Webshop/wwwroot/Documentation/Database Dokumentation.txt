@@ -1,4 +1,4 @@
-Update-database -> in PM-Console eingeben
+Update-Database -> in PM-Console eingeben
 
 Alternativ zu Update-database
 

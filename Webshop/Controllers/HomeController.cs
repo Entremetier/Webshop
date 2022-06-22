@@ -20,7 +20,7 @@ namespace Webshop.Controllers
         private readonly GetCategories _getCategories;
         private readonly CalculateProductPrice _calculateProductPrice;
 
-        private List<Product> shoppingCart = new List<Product>();
+        private List<ShoppingCartModel> shoppingCart = new List<ShoppingCartModel>();
 
 
         public HomeController(LapWebshopContext context, 
@@ -69,20 +69,36 @@ namespace Webshop.Controllers
             return View(products);
         }
 
-        public IActionResult ShoppingCart(string? amount, int id)
+        public IActionResult ShoppingCart(string amount, int id)
         {
-            if (amount == null)
-            {
-                amount = "1";
-            }
+            ShoppingCartModel cartModel = new ShoppingCartModel();
 
             int.TryParse(amount, out int amountInt);
 
-            var product = _context.Products.FirstOrDefault(x => x.Id == id);
+            var product = _context.Products.Include(m => m.Manufacturer)
+                .FirstOrDefault(x => x.Id == id);
 
-            shoppingCart.Add(product);
+            if (product == null)
+            {
+                return NotFound();
+            }
 
-            return View(shoppingCart);
+            // Bruttopreis für das Produkt berechnen
+            var categoryAndTaxRate = _context.Categories.ToList();
+            decimal bruttoUnitPrice = _calculateProductPrice.CalcPrice(product, categoryAndTaxRate);
+
+            cartModel.Id = product.Id;
+            cartModel.Amount = amountInt;
+            cartModel.ProductName = product.ProductName;
+            cartModel.ManufacturerName = product.Manufacturer.Name;
+            cartModel.NetUnitPrice = product.NetUnitPrice;
+            cartModel.BruttoUnitPrice = bruttoUnitPrice;
+            cartModel.ImagePath = product.ImagePath;
+            cartModel.Description = product.Description;
+
+            shoppingCart.Add(cartModel);
+
+            return RedirectToAction("Shop");
         }
 
         public IActionResult Impressum()

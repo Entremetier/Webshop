@@ -54,6 +54,7 @@
                         <p>Mehr anzeigen...</p>
                     </a>
                     <form asp-controller="Home" asp-action="ShoppingCart" asp-route-id="@item.Id" method="post">
+                        <input type="hidden" name="amount" value="1" />
                         <input type="submit" name="addToCartButton" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
                     </form>
                 </div>
