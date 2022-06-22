@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    public class RegisterCustomer
+    public partial class RegisterCustomer
     {
         public RegisterCustomer()
         {
