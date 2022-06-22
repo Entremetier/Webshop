@@ -20,9 +20,6 @@ namespace Webshop.Controllers
         private readonly GetCategories _getCategories;
         private readonly CalculateProductPrice _calculateProductPrice;
 
-        private List<ShoppingCartModel> shoppingCart = new List<ShoppingCartModel>();
-
-
         public HomeController(LapWebshopContext context, 
             Filter filter, 
             GetManufacturers getManufacturers, 
@@ -69,13 +66,12 @@ namespace Webshop.Controllers
             return View(products);
         }
 
-        public IActionResult ShoppingCart(string amount, int id)
+        public async Task<IActionResult> ShoppingCart(string amount, int id)
         {
-            ShoppingCartModel cartModel = new ShoppingCartModel();
-
             int.TryParse(amount, out int amountInt);
 
             var product = _context.Products.Include(m => m.Manufacturer)
+                .Include(c => c.Category)
                 .FirstOrDefault(x => x.Id == id);
 
             if (product == null)
@@ -83,20 +79,16 @@ namespace Webshop.Controllers
                 return NotFound();
             }
 
-            // Bruttopreis für das Produkt berechnen
-            var categoryAndTaxRate = _context.Categories.ToList();
-            decimal bruttoUnitPrice = _calculateProductPrice.CalcPrice(product, categoryAndTaxRate);
+            var newOrderLine = new OrderLine
+            {
+                ProductId = product.Id,
+                Amount = amountInt,
+                NetUnitPrice = product.NetUnitPrice,
+                TaxRate = product.Category.TaxRate
+            };
 
-            cartModel.Id = product.Id;
-            cartModel.Amount = amountInt;
-            cartModel.ProductName = product.ProductName;
-            cartModel.ManufacturerName = product.Manufacturer.Name;
-            cartModel.NetUnitPrice = product.NetUnitPrice;
-            cartModel.BruttoUnitPrice = bruttoUnitPrice;
-            cartModel.ImagePath = product.ImagePath;
-            cartModel.Description = product.Description;
-
-            shoppingCart.Add(cartModel);
+            _context.OrderLines.Add(newOrderLine);
+            await _context.SaveChangesAsync();
 
             return RedirectToAction("Shop");
         }

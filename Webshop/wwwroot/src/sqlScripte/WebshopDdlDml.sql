@@ -52,7 +52,7 @@ create table [Order] (
 Id int identity(1,1) primary key,
 CustomerId int not null,
 PriceTotal decimal(7,2) not null,
-DateOrdered DateTime not null,
+DateOrdered DateTime null,
 Street nvarchar(80) not null,
 Zip char(4) not null,
 City nvarchar(50) not null,
@@ -67,7 +67,7 @@ OrderId int not null,
 ProductId int not null,
 Amount int not null,
 NetUnitPrice decimal(6,2) not null,
-TaxRate decimal(3,2) not null,
+TaxRate decimal(4,2) not null,
 constraint FK_OrderLine_Order foreign key (OrderId) references [Order](Id),
 constraint FK_OrderLine_Product foreign key (ProductId) references Product(Id)
 );
