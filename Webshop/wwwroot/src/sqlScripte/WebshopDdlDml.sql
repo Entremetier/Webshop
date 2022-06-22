@@ -51,7 +51,7 @@ constraint FK_Product_Category foreign key (CategoryId) references Category(Id)
 create table [Order] (
 Id int identity(1,1) primary key,
 CustomerId int not null,
-PriceTotal decimal(7,2) not null,
+PriceTotal decimal(7,2) default 0,
 DateOrdered DateTime null,
 Street nvarchar(80) not null,
 Zip char(4) not null,
