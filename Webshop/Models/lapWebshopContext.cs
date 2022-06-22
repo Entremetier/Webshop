@@ -137,7 +137,7 @@ namespace Webshop.Models
 
                 entity.Property(e => e.NetUnitPrice).HasColumnType("decimal(6, 2)");
 
-                entity.Property(e => e.TaxRate).HasColumnType("decimal(3, 2)");
+                entity.Property(e => e.TaxRate).HasColumnType("decimal(4, 2)");
 
                 entity.HasOne(d => d.Order)
                     .WithMany(p => p.OrderLines)

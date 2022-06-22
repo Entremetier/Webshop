@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Webshop.Models;
 using Webshop.Services;
@@ -20,10 +21,10 @@ namespace Webshop.Controllers
         private readonly GetCategories _getCategories;
         private readonly CalculateProductPrice _calculateProductPrice;
 
-        public HomeController(LapWebshopContext context, 
-            Filter filter, 
-            GetManufacturers getManufacturers, 
-            GetCategories getCategories, 
+        public HomeController(LapWebshopContext context,
+            Filter filter,
+            GetManufacturers getManufacturers,
+            GetCategories getCategories,
             CalculateProductPrice calculateProductPrice)
         {
             _context = context;
@@ -68,29 +69,67 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> ShoppingCart(string amount, int id)
         {
-            int.TryParse(amount, out int amountInt);
-
-            var product = _context.Products.Include(m => m.Manufacturer)
-                .Include(c => c.Category)
-                .FirstOrDefault(x => x.Id == id);
-
-            if (product == null)
+            using (var db = new LapWebshopContext())
             {
-                return NotFound();
+                // Den angemeldeten User mittels E-Mail-Claim identifizieren
+                string email = User.FindFirstValue(ClaimTypes.Email);
+
+                // Wenn es den User nicht gibt NotFound zurückgeben
+                if (email == null)
+                {
+                    return RedirectToAction("Login", "Customer");
+                }
+
+                var customer = db.Customers.Where(e => e.Email == email).FirstOrDefault();
+
+                int.TryParse(amount, out int amountInt);
+
+                // Das gewählte Produkt aus DB holen
+                var product = db.Products.Include(m => m.Manufacturer)
+                    .Include(c => c.Category)
+                    .FirstOrDefault(x => x.Id == id);
+
+                // Gibt es das Produkt
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                // Eine neue Order erstellen
+                var newOrder = new Order
+                {
+                    CustomerId = customer.Id,
+                    PriceTotal = 0,
+                    //DateOrdered = DateTime.Today,
+                    Street = customer.Street,
+                    Zip = customer.Zip,
+                    City = customer.City,
+                    FirstName = customer.FirstName,
+                    LastName = customer.LastName
+                };
+
+                db.Orders.Add(newOrder);
+                await db.SaveChangesAsync();
+
+                var order = db.Orders.FirstOrDefault(e => e.DateOrdered == null);
+
+                // Für die Offene Order des Users eine neue OrderLine hinzufügen
+                var newOrderLine = new OrderLine
+                {
+                    ProductId = product.Id,
+                    OrderId = order.Id,
+                    Amount = amountInt,
+                    NetUnitPrice = product.NetUnitPrice,
+                    TaxRate = product.Category.TaxRate
+                };
+
+                // OrderLine speichern
+                db.OrderLines.Add(newOrderLine);
+                await db.SaveChangesAsync();
+
+                // Die Seite nicht neu laden
+                return RedirectToAction("Shop");
             }
-
-            var newOrderLine = new OrderLine
-            {
-                ProductId = product.Id,
-                Amount = amountInt,
-                NetUnitPrice = product.NetUnitPrice,
-                TaxRate = product.Category.TaxRate
-            };
-
-            _context.OrderLines.Add(newOrderLine);
-            await _context.SaveChangesAsync();
-
-            return RedirectToAction("Shop");
         }
 
         public IActionResult Impressum()

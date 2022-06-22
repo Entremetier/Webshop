@@ -72,6 +72,9 @@ constraint FK_OrderLine_Order foreign key (OrderId) references [Order](Id),
 constraint FK_OrderLine_Product foreign key (ProductId) references Product(Id)
 );
 
+--alter table [OrderLine]
+--alter column TaxRate decimal(4,2) not null;
+
 insert into Category values
 ('Smartphone', 20.00),
 ('Tablet', 20.00),
