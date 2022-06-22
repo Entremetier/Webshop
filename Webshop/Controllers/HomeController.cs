@@ -95,6 +95,9 @@ namespace Webshop.Controllers
                     return NotFound();
                 }
 
+                //TODO: Gibt es einen offenen Warenkorb (Order)?
+                //TODO: Gibt es das Produkt schon im Warenkorb (nur den amount erhöhen und db.Update und SaveChanges speichern)
+
                 // Eine neue Order erstellen
                 var newOrder = new Order
                 {
