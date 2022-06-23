@@ -74,7 +74,7 @@ namespace Webshop.Controllers
                 itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
             }
 
-            ViewBag.ItemAmount = itemAmount;
+            ViewBag.Amount = itemAmount;
             ViewBag.ImagePath = product.ImagePath;
 
             return View(product);

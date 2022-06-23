@@ -13,7 +13,7 @@ namespace Webshop.Services
             using (var db = new LapWebshopContext())
             {
                 // Kontrollieren ob ein Produkt schon im Warenkorb, des angemeldeten users, ist
-                var productAlreadyInCart = db.OrderLines.Where(x => x.ProductId == product.Id && order.Id == x.OrderId && order.DateOrdered != null)
+                var productAlreadyInCart = db.OrderLines.Where(x => x.ProductId == product.Id && order.Id == x.OrderId && order.DateOrdered == null)
                     .FirstOrDefault();
 
                 if (productAlreadyInCart != null)

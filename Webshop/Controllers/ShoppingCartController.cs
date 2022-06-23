@@ -14,20 +14,17 @@ namespace Webshop.Controllers
     {
         private readonly UserService _userService;
         private readonly ProductService _productService;
-        private readonly CategoryService _categoryService;
         private readonly OrderService _orderService;
         private readonly OrderLineService _orderLineService;
 
         public ShoppingCartController(
             UserService userService,
             ProductService productService,
-            CategoryService categoryService,
             OrderService orderService,
             OrderLineService orderLineService)
         {
             _userService = userService;
             _productService = productService;
-            _categoryService = categoryService;
             _orderService = orderService;
             _orderLineService = orderLineService;
         }
@@ -72,12 +69,10 @@ namespace Webshop.Controllers
             }
 
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
-            //var productAlreadyInCart = _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
             _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
 
             // Die Seite nicht neu laden
             return RedirectToAction("Shop", "Home");
-
         }
     }
 }
