@@ -80,7 +80,9 @@ namespace Webshop.Controllers
                     return RedirectToAction("Login", "Customer");
                 }
 
-                var customer = db.Customers.Where(e => e.Email == email).FirstOrDefault();
+                // Customer aus der DB holen
+                var customer = db.Customers.Where(e => e.Email == email)
+                    .FirstOrDefault();
 
                 int.TryParse(amount, out int amountInt);
 
@@ -89,47 +91,67 @@ namespace Webshop.Controllers
                     .Include(c => c.Category)
                     .FirstOrDefault(x => x.Id == id);
 
-                // Gibt es das Produkt
+                // Wenn es das Produkt nicht gibt
                 if (product == null)
                 {
                     return NotFound();
                 }
 
-                //TODO: Gibt es einen offenen Warenkorb (Order)?
-                //TODO: Gibt es das Produkt schon im Warenkorb (nur den amount erhöhen und db.Update und SaveChanges speichern)
+                // Die offene Bestellung des Users heraussuchen (DateOrdered == null)
+                var order = db.Orders.Where(x => x.CustomerId == customer.Id)
+                    .FirstOrDefault(e => e.DateOrdered == null);
 
-                // Eine neue Order erstellen
-                var newOrder = new Order
+                // Wenn es keine offene Order gibt
+                if (order == null)
                 {
-                    CustomerId = customer.Id,
-                    PriceTotal = 0,
-                    //DateOrdered = DateTime.Today,
-                    Street = customer.Street,
-                    Zip = customer.Zip,
-                    City = customer.City,
-                    FirstName = customer.FirstName,
-                    LastName = customer.LastName
-                };
+                    // Eine neue Order erstellen, da es Produkt und Customer gibt
+                    var newOrder = new Order
+                    {
+                        CustomerId = customer.Id,
+                        PriceTotal = 0,
+                        Street = customer.Street,
+                        Zip = customer.Zip,
+                        City = customer.City,
+                        FirstName = customer.FirstName,
+                        LastName = customer.LastName
+                    };
 
-                db.Orders.Add(newOrder);
-                await db.SaveChangesAsync();
+                    db.Orders.Add(newOrder);
+                    await db.SaveChangesAsync();
 
-                var order = db.Orders.FirstOrDefault(e => e.DateOrdered == null);
+                    await ShoppingCart(amount, id);
+                }
+                // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
+                var productAlreadyInCart = db.OrderLines.Where(x => x.ProductId == product.Id).FirstOrDefault();
 
-                // Für die Offene Order des Users eine neue OrderLine hinzufügen
-                var newOrderLine = new OrderLine
+                // Der offenen Order eine neue Zeile hinzufügen oder amount beim bestehenden Produkt erhöhen
+                if(productAlreadyInCart != null)
                 {
-                    ProductId = product.Id,
-                    OrderId = order.Id,
-                    Amount = amountInt,
-                    NetUnitPrice = product.NetUnitPrice,
-                    TaxRate = product.Category.TaxRate
-                };
+                    // Wenn es das Produkt schon im Warenkorb gibt, nur den amount erhöhen und db.Update
+                    // und mit SaveChanges speichern.
 
-                // OrderLine speichern
-                db.OrderLines.Add(newOrderLine);
-                await db.SaveChangesAsync();
+                    productAlreadyInCart.Amount = productAlreadyInCart.Amount + amountInt;
 
+                    db.Update(productAlreadyInCart);
+                    await db.SaveChangesAsync();
+                    
+                }
+                else
+                {
+                    // Für die Offene Order des Users eine neue OrderLine hinzufügen
+                    var newOrderLine = new OrderLine
+                    {
+                        ProductId = product.Id,
+                        OrderId = order.Id,
+                        Amount = amountInt,
+                        NetUnitPrice = product.NetUnitPrice,
+                        TaxRate = product.Category.TaxRate
+                    };
+
+                    // OrderLine speichern
+                    db.OrderLines.Add(newOrderLine);
+                    await db.SaveChangesAsync();
+                }
                 // Die Seite nicht neu laden
                 return RedirectToAction("Shop");
             }
