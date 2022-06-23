@@ -6,19 +6,28 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Webshop.Models;
+using Webshop.Services;
 
 namespace Webshop.Controllers
 {
     public class ShoppingCartController : Controller
     {
+        private readonly GetCurrentUser _getCurrentUser;
+
+        public ShoppingCartController(GetCurrentUser getCurrentUser)
+        {
+            _getCurrentUser = getCurrentUser;
+        }
+
+        
         public async Task<IActionResult> AddToShoppingCart(string amount, int id)
         {
             using (var db = new LapWebshopContext())
             {
-                // Den angemeldeten User mittels E-Mail-Claim identifizieren
+                // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
                 string email = User.FindFirstValue(ClaimTypes.Email);
 
-                // Wenn es den User nicht gibt NotFound zurückgeben
+                // Wenn es keine Email gibt zurück zum Login schicken
                 if (email == null)
                 {
                     return RedirectToAction("Login", "Customer");

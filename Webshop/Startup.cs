@@ -31,6 +31,7 @@ namespace Webshop
             services.AddScoped<GetManufacturers>();
             services.AddScoped<GetCategories>();
             services.AddScoped<CalculateProductPrice>();
+            services.AddScoped<GetCurrentUser>();
             services.AddDbContext<LapWebshopContext>();
             services.AddControllersWithViews();
 
