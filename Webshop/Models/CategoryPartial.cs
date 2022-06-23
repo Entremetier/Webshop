@@ -6,13 +6,12 @@ using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    [MetadataTypeAttribute(typeof(Category.Metadata))]
+    [MetadataType(typeof(Metadata))]
     public partial class Category
     {
         internal sealed class Metadata
         {
             public int Id { get; set; }
-            [Required]
             public string Name { get; set; }
             public decimal TaxRate { get; set; }
         }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    public partial class RegisterCustomer
+    public class RegisterCustomer
     {
         public RegisterCustomer()
         {
@@ -31,8 +31,6 @@ namespace Webshop.Models
         [MaxLength(50, ErrorMessage = "Maximal 50 Zeichen")]
         [RegularExpression("^[a-z0-9_\\+-]+(\\.[a-z0-9_\\+-]+)*@[a-z0-9-]+(\\.[a-z0-9-]+)*\\.([a-z]{2,4})$", 
             ErrorMessage = "Die EMail Adresse ist nicht gültig.")]
-        // Nur minimale Validierung der E-Mail, besser wäre es eine Mail an die Adresse zu schicken wo der User einen bestätigungslink drücken muss.
-        //[DataType(DataType.EmailAddress)]
         public string Email { get; set; }
 
         [Required(ErrorMessage = "Straße und Hausnummer angeben")]
