@@ -7,11 +7,11 @@ using Webshop.Models;
 
 namespace Webshop.Services
 {
-    public class GetManufacturers
+    public class ManufacturerService
     {
         private readonly LapWebshopContext _context;
 
-        public GetManufacturers(LapWebshopContext context)
+        public ManufacturerService(LapWebshopContext context)
         {
             _context = context;
         }
@@ -26,7 +26,7 @@ namespace Webshop.Services
 
             foreach (var manufacturer in manufacturers)
             {
-                allManufacturer.Add(new SelectListItem { Value = manufacturer.ToString(), Text = manufacturer.ToString()});
+                allManufacturer.Add(new SelectListItem { Value = manufacturer.ToString(), Text = manufacturer.ToString() });
             }
 
             return allManufacturer;

@@ -26,7 +26,7 @@ namespace Webshop
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<GetManufacturers>();
-            services.AddScoped<GetCategories>();
+            services.AddScoped<ManufacturerService>();
             services.AddScoped<UserService>();
             services.AddScoped<ProductService>();
             services.AddScoped<CategoryService>();

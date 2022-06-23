@@ -10,6 +10,7 @@ namespace Webshop.Services
 {
     public class ProductService
     {
+        // Über _context arbeiten damit die Verbindung zur DB nicht zu früh geschlossen wird
         private readonly LapWebshopContext _context;
 
         public ProductService(LapWebshopContext context)

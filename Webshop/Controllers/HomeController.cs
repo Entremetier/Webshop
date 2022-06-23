@@ -15,21 +15,21 @@ namespace Webshop.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly LapWebshopContext _context;
+        private readonly CategoryService _categoryService;
         private readonly GetManufacturers _getManufacturers;
-        private readonly GetCategories _getCategories;
         private readonly ProductService _productService;
+        private readonly ManufacturerService _manufacturerService;
 
         public HomeController(
-            LapWebshopContext context,
+            CategoryService categoryService,
             GetManufacturers getManufacturers,
-            GetCategories getCategories,
-            ProductService productService)
+            ProductService productService,
+            ManufacturerService manufacturerService)
         {
-            _context = context;
+            _categoryService = categoryService;
             _getManufacturers = getManufacturers;
-            _getCategories = getCategories;
             _productService = productService;
+            _manufacturerService = manufacturerService;
         }
 
         public IActionResult Index()
@@ -46,7 +46,7 @@ namespace Webshop.Controllers
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden
-            List<Category> categoryAndTaxRate = _context.Categories.ToList();
+            List<Category> categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();
 
             // Bruttopreis für alle Produkte berechnen
             foreach (var product in products)
@@ -55,8 +55,8 @@ namespace Webshop.Controllers
             }
 
             // Die DDL`s befüllen
-            List<SelectListItem> allManufacturer = _getManufacturers.GetAllManufacturers();
-            List<SelectListItem> allCategories = _getCategories.GetAllCategories();
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+            List<SelectListItem> allCategories = _categoryService.GetAllCategories();
 
             ViewBag.Manufacturers = allManufacturer;
             ViewBag.Category = allCategories;
