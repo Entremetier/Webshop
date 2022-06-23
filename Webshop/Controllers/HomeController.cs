@@ -97,6 +97,10 @@ namespace Webshop.Controllers
                     return NotFound();
                 }
 
+                // Für das Produkt den Bruttopreis berechnen
+                List<Category> categoryAndTaxRate = db.Categories.ToList();
+                //product.NetUnitPrice = _calculateProductPrice.CalcPrice(product, categoryAndTaxRate);
+
                 // Die offene Bestellung des Users heraussuchen (DateOrdered == null)
                 var order = db.Orders.Where(x => x.CustomerId == customer.Id)
                     .FirstOrDefault(e => e.DateOrdered == null);
@@ -119,18 +123,21 @@ namespace Webshop.Controllers
                     db.Orders.Add(newOrder);
                     await db.SaveChangesAsync();
 
-                    await ShoppingCart(amount, id);
+                    // Die neu erstellte, offene Bestellung des Users heraussuchen
+                    order = db.Orders.Where(x => x.CustomerId == customer.Id)
+                        .FirstOrDefault(e => e.DateOrdered == null);
                 }
+
                 // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
-                var productAlreadyInCart = db.OrderLines.Where(x => x.ProductId == product.Id).FirstOrDefault();
+                var productAlreadyInCart = db.OrderLines.Where(x => x.ProductId == product.Id)
+                    .FirstOrDefault();
 
                 // Der offenen Order eine neue Zeile hinzufügen oder amount beim bestehenden Produkt erhöhen
                 if(productAlreadyInCart != null)
                 {
                     // Wenn es das Produkt schon im Warenkorb gibt, nur den amount erhöhen und db.Update
                     // und mit SaveChanges speichern.
-
-                    productAlreadyInCart.Amount = productAlreadyInCart.Amount + amountInt;
+                    productAlreadyInCart.Amount += amountInt;
 
                     db.Update(productAlreadyInCart);
                     await db.SaveChangesAsync();
@@ -152,6 +159,28 @@ namespace Webshop.Controllers
                     db.OrderLines.Add(newOrderLine);
                     await db.SaveChangesAsync();
                 }
+
+                // Alle Produkte des Warenkorbs aus DB holen
+                var productsInShoppingCart = db.OrderLines.Where(x => x.OrderId == order.Id && order.DateOrdered == null);
+                decimal totalPrice = 0;
+
+                // Alle Produkte den Bruttopreis berechnen und addieren um gesamtpreis in Order einzutragen
+                foreach (var item in productsInShoppingCart)
+                {
+                    decimal itemOnePercent = item.NetUnitPrice / 100;
+                    decimal itemTaxes = itemOnePercent * item.TaxRate;
+                    decimal itemBruttoPrice = item.NetUnitPrice + itemTaxes;
+
+                    decimal allItems = item.Amount * itemBruttoPrice;
+
+                    totalPrice += allItems;
+                }
+
+                order.PriceTotal = totalPrice;
+
+                db.Update(order);
+                await db.SaveChangesAsync();
+
                 // Die Seite nicht neu laden
                 return RedirectToAction("Shop");
             }
