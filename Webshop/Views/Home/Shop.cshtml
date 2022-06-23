@@ -53,7 +53,7 @@
                     <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration">
                         <p>Mehr anzeigen...</p>
                     </a>
-                    <form asp-controller="Home" asp-action="ShoppingCart" asp-route-id="@item.Id" method="post">
+                    <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id" method="post">
                         <input type="hidden" name="amount" value="1" />
                         <input type="submit" name="addToCartButton" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
                     </form>
