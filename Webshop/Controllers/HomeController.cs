@@ -19,20 +19,20 @@ namespace Webshop.Controllers
         private readonly Filter _filter;
         private readonly GetManufacturers _getManufacturers;
         private readonly GetCategories _getCategories;
-        private readonly CalculateProductPrice _calculateProductPrice;
+        private readonly ProductService _productService;
 
         public HomeController(
             LapWebshopContext context,
             Filter filter,
             GetManufacturers getManufacturers,
             GetCategories getCategories,
-            CalculateProductPrice calculateProductPrice)
+            ProductService productService)
         {
             _context = context;
             _filter = filter;
             _getManufacturers = getManufacturers;
             _getCategories = getCategories;
-            _calculateProductPrice = calculateProductPrice;
+            _productService = productService;
         }
 
         public IActionResult Index()
@@ -54,7 +54,7 @@ namespace Webshop.Controllers
             // Bruttopreis für alle Produkte berechnen
             foreach (var product in products)
             {
-                product.NetUnitPrice = _calculateProductPrice.CalcPrice(product, categoryAndTaxRate);
+                product.NetUnitPrice = _productService.CalcPrice(product, categoryAndTaxRate);
             }
 
             // Die DDL`s befüllen

@@ -8,7 +8,7 @@ namespace Webshop.Services
 {
     public class CategoryService
     {
-        public List<Category> GetCategory()
+        public List<Category> GetAllCategoriesAndTaxRates()
         {
             using (var db = new LapWebshopContext())
             {

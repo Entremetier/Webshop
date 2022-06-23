@@ -38,7 +38,7 @@ namespace Webshop.Controllers
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
             string email = User.FindFirstValue(ClaimTypes.Email);
 
-            // Wenn es keine Email gibt zurück zum Login schicken
+            // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
             if (email == null)
             {
                 return RedirectToAction("Login", "Customer");
@@ -48,7 +48,7 @@ namespace Webshop.Controllers
             var customer = _userService.GetCurrentUser(email);
 
             // Das gewählte Produkt aus DB holen
-            var product = _productService.GetProduct(id);
+            var product = _productService.GetProductWithManufacturerAndCategory(id);
 
             // Wenn es das Produkt nicht gibt
             if (product == null)

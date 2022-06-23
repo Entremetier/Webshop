@@ -13,12 +13,17 @@ namespace Webshop.Controllers
     public class ProductController : Controller
     {
         private readonly LapWebshopContext _context;
-        private readonly CalculateProductPrice _calculateProductPrice;
+        private readonly ProductService _productService;
+        private readonly CategoryService _categoryService;
 
-        public ProductController(LapWebshopContext context, CalculateProductPrice calculateProductPrice)
+        public ProductController(
+            LapWebshopContext context,
+            ProductService productService,
+            CategoryService categoryService)
         {
             _context = context;
-            _calculateProductPrice = calculateProductPrice;
+            _productService = productService;
+            _categoryService = categoryService;
         }
 
         // GET: Products/Details/5
@@ -44,40 +49,38 @@ namespace Webshop.Controllers
         // Get Product Details
         public IActionResult Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             // Menge die ein Kunde maximal in den Warenkorb legen kann
-            int amount = 10;
+            int maxAmountOfItems = 10;
 
-            Product product = _context.Products
-                .Include(m => m.Manufacturer)
-                .FirstOrDefault(p => p.Id == id);
-
-            if (product == null)
+            if (!id.HasValue)
             {
                 return NotFound();
             }
-
-            // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre, da zwei offene DB Verbindungen
-            // bestehen würden
-            List<Category> categoryAndTaxRate = _context.Categories.ToList();
-
-            product.NetUnitPrice = _calculateProductPrice.CalcPrice(product, categoryAndTaxRate);
-
-            List<SelectListItem> itemAmount = new List<SelectListItem>();
-
-            for (int i = 1; i <= amount; i++)
+            else
             {
-                itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                Product product = _productService.GetProductWithManufacturer(id.Value);
+
+                if (product == null)
+                {
+                    return NotFound();
+                }
+
+                var categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();
+
+                product.NetUnitPrice = _productService.CalcPrice(product, categoryAndTaxRate);
+
+                List<SelectListItem> itemAmount = new List<SelectListItem>();
+
+                for (int i = 1; i <= maxAmountOfItems; i++)
+                {
+                    itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                }
+
+                ViewBag.Amount = itemAmount;
+                ViewBag.ImagePath = product.ImagePath;
+
+                return View(product);
             }
-
-            ViewBag.Amount = itemAmount;
-            ViewBag.ImagePath = product.ImagePath;
-
-            return View(product);
         }
 
         // GET: Product/Create

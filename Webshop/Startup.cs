@@ -30,7 +30,6 @@ namespace Webshop
             services.AddScoped<Filter>();
             services.AddScoped<GetManufacturers>();
             services.AddScoped<GetCategories>();
-            services.AddScoped<CalculateProductPrice>();
             services.AddScoped<UserService>();
             services.AddScoped<ProductService>();
             services.AddScoped<CategoryService>();
