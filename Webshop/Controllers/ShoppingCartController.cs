@@ -32,6 +32,7 @@ namespace Webshop.Controllers
 
         public IActionResult AddToShoppingCart(string amount, int id)
         {
+            // Parsen weil die Menge von der DDL als string kommt
             int.TryParse(amount, out int amountInt);
 
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
