@@ -14,13 +14,13 @@ namespace Webshop.Controllers
     public class RegisterCustomerController : Controller
     {
         private readonly LapWebshopContext _context;
-        private readonly UserAccountService _userAccountService;
+        private readonly UserService _userService;
 
 
-        public RegisterCustomerController(LapWebshopContext context, UserAccountService userAccountService)
+        public RegisterCustomerController(LapWebshopContext context, UserService userService)
         {
             _context = context;
-            _userAccountService = userAccountService;
+            _userService = userService;
         }
 
         [HttpGet]
@@ -50,7 +50,7 @@ namespace Webshop.Controllers
             // Wenn nicht wird die View mit customer und Fehlern angezeigt 
             if (ModelState.IsValid)
             {
-                await _userAccountService.RegisterUserAsync(customer, password);
+                await _userService.RegisterUserAsync(customer, password);
                 return RedirectToAction("Index", "Home");
             }
             return View(customer);

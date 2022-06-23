@@ -16,20 +16,17 @@ namespace Webshop.Controllers
     public class HomeController : Controller
     {
         private readonly LapWebshopContext _context;
-        private readonly Filter _filter;
         private readonly GetManufacturers _getManufacturers;
         private readonly GetCategories _getCategories;
         private readonly ProductService _productService;
 
         public HomeController(
             LapWebshopContext context,
-            Filter filter,
             GetManufacturers getManufacturers,
             GetCategories getCategories,
             ProductService productService)
         {
             _context = context;
-            _filter = filter;
             _getManufacturers = getManufacturers;
             _getCategories = getCategories;
             _productService = productService;
@@ -45,7 +42,7 @@ namespace Webshop.Controllers
             //TODO: Filter speichern und ausführen wenn man zurück zur Liste geht
             //TODO: Filter löschen einbauen
             // Produktliste befüllen
-            IQueryable<Product> products = _filter.FilterList(searchString, categorie, manufacturer);
+            IQueryable<Product> products = _productService.FilterList(searchString, categorie, manufacturer);
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden

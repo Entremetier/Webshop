@@ -9,26 +9,23 @@ namespace Webshop.Services
 {
     public class GetCategories
     {
-        private readonly LapWebshopContext _context;
-
-        public GetCategories(LapWebshopContext context)
-        {
-            _context = context;
-        }
         public List<SelectListItem> GetAllCategories()
         {
             List<SelectListItem> allCategories = new List<SelectListItem>();
 
-            // Alle Kategorien, alphabetisch geordnet
-            var categories = _context.Categories.Select(c => c.Name).OrderBy(c => c);
-            allCategories.Add(new SelectListItem { Value = "0", Text = "Alle Kategorien" });
-
-            foreach (var category in categories)
+            using (var db = new LapWebshopContext())
             {
-                allCategories.Add(new SelectListItem { Value = category.ToString(), Text = category.ToString() });
-            }
+                // Alle Kategorien, alphabetisch geordnet
+                var categories = db.Categories.Select(c => c.Name).OrderBy(c => c);
+                allCategories.Add(new SelectListItem { Value = "0", Text = "Alle Kategorien" });
 
-            return allCategories;
+                foreach (var category in categories)
+                {
+                    allCategories.Add(new SelectListItem { Value = category.ToString(), Text = category.ToString() });
+                }
+
+                return allCategories;
+            }
         }
     }
 }

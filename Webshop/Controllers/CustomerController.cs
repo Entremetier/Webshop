@@ -15,15 +15,11 @@ namespace Webshop.Controllers
 {
     public class CustomerController : Controller
     {
-        private readonly LapWebshopContext _context;
-        private readonly UserAccountService _userAccountService;
-        private readonly UserSignIn _userSignIn;
+        private readonly UserService _userService;
 
-        public CustomerController(LapWebshopContext context, UserAccountService userAccountService, UserSignIn userSignIn)
+        public CustomerController(UserService userService)
         {
-            _context = context;
-            _userAccountService = userAccountService;
-            _userSignIn = userSignIn;
+            _userService = userService;
         }
 
         // GET: Customer
@@ -88,7 +84,7 @@ namespace Webshop.Controllers
         public async Task<IActionResult> Login(string email, string password)
         {
             //In der Datenbank prüfen ob es den Benutzer gibt und ob das Passwort stimmt
-            var user = await _userAccountService.CanUserLogInAsync(email.Trim(), password.Trim());
+            var user = await _userService.CanUserLogInAsync(email.Trim(), password.Trim());
 
             if (user is null)
             {
@@ -97,10 +93,10 @@ namespace Webshop.Controllers
             }
 
             // Mit email und user.Id die IdentityClaims (Behauptungen) des Users holen und Cookie mitgeben
-            ClaimsIdentity claimsIdentity = _userSignIn.GetClaimsIdentity(email, user.Id);
+            ClaimsIdentity claimsIdentity = _userService.GetClaimsIdentity(email, user.Id);
 
             //Die Claims wandern in eine Identity, welche für den Principal (den Rechteinhaber) benötigt wird
-            ClaimsPrincipal claimsPrincipal = _userSignIn.GetClaimsPrincipal(claimsIdentity);
+            ClaimsPrincipal claimsPrincipal = _userService.GetClaimsPrincipal(claimsIdentity);
 
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
 
