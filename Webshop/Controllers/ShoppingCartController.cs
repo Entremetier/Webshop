@@ -53,7 +53,7 @@ namespace Webshop.Controllers
             // Wenn es das Produkt nicht gibt
             if (product == null)
             {
-                return NotFound();
+                return RedirectToAction("AddToShoppingCart");
             }
 
             // Die offene Bestellung des Users heraussuchen (DateOrdered == null)
