@@ -36,24 +36,27 @@ namespace Webshop.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterCustomer customer, string password)
         {
-            // Schauen ob die angegebene Mailadresse schon in der DB ist
-            Customer existingCustomer = _context.Customers.FirstOrDefault(m => m.Email.Trim() == customer.Email.Trim());
-
-            // Wenn es schon einen Customer mit der Mailadresse gibt eine Warnung ausgeben das er schon existiert
-            if (existingCustomer != null)
+            // Im Model überprüfen ob die Einschränkungen bei den Feldern eingehalten wurden (z.B. max Länge von Feldern)
+            // Wenn nicht wird die View mit eingegebenen Daten und Fehlern angezeigt
+            if (!ModelState.IsValid)
             {
-                TempData["UserExists"] = "Es existiert bereits ein Account mit diesen Daten!";
                 return View(customer);
             }
-
-            // Im Model überprüfen ob die Einschränkungen bei den Feldern eingehalten wurden (z.B. max Länge von Feldern)
-            // Wenn nicht wird die View mit customer und Fehlern angezeigt 
-            if (ModelState.IsValid)
+            else
             {
+                // Schauen ob die angegebene Mailadresse schon in der DB ist
+                Customer existingCustomer = _context.Customers.FirstOrDefault(m => m.Email.Trim() == customer.Email.Trim());
+
+                // Wenn es schon einen Customer mit der Mailadresse gibt eine Warnung ausgeben das er schon existiert
+                if (existingCustomer != null)
+                {
+                    TempData["UserExists"] = "Es existiert bereits ein Account mit diesen Daten!";
+                    return View(customer);
+                }
+
                 await _userService.RegisterUserAsync(customer, password);
                 return RedirectToAction("Index", "Home");
             }
-            return View(customer);
         }
     }
 }

@@ -22,6 +22,9 @@ a {
     margin-bottom: 10rem;
 }
 
+.agbColor{
+    color: red !important;
+}
 /* Navbar */
 .navbar-nav .nav-item > .nav-link {
     color: #343a40 !important;
