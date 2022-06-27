@@ -54,7 +54,7 @@ namespace Webshop.Controllers
 
             if (!id.HasValue)
             {
-                return NotFound();
+                return RedirectToAction("Home", "Shop");
             }
             else
             {
@@ -62,7 +62,7 @@ namespace Webshop.Controllers
 
                 if (product == null)
                 {
-                    return NotFound();
+                    return RedirectToAction("Home", "Shop");
                 }
 
                 var categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();

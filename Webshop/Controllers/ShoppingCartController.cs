@@ -29,7 +29,7 @@ namespace Webshop.Controllers
             _orderLineService = orderLineService;
         }
 
-
+        [HttpPost]
         public IActionResult AddToShoppingCart(string amount, int id)
         {
             // Parsen weil die Menge von der DDL als string kommt

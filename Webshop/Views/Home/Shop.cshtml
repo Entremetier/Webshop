@@ -53,12 +53,24 @@
                     <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration">
                         <p>Mehr anzeigen...</p>
                     </a>
-                    <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id" method="post">
-                        <input type="hidden" name="amount" value="1" />
-                        <input type="submit" name="addToCartButton" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
-                    </form>
+                    <input data-id="@item.Id" value="In den Warenkorb legen" class="btn btn-outline-dark addToCartButton mt-3"/>
                 </div>
             </div>
         </div>
     </div>
 }
+
+@* jQuery damit die Seite nicht neu geladen wird wenn man Item dem Warenkorb hinzufügt *@
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script type="text/javascript">
+    $(function () {
+        $(".addToCartButton").click(function () {
+            var idOfItem = $(this).attr("data-id");
+            var amount = "1";
+            if (idOfItem != '') {
+                $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem }
+                );
+            }
+        });
+    });
+</script>
