@@ -16,18 +16,15 @@ namespace Webshop.Controllers
     public class HomeController : Controller
     {
         private readonly CategoryService _categoryService;
-        private readonly GetManufacturers _getManufacturers;
         private readonly ProductService _productService;
         private readonly ManufacturerService _manufacturerService;
 
         public HomeController(
             CategoryService categoryService,
-            GetManufacturers getManufacturers,
             ProductService productService,
             ManufacturerService manufacturerService)
         {
             _categoryService = categoryService;
-            _getManufacturers = getManufacturers;
             _productService = productService;
             _manufacturerService = manufacturerService;
         }
