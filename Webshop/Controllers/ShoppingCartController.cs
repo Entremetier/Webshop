@@ -72,8 +72,8 @@ namespace Webshop.Controllers
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
             _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
 
-            // Die Seite nicht neu laden
-            return RedirectToAction("Shop", "Home");
+            // Falls das Produkt nicht dem Warenkorb hinzugefügt werden kann
+            return View();
         }
     }
 }

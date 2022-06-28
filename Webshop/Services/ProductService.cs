@@ -12,10 +12,14 @@ namespace Webshop.Services
     {
         // Über _context arbeiten damit die Verbindung, beim filtern, zur DB nicht zu früh geschlossen wird
         private readonly LapWebshopContext _context;
+        private readonly OrderService _orderService;
+        private readonly UserService _userService;
 
-        public ProductService(LapWebshopContext context)
+        public ProductService(LapWebshopContext context, OrderService orderService, UserService userService)
         {
             _context = context;
+            _orderService = orderService;
+            _userService = userService;
         }
         public Product GetProductWithManufacturerAndCategory(int id)
         {
@@ -55,40 +59,52 @@ namespace Webshop.Services
             return itemBruttoPrice;
         }
 
-        public List<SelectListItem> GetMaxItemAmount(Product product)
+        public List<SelectListItem> GetMaxItemAmount(Product product,string email)
         {
             // Menge die ein Kunde maximal in den Warenkorb legen kann
-            int maxAmountOfItems = 10;
+            int maxAmountOfItems = new MaxItemsInCart().MaxItemsInShoppingCart;
 
             List<SelectListItem> itemAmount = new List<SelectListItem>();
 
             using (var db = new LapWebshopContext())
             {
-                // TODO: Abfrage anpassen um richtiges Ergebnis zurück zu bekommen
-                int productAmountInCart = db.OrderLines.Include(x => x.Order)
-                    .Where(x => x.ProductId == product.Id && x.Order.DateOrdered == null)
-                    .Select(x => x.Amount)
-                    .FirstOrDefault();
-
-                if (productAmountInCart == 0)
+                // Wenn user angemeldet ist
+                if (email != null)
                 {
-                    productAmountInCart++;
-                }
+                    //User aus DB holen
+                    Customer customer = _userService.GetCurrentUser(email);
 
-                if (productAmountInCart >= maxAmountOfItems)
-                {
-                    itemAmount.Add(new SelectListItem { Value = "0", Text = "0" });
+                    // Die offene Bestellung des Users aus DB holen
+                    var order = _orderService.GetOrder(customer);
+
+                    // Menge vom Product die schon im Warenkorb ist
+                    int productAmountInCart = db.OrderLines.Where(x => x.ProductId == product.Id && order.Id == x.OrderId && order.DateOrdered == null)
+                        .Select(x => x.Amount)
+                        .FirstOrDefault();
+
+                    // Wenn schon 10 Stk von einem Product im Warenkorb sind
+                    if (productAmountInCart >= maxAmountOfItems)
+                    {
+                        itemAmount.Add(new SelectListItem { Value = "0", Text = "0" });
+                    }
+                    else
+                    {
+                        int amountCustomerCanAdd = maxAmountOfItems - productAmountInCart;
+                        for (int i = 1; i <= amountCustomerCanAdd; i++)
+                        {
+                            itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                        }
+                    }
                 }
+                // Wenn user nicht angemeldet ist
                 else
                 {
-                    // TODO: Berechnung um die noch fehlenden Werte in das DDL hinzufügen (z.B. 1-4, wenn schon 6 Stk im Warenkorb sind)
                     for (int i = 1; i <= maxAmountOfItems; i++)
                     {
                         itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
                     }
                 }
-
-                return itemAmount;
+                    return itemAmount;
             }
         }
 

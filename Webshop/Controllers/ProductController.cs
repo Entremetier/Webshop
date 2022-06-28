@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -66,13 +67,16 @@ namespace Webshop.Controllers
 
                 product.NetUnitPrice = _productService.CalcPrice(product, categoryAndTaxRate);
 
-                List<SelectListItem> itemAmount =  _productService.GetMaxItemAmount(product);
-                    //new List<SelectListItem>();
+                // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
+                string email = User.FindFirstValue(ClaimTypes.Email);
 
-                //for (int i = 1; i <= maxAmountOfItems; i++)
+                // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
+                //if (email == null)
                 //{
-                //    itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                //    return RedirectToAction("Login", "Customer");
                 //}
+
+                List<SelectListItem> itemAmount =  _productService.GetMaxItemAmount(product, email);
 
                 ViewBag.Amount = itemAmount;
                 ViewBag.ImagePath = product.ImagePath;
