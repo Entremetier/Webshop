@@ -55,6 +55,43 @@ namespace Webshop.Services
             return itemBruttoPrice;
         }
 
+        public List<SelectListItem> GetMaxItemAmount(Product product)
+        {
+            // Menge die ein Kunde maximal in den Warenkorb legen kann
+            int maxAmountOfItems = 10;
+
+            List<SelectListItem> itemAmount = new List<SelectListItem>();
+
+            using (var db = new LapWebshopContext())
+            {
+                // TODO: Abfrage anpassen um richtiges Ergebnis zurück zu bekommen
+                int productAmountInCart = db.OrderLines.Include(x => x.Order)
+                    .Where(x => x.ProductId == product.Id && x.Order.DateOrdered == null)
+                    .Select(x => x.Amount)
+                    .FirstOrDefault();
+
+                if (productAmountInCart == 0)
+                {
+                    productAmountInCart++;
+                }
+
+                if (productAmountInCart >= maxAmountOfItems)
+                {
+                    itemAmount.Add(new SelectListItem { Value = "0", Text = "0" });
+                }
+                else
+                {
+                    // TODO: Berechnung um die noch fehlenden Werte in das DDL hinzufügen (z.B. 1-4, wenn schon 6 Stk im Warenkorb sind)
+                    for (int i = 1; i <= maxAmountOfItems; i++)
+                    {
+                        itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                    }
+                }
+
+                return itemAmount;
+            }
+        }
+
         public IQueryable<Product> FilterList(string searchString, string categorie, string manufacturer)
         {
             IQueryable<Product> products = null;

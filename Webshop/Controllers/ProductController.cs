@@ -49,9 +49,6 @@ namespace Webshop.Controllers
         // Get Product Details
         public IActionResult Details(int? id)
         {
-            // Menge die ein Kunde maximal in den Warenkorb legen kann
-            int maxAmountOfItems = 10;
-
             if (!id.HasValue)
             {
                 return RedirectToAction("Home", "Shop");
@@ -69,12 +66,13 @@ namespace Webshop.Controllers
 
                 product.NetUnitPrice = _productService.CalcPrice(product, categoryAndTaxRate);
 
-                List<SelectListItem> itemAmount = new List<SelectListItem>();
+                List<SelectListItem> itemAmount =  _productService.GetMaxItemAmount(product);
+                    //new List<SelectListItem>();
 
-                for (int i = 1; i <= maxAmountOfItems; i++)
-                {
-                    itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
-                }
+                //for (int i = 1; i <= maxAmountOfItems; i++)
+                //{
+                //    itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                //}
 
                 ViewBag.Amount = itemAmount;
                 ViewBag.ImagePath = product.ImagePath;
