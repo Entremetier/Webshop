@@ -53,6 +53,7 @@
                     <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration">
                         <p>Mehr anzeigen...</p>
                     </a>
+                    @* Kein Formular, damit die Methode nicht die Seite neu lädt *@
                     <input type="submit" data-id="@item.Id" value="In den Warenkorb legen" class="btn btn-outline-dark addToCartButton mt-3" />
                 </div>
             </div>
@@ -69,12 +70,12 @@
             var amount = "1";
             if (idOfItem != '') {
                 $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
-                    .done(function () {
-                        console.log("success");
-                    })
-                    .fail(function () {
-                        console.log("Failed");
-                    });
+                    //.done(function () {
+                    //    console.log("success");
+                    //})
+                    //.fail(function () {
+                    //    console.log("Failed");
+                    //});
             }
         });
     });
