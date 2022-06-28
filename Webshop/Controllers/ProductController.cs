@@ -70,12 +70,6 @@ namespace Webshop.Controllers
                 // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
                 string email = User.FindFirstValue(ClaimTypes.Email);
 
-                // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
-                //if (email == null)
-                //{
-                //    return RedirectToAction("Login", "Customer");
-                //}
-
                 List<SelectListItem> itemAmount =  _productService.GetMaxItemAmount(product, email);
 
                 ViewBag.Amount = itemAmount;

@@ -53,7 +53,7 @@
                     <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration">
                         <p>Mehr anzeigen...</p>
                     </a>
-                    <input data-id="@item.Id" value="In den Warenkorb legen" class="btn btn-outline-dark addToCartButton mt-3"/>
+                    <input type="submit" data-id="@item.Id" value="In den Warenkorb legen" class="btn btn-outline-dark addToCartButton mt-3" />
                 </div>
             </div>
         </div>
@@ -68,8 +68,13 @@
             var idOfItem = $(this).attr("data-id");
             var amount = "1";
             if (idOfItem != '') {
-                $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem }
-                );
+                $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
+                    .done(function () {
+                        console.log("success");
+                    })
+                    .fail(function () {
+                        console.log("Failed");
+                    });
             }
         });
     });

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Extensions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -53,7 +55,7 @@ namespace Webshop.Controllers
             // Wenn es das Produkt nicht gibt
             if (product == null)
             {
-                return RedirectToAction("AddToShoppingCart");
+                return RedirectToAction("Shop", "Home");
             }
 
             // Die offene Bestellung des Users heraussuchen (DateOrdered == null)
@@ -73,7 +75,7 @@ namespace Webshop.Controllers
             _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
 
             // Falls das Produkt nicht dem Warenkorb hinzugefügt werden kann
-            return View();
+            return RedirectToAction("Shop", "Home");
         }
     }
 }
