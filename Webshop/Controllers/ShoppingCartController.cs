@@ -15,20 +15,20 @@ namespace Webshop.Controllers
     public class ShoppingCartController : Controller
     {
         private readonly UserService _userService;
-        private readonly ProductService _productService;
         private readonly OrderService _orderService;
         private readonly OrderLineService _orderLineService;
+        private readonly ProductService _productService;
 
         public ShoppingCartController(
             UserService userService,
-            ProductService productService,
             OrderService orderService,
-            OrderLineService orderLineService)
+            OrderLineService orderLineService,
+            ProductService productService)
         {
             _userService = userService;
-            _productService = productService;
             _orderService = orderService;
             _orderLineService = orderLineService;
+            _productService = productService;
         }
 
         [HttpPost]
@@ -74,8 +74,8 @@ namespace Webshop.Controllers
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
             _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
 
-            // Falls das Produkt nicht dem Warenkorb hinzugefügt werden kann
-            return RedirectToAction("Shop", "Home");
+            // Die Details Seite mit dem Produkt und geändertem DDL laden
+            return RedirectToAction("Details", "Product", product);
         }
     }
 }
