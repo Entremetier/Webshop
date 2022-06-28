@@ -50,7 +50,7 @@
                 </div>
                 <div>
                     <p style="font-size: 1.2rem">@Html.DisplayFor(modelItem => item.NetUnitPrice)&nbsp;€</p>
-                    <a asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id" class="noTextDecoration">
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration">
                         <p>Mehr anzeigen...</p>
                     </a>
                     <input type="submit" data-id="@item.Id" value="In den Warenkorb legen" class="btn btn-outline-dark addToCartButton mt-3" />
@@ -60,7 +60,7 @@
     </div>
 }
 
-@* jQuery damit die Seite nicht neu geladen wird wenn man Item dem Warenkorb hinzufügt *@
+@* jQuery damit die Seite nicht neu geladen wird wenn man dem Warenkorb einen Item hinzufügt *@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
     $(function () {

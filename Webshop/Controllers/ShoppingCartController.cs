@@ -74,7 +74,8 @@ namespace Webshop.Controllers
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
             _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
 
-            // Die Details Seite mit dem Produkt und geändertem DDL laden
+            // Die Details Seite mit dem Produkt und geändertem DDL laden (wenn aus der Details Seite aufgerufen
+            // wurde, direkt aus Shop wird die Seite nicht neu geladen (jQuery im Shop.cshtml))
             return RedirectToAction("Details", "Product", product);
         }
     }
