@@ -79,14 +79,16 @@ namespace Webshop.Controllers
             return RedirectToAction("Details", "Product", product);
         }
 
+        [HttpGet]
         public async Task<IActionResult> Shop()
         {
-            // Den Warenkorb des Users und den User selbst holen
+            // Den Warenkorb des Users, Order des Users und den User selbst holen
 
-            // Warenkorb und Kundeninformationen darstellen
+            // Warenkorb, Order und Kundeninformationen an View übergeben (ViewModel)
 
 
-            return;
+
+            return View();
         }
     }
 }

@@ -61,9 +61,6 @@ namespace Webshop.Services
 
         public List<SelectListItem> GetMaxItemAmount(Product product,string email)
         {
-            // Menge die ein Kunde maximal in den Warenkorb legen kann
-            int maxAmountOfItems = new MaxItemsInCart().MaxItemsInShoppingCart;
-
             List<SelectListItem> itemAmount = new List<SelectListItem>();
 
             using (var db = new LapWebshopContext())
@@ -83,13 +80,13 @@ namespace Webshop.Services
                         .FirstOrDefault();
 
                     // Wenn schon 10 Stk von einem Product im Warenkorb sind
-                    if (productAmountInCart >= maxAmountOfItems)
+                    if (productAmountInCart >= MaxItemsInCart.MaxItemsInShoppingCart)
                     {
                         itemAmount.Add(new SelectListItem { Value = "0", Text = "0" });
                     }
                     else
                     {
-                        int amountCustomerCanAdd = maxAmountOfItems - productAmountInCart;
+                        int amountCustomerCanAdd = MaxItemsInCart.MaxItemsInShoppingCart - productAmountInCart;
                         for (int i = 1; i <= amountCustomerCanAdd; i++)
                         {
                             itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
@@ -99,7 +96,7 @@ namespace Webshop.Services
                 // Wenn user nicht angemeldet ist
                 else
                 {
-                    for (int i = 1; i <= maxAmountOfItems; i++)
+                    for (int i = 1; i <= MaxItemsInCart.MaxItemsInShoppingCart; i++)
                     {
                         itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
                     }

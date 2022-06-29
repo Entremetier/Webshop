@@ -19,7 +19,7 @@ namespace Webshop.Services
 
                 if (productAlreadyInCart != null)
                 {
-                    if (productAlreadyInCart.Amount >= new MaxItemsInCart().MaxItemsInShoppingCart)
+                    if (productAlreadyInCart.Amount >= MaxItemsInCart.MaxItemsInShoppingCart)
                     {
                         return;
                     }

@@ -5,10 +5,11 @@ using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    public class MaxItemsInCart
+    public static class MaxItemsInCart
     {
+        // const ist default static
         private const int maxItemsInShoppingCart = 10;
-        public int MaxItemsInShoppingCart 
+        public static int MaxItemsInShoppingCart 
         { 
             get => maxItemsInShoppingCart; 
         }
