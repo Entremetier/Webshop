@@ -78,5 +78,15 @@ namespace Webshop.Controllers
             // wurde, direkt aus Shop wird die Seite nicht neu geladen (jQuery im Shop.cshtml))
             return RedirectToAction("Details", "Product", product);
         }
+
+        public async Task<IActionResult> Shop()
+        {
+            // Den Warenkorb des Users und den User selbst holen
+
+            // Warenkorb und Kundeninformationen darstellen
+
+
+            return;
+        }
     }
 }
