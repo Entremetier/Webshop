@@ -58,7 +58,7 @@ namespace Webshop.Controllers
                 return RedirectToAction("Shop", "Home");
             }
 
-            // Die offene Bestellung des Users heraussuchen (DateOrdered == null)
+            // Die offene Order des Users heraussuchen (DateOrdered == null)
             var order = _orderService.GetOrder(customer);
 
             // Wenn es keine offene Order gibt

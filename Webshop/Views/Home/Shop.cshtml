@@ -53,29 +53,37 @@
                     <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="noTextDecoration">
                         <p>Mehr anzeigen...</p>
                     </a>
-                    @* Kein Formular, damit die Methode nicht die Seite neu lädt *@
-                    <input type="submit" data-id="@item.Id" value="In den Warenkorb legen" class="btn btn-outline-dark addToCartButton mt-3" />
+                    @{
+                        if (User.Identity.IsAuthenticated)
+                        {
+                            @* Kein Formular, damit die Methode nicht die Seite neu lädt *@
+                            <input type="submit" data-id="@item.Id" value="In den Warenkorb legen" 
+                                   class="btn btn-outline-dark addToCartButton mt-3" />
+                        }
+                        else
+                        {
+                            @* Wenn der User nicht angemeldet ist, die Methode durchlaufen um zum Login zu schicken *@
+                            <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id" 
+                                  method="post">
+                                <input type="submit" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
+                            </form>
+                        }
+                    }
                 </div>
             </div>
         </div>
     </div>
 }
 
-@* jQuery damit die Seite nicht neu geladen wird wenn man dem Warenkorb einen Item hinzufügt *@
+@* jQuery damit die Seite nicht neu geladen wird wenn man dem Warenkorb einen Item hinzufügt (User ist angemeldet) *@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script type="text/javascript">
     $(function () {
         $(".addToCartButton").click(function () {
             var idOfItem = $(this).attr("data-id");
-            var amount = "1";
+            var amount = 1;
             if (idOfItem != '') {
                 $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
-                    //.done(function () {
-                    //    console.log("success");
-                    //})
-                    //.fail(function () {
-                    //    console.log("Failed");
-                    //});
             }
         });
     });
