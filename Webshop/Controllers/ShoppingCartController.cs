@@ -83,7 +83,11 @@ namespace Webshop.Controllers
         public async Task<IActionResult> Shop()
         {
             // Den Warenkorb des Users, Order des Users und den User selbst holen
-
+            using (var db = new LapWebshopContext())
+            {
+                //TODO: Alle Tabellen includieren
+                //var everything = db.Customers.Include(x => x.Orders).Include(x => x.OrderLine)
+            }
             // Warenkorb, Order und Kundeninformationen an View übergeben (ViewModel)
 
 
