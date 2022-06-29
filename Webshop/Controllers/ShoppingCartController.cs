@@ -61,16 +61,6 @@ namespace Webshop.Controllers
             // Die offene Order des Users heraussuchen (DateOrdered == null)
             var order = _orderService.GetOrder(customer);
 
-            // Wenn es keine offene Order gibt
-            if (order == null)
-            {
-                // Eine neue Order erstellen, da es Produkt und Customer gibt
-                _orderService.CreateOrder(customer);
-
-                // Die neu erstellte, offene Bestellung des Users heraussuchen
-                order = _orderService.GetOrder(customer);
-            }
-
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
             _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
 
@@ -80,19 +70,27 @@ namespace Webshop.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Shop()
+        public async Task<IActionResult> Cart()
         {
             // Den Warenkorb des Users, Order des Users und den User selbst holen
             using (var db = new LapWebshopContext())
             {
                 //TODO: Alle Tabellen includieren
-                //var everything = db.Customers.Include(x => x.Orders).Include(x => x.OrderLine)
+                var everything = db.Customers.Include(x => x.Orders).ThenInclude(x => x.OrderLines);
+
+                if (everything == null)
+                {
+                    return RedirectToAction("Shop", "Home");
+                }
+                else
+                {
+                    // Warenkorb, Order und Kundeninformationen an View übergeben (ViewModel)
+                    return View(everything);
+                }
             }
-            // Warenkorb, Order und Kundeninformationen an View übergeben (ViewModel)
 
 
 
-            return View();
         }
     }
 }

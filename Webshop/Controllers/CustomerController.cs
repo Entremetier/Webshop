@@ -83,6 +83,10 @@ namespace Webshop.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(string email, string password)
         {
+            if (email == null || password == null)
+            {
+                return RedirectToAction("Login");
+            }
             //In der Datenbank prüfen ob es den Benutzer gibt und ob das Passwort stimmt
             var user = await _userService.CanUserLogInAsync(email.Trim(), password.Trim());
 

@@ -15,11 +15,19 @@ namespace Webshop.Services
                 var order = db.Orders.Where(x => x.CustomerId == customer.Id)
                     .FirstOrDefault(e => e.DateOrdered == null);
 
+                // Neue Order erstellen wenn keine vorhanden ist
+                if (order == null)
+                {
+                    CreateOrder(customer);
+
+                     // Neu erstellte Order aus der DB holen
+                    order = GetOrder(customer);
+                }
                 return order;
             }
         }
 
-        public async void CreateOrder(Customer customer)
+        private async void CreateOrder(Customer customer)
         {
             using (var db = new LapWebshopContext())
             {
