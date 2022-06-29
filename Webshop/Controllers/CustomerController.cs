@@ -85,6 +85,7 @@ namespace Webshop.Controllers
         {
             if (email == null || password == null)
             {
+                TempData["LoginFailed"] = "E-Mail oder Passwort ist falsch!";
                 return RedirectToAction("Login");
             }
             //In der Datenbank prüfen ob es den Benutzer gibt und ob das Passwort stimmt

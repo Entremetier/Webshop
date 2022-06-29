@@ -9,7 +9,7 @@ namespace Webshop.Services
 {
     public class OrderLineService : Controller
     {
-        public void GetProductIfInShoppingCart(Product product, Order order, int amount)
+        public void AddProductToShoppingCart(Product product, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
             {
@@ -91,6 +91,16 @@ namespace Webshop.Services
 
                 db.Update(order);
                 await db.SaveChangesAsync();
+            }
+        }
+
+        public List<OrderLine> GetOrderLinesOfOrderAsList(Order order)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                var orderLines = db.OrderLines.Where(x => x.OrderId == order.Id).ToList();
+
+                return orderLines;
             }
         }
     }

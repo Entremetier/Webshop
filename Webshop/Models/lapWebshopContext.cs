@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Webshop.ViewModels;
 
 #nullable disable
 
@@ -183,5 +184,7 @@ namespace Webshop.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+        public DbSet<Webshop.ViewModels.CustomerOrderViewModel> CustomerOrderViewModel { get; set; }
     }
 }

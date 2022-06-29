@@ -9,6 +9,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Webshop.Models;
 using Webshop.Services;
+using Webshop.ViewModels;
 
 namespace Webshop.Controllers
 {
@@ -62,7 +63,7 @@ namespace Webshop.Controllers
             var order = _orderService.GetOrder(customer);
 
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
-            _orderLineService.GetProductIfInShoppingCart(product, order, amountInt);
+            _orderLineService.AddProductToShoppingCart(product, order, amountInt);
 
             // Die Details Seite mit dem Produkt und geändertem DDL laden (wenn aus der Details Seite aufgerufen
             // wurde, direkt aus Shop wird die Seite nicht neu geladen (jQuery im Shop.cshtml))
@@ -72,25 +73,34 @@ namespace Webshop.Controllers
         [HttpGet]
         public async Task<IActionResult> Cart()
         {
-            // Den Warenkorb des Users, Order des Users und den User selbst holen
-            using (var db = new LapWebshopContext())
-            {
-                //TODO: Alle Tabellen includieren
-                var everything = db.Customers.Include(x => x.Orders).ThenInclude(x => x.OrderLines);
+            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
+            string email = User.FindFirstValue(ClaimTypes.Email);
 
-                if (everything == null)
-                {
-                    return RedirectToAction("Shop", "Home");
-                }
-                else
-                {
-                    // Warenkorb, Order und Kundeninformationen an View übergeben (ViewModel)
-                    return View(everything);
-                }
+            // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Customer");
             }
 
+            var customer = _userService.GetCurrentUser(email);
+            var order = _orderService.GetOrder(customer);
+            var orderLine = _orderLineService.GetOrderLinesOfOrderAsList(order);
 
+            if (customer == null || order == null)
+            {
+                return RedirectToAction("Shop", "Home");
+            }
+            else
+            {
+                // Warenkorb, Order und Kundeninformationen an View übergeben (ViewModel)
+                CustomerOrderViewModel customerOrderViewModel = new CustomerOrderViewModel();
+                //customerOrderViewModel.Id = order.Id;
+                customerOrderViewModel.Customer = customer;
+                customerOrderViewModel.Order = order;
+                customerOrderViewModel.OrderLine = orderLine;
 
+                return View(customerOrderViewModel);
+            }
         }
     }
 }
