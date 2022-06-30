@@ -4,27 +4,77 @@
     ViewData["Title"] = "Warenkorb";
 }
 
-@{ 
+@{
     Customer customer = @ViewBag.Customer;
+    Order order = ViewBag.Order;
 }
 
-@customer.FirstName @customer.LastName
+<div class="row pl-3">
+    <div class="mb-5">
+        <h1>Warenkorb</h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-sm-12 col-md-3">
+        <form>
+            <div>
+                <h3>Lieferadresse</h3>
+                <p>Sollte die Lieferadresse von der Rechnungsadresse abweichen können Sie diese hier ändern.</p>
+            </div>
+            <div class="form-group">
+                <label for="title">Anrede</label>
+                <input type="text" name="title" class="form-control" value="@customer.Title">
+            </div>
+            <div class="form-group">
+                <label for="firstName">Vorname</label>
+                <input type="text" name="firstName" class="form-control" value="@customer.FirstName">
+            </div>
+            <div class="form-group">
+                <label for="lastName">Nachname</label>
+                <input type="text" name="lastName" class="form-control" value="@customer.LastName">
+            </div>
+            <div class="form-group">
+                <label for="email">E-mail</label>
+                <input type="email" name="email" class="form-control" value="@customer.Email">
+            </div>
+            <div class="form-group">
+                <label for="street">Straße und Nr.</label>
+                <input type="text" name="street" class="form-control" value="@customer.Street">
+            </div>
+            <div class="form-group">
+                <label for="zip">Postleitzahl</label>
+                <input type="text" name="zip" class="form-control" value="@customer.Zip">
+            </div>
+            <div class="form-group">
+                <label for="city">Stadt</label>
+                <input type="text" name="city" class="form-control" value="@customer.City">
+            </div>
+        </form>
+    </div>
+    <div class="col-sm-12 col-md-5 offset-md-1 mb-3">
+        <h3>Produkte</h3> <br />
+        @foreach (var item in Model)
+        {
+            <div class="inline-block">
+                <img src="@item.ImagePath" asp-append-version="true" alt="@item.Manufacturer @item.ProductName" style="height:8rem; width:auto" />
+                <span class="align-top ml-2" style="font-size:1.3rem"><b>@item.Manufacturer&nbsp;@item.ProductName</b></span>
+                <span class="ml-2">Stück:&nbsp;@item.BruttoPrice&nbsp;€</span>
+                <span class="ml-2">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>
+            </div>
+            <br />
+            @item.Orderline.Amount
+            
+            <br />
+            <select name="miau" asp-items="@item.SelectList" class="form-control d-inline btn btn-outline-dark" style="width: 4rem"></select>
+            <br />
+        }
+    </div>
+    <div class="col-sm-12 col-md-3 text-md-right">
+        <h3>Gesamtpreis</h3>
+        <span style="font-size:1.3rem">@order.PriceTotal&nbsp;€</span>
+    </div>
+</div>
 <br />
-<br />  
 
-@foreach (var item in Model)
-{
-    <img src="@item.ImagePath" asp-append-version="true" alt="@item.Manufacturer @item.ProductName" style="height:100px; width:auto"/>
 
-    <br />
-    @item.Manufacturer @item.ProductName
-    <br />
-    @item.Orderline.Amount
-    <br />
-    @item.BruttoPrice
-    <br />
-    @item.RowPrice
-    <br />
-    <select name="miau" asp-items="@item.SelectList" class="form-control d-inline btn btn-outline-dark" style="width: 4rem"></select>
-    <br />
-}

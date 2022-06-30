@@ -117,6 +117,7 @@ namespace Webshop.Controllers
                     });
                 }
 
+                ViewBag.Order = order;
                 ViewBag.Customer = customer;
                 return View(viewModelList);
             }
