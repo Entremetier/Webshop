@@ -25,6 +25,10 @@ a {
 .agbColor{
     color: red !important;
 }
+
+.custom-btn-size{
+    width: 10rem;
+}
 /* Navbar */
 .navbar-nav .nav-item > .nav-link {
     color: #343a40 !important;
