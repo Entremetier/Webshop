@@ -9,6 +9,12 @@ namespace Webshop.Services
 {
     public class OrderLineService : Controller
     {
+        private readonly LapWebshopContext _context;
+
+        public OrderLineService(LapWebshopContext context)
+        {
+            _context = context;
+        }
         public void AddProductToShoppingCart(Product product, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
@@ -94,14 +100,9 @@ namespace Webshop.Services
             }
         }
 
-        public List<OrderLine> GetOrderLinesOfOrderAsList(Order order)
+        public List<OrderLine> GetOrderLinesOfOrder(Order order)
         {
-            using (var db = new LapWebshopContext())
-            {
-                var orderLines = db.OrderLines.Where(x => x.OrderId == order.Id).ToList();
-
-                return orderLines;
-            }
+            return _context.OrderLines.Where(x => x.OrderId == order.Id).ToList();
         }
     }
 }

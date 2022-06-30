@@ -185,6 +185,5 @@ namespace Webshop.Models
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
-        public DbSet<Webshop.ViewModels.CustomerOrderViewModel> CustomerOrderViewModel { get; set; }
     }
 }

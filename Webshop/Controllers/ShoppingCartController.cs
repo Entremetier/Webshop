@@ -70,8 +70,7 @@ namespace Webshop.Controllers
             return RedirectToAction("Details", "Product", product);
         }
 
-        [HttpGet]
-        public async Task<IActionResult> Cart()
+        public IActionResult Cart()
         {
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
             string email = User.FindFirstValue(ClaimTypes.Email);
@@ -84,7 +83,7 @@ namespace Webshop.Controllers
 
             var customer = _userService.GetCurrentUser(email);
             var order = _orderService.GetOrder(customer);
-            var orderLine = _orderLineService.GetOrderLinesOfOrderAsList(order);
+            List<OrderLine> orderLines = _orderLineService.GetOrderLinesOfOrder(order);
 
             if (customer == null || order == null)
             {
@@ -92,14 +91,23 @@ namespace Webshop.Controllers
             }
             else
             {
-                // Warenkorb, Order und Kundeninformationen an View übergeben (ViewModel)
-                CustomerOrderViewModel customerOrderViewModel = new CustomerOrderViewModel();
-                //customerOrderViewModel.Id = order.Id;
-                customerOrderViewModel.Customer = customer;
-                customerOrderViewModel.Order = order;
-                customerOrderViewModel.OrderLine = orderLine;
+                List<CustomerOrderViewModel> viewModelList = new List<CustomerOrderViewModel>();
+                foreach (var item in orderLines)
+                {
+                    var product = _productService.GetProductWithManufacturer(item.ProductId);
+                    viewModelList.Add(new CustomerOrderViewModel
+                    {
+                        ProductNumber = item.ProductId,
+                        ProductName = product.ProductName,
+                        Manufracturer = product.Manufacturer.Name,
+                        // TODO: Berechnung einfügen
+                        BruttoPrice = (item.NetUnitPrice / 100) * 120,
+                        ImagePath = product.ImagePath,
+                        orderline = item
+                    });
+                }
 
-                return View(customerOrderViewModel);
+                return View(viewModelList);
             }
         }
     }
