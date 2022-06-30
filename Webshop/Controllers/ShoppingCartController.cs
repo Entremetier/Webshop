@@ -108,11 +108,11 @@ namespace Webshop.Controllers
                         // Bruttopreis auf zwei Nachkommastellen runden
                         BruttoPrice = Math.Round(_productService.CalcPrice(product, categoryAndTaxRate), 2),
                         ImagePath = product.ImagePath,
-                        orderline = item,
+                        Orderline = item,
                         RowPrice = Math.Round(item.Amount * _productService.CalcPrice(product, categoryAndTaxRate), 2),
-                        selectList = new List<SelectListItem>
+                        SelectList = new List<SelectListItem>
                         {
-                            new SelectListItem { Value = "1", Text = "Eins" }
+                            new SelectListItem { Value = "1", Text = "1" }
                         }
                     });
                 }

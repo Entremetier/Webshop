@@ -107,7 +107,7 @@ namespace Webshop.Controllers
                 new AuthenticationProperties
                 {
                 IsPersistent = true,
-                    ExpiresUtc = DateTime.UtcNow.AddDays(5)
+                    ExpiresUtc = DateTime.UtcNow.AddMinutes(15)
                 });
 
             return RedirectToAction("Shop", "Home");

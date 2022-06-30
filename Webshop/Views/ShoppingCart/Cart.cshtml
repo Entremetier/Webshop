@@ -8,9 +8,7 @@
     Customer customer = @ViewBag.Customer;
 }
 
-@customer.FirstName
-<br />
-@customer.LastName
+@customer.FirstName @customer.LastName
 <br />
 <br />  
 
@@ -21,12 +19,12 @@
     <br />
     @item.Manufacturer @item.ProductName
     <br />
-    @item.orderline.Amount
+    @item.Orderline.Amount
     <br />
     @item.BruttoPrice
     <br />
     @item.RowPrice
     <br />
-    <select name="miau" asp-items="@item.selectList" class="form-control d-inline btn btn-outline-dark" style="width: 4rem"></select>
+    <select name="miau" asp-items="@item.SelectList" class="form-control d-inline btn btn-outline-dark" style="width: 4rem"></select>
     <br />
 }
