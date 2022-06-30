@@ -103,7 +103,12 @@ namespace Webshop.Controllers
             //Die Claims wandern in eine Identity, welche für den Principal (den Rechteinhaber) benötigt wird
             ClaimsPrincipal claimsPrincipal = _userService.GetClaimsPrincipal(claimsIdentity);
 
-            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal);
+            await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
+                new AuthenticationProperties
+                {
+                IsPersistent = true,
+                    ExpiresUtc = DateTime.UtcNow.AddDays(5)
+                });
 
             return RedirectToAction("Shop", "Home");
         }

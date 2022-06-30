@@ -4,7 +4,18 @@
     ViewData["Title"] = "Warenkorb";
 }
 
+@ViewBag.Customer <br />
+
 @foreach (var item in Model)
 {
     @item.ImagePath
+    <br />
+    @item.Manufracturer  @item.ProductName
+    <br />
+    @item.orderline.Amount
+    <br />
+    @item.BruttoPrice
+    <br />
+    @item.RowPrice
+    <br />
 }

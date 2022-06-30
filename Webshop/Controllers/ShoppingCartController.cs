@@ -19,17 +19,20 @@ namespace Webshop.Controllers
         private readonly OrderService _orderService;
         private readonly OrderLineService _orderLineService;
         private readonly ProductService _productService;
+        private readonly CategoryService _categoryService;
 
         public ShoppingCartController(
             UserService userService,
             OrderService orderService,
             OrderLineService orderLineService,
-            ProductService productService)
+            ProductService productService,
+            CategoryService categoryService)
         {
             _userService = userService;
             _orderService = orderService;
             _orderLineService = orderLineService;
             _productService = productService;
+            _categoryService = categoryService;
         }
 
         [HttpPost]
@@ -83,9 +86,10 @@ namespace Webshop.Controllers
 
             var customer = _userService.GetCurrentUser(email);
             var order = _orderService.GetOrder(customer);
+            var categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();
             List<OrderLine> orderLines = _orderLineService.GetOrderLinesOfOrder(order);
 
-            if (customer == null || order == null)
+            if (customer == null || order == null || categoryAndTaxRate == null || orderLines == null)
             {
                 return RedirectToAction("Shop", "Home");
             }
@@ -100,13 +104,15 @@ namespace Webshop.Controllers
                         ProductNumber = item.ProductId,
                         ProductName = product.ProductName,
                         Manufracturer = product.Manufacturer.Name,
-                        // TODO: Berechnung einfügen
-                        BruttoPrice = (item.NetUnitPrice / 100) * 120,
+                        // Bruttopreis auf zwei Nachkommastellen runden
+                        BruttoPrice = Math.Round(_productService.CalcPrice(product, categoryAndTaxRate), 2),
                         ImagePath = product.ImagePath,
-                        orderline = item
+                        orderline = item,
+                        RowPrice = Math.Round(item.Amount * _productService.CalcPrice(product, categoryAndTaxRate), 2)
                     });
                 }
 
+                ViewBag.Customer = customer;
                 return View(viewModelList);
             }
         }
