@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -103,12 +104,16 @@ namespace Webshop.Controllers
                     {
                         ProductNumber = item.ProductId,
                         ProductName = product.ProductName,
-                        Manufracturer = product.Manufacturer.Name,
+                        Manufacturer = product.Manufacturer.Name,
                         // Bruttopreis auf zwei Nachkommastellen runden
                         BruttoPrice = Math.Round(_productService.CalcPrice(product, categoryAndTaxRate), 2),
                         ImagePath = product.ImagePath,
                         orderline = item,
-                        RowPrice = Math.Round(item.Amount * _productService.CalcPrice(product, categoryAndTaxRate), 2)
+                        RowPrice = Math.Round(item.Amount * _productService.CalcPrice(product, categoryAndTaxRate), 2),
+                        selectList = new List<SelectListItem>
+                        {
+                            new SelectListItem { Value = "1", Text = "Eins" }
+                        }
                     });
                 }
 
