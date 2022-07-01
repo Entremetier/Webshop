@@ -99,6 +99,7 @@ namespace Webshop.Controllers
                 List<CustomerOrderViewModel> viewModelList = new List<CustomerOrderViewModel>();
                 foreach (var item in orderLines)
                 {
+
                     var product = _productService.GetProductWithManufacturer(item.ProductId);
                     viewModelList.Add(new CustomerOrderViewModel
                     {
@@ -110,10 +111,7 @@ namespace Webshop.Controllers
                         ImagePath = product.ImagePath,
                         Orderline = item,
                         RowPrice = Math.Round(item.Amount * _productService.CalcPrice(product, categoryAndTaxRate), 2),
-                        SelectList = new List<SelectListItem>
-                        {
-                            new SelectListItem { Value = "1", Text = "1" }
-                        }
+                        SelectList = _orderLineService.FillSelectList(item.Amount)
                     });
                 }
 

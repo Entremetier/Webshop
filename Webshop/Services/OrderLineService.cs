@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -103,6 +104,16 @@ namespace Webshop.Services
         public List<OrderLine> GetOrderLinesOfOrder(Order order)
         {
             return _context.OrderLines.Where(x => x.OrderId == order.Id).ToList();
+        }
+
+        public List<SelectListItem> FillSelectList(int amount)
+        {
+            List<SelectListItem> listItems = new List<SelectListItem>();
+            for (int i = amount; i > 0; i--)
+            {
+                listItems.Add(new SelectListItem{ Value = i.ToString(), Text = i.ToString()});
+            }
+            return listItems;
         }
     }
 }
