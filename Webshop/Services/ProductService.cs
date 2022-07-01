@@ -21,25 +21,25 @@ namespace Webshop.Services
             _orderService = orderService;
             _userService = userService;
         }
-        public Product GetProductWithManufacturerAndCategory(int id)
+        public async Task<Product> GetProductWithManufacturerAndCategory(int id)
         {
             using (var db = new LapWebshopContext())
             {
-                var product = db.Products.Include(m => m.Manufacturer)
+                var product = await db.Products.Include(m => m.Manufacturer)
                     .Include(c => c.Category)
-                    .FirstOrDefault(x => x.Id == id);
+                    .FirstOrDefaultAsync(x => x.Id == id);                    
 
                 return product;
             }
         }
 
-        public Product GetProductWithManufacturer(int id)
+        public async Task<Product> GetProductWithManufacturer(int id)
         {
             using (var db = new LapWebshopContext())
             {
-                Product product = db.Products
+                Product product = await db.Products
                     .Include(m => m.Manufacturer)
-                    .FirstOrDefault(p => p.Id == id);
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
                 return product;
             }
@@ -59,7 +59,7 @@ namespace Webshop.Services
             return itemBruttoPrice;
         }
 
-        public List<SelectListItem> GetMaxItemAmount(Product product,string email)
+        public async Task<List<SelectListItem>> GetMaxItemAmount(Product product,string email)
         {
             List<SelectListItem> itemAmount = new List<SelectListItem>();
 
@@ -69,15 +69,15 @@ namespace Webshop.Services
                 if (email != null)
                 {
                     //User aus DB holen
-                    Customer customer = _userService.GetCurrentUser(email);
+                    Customer customer = await _userService.GetCurrentUser(email);
 
                     // Die offene Bestellung des Users aus DB holen
-                    var order = _orderService.GetOrder(customer);
+                    var order = await _orderService.GetOrder(customer);
 
                     // Menge vom Product die schon im Warenkorb ist
-                    int productAmountInCart = db.OrderLines.Where(x => x.ProductId == product.Id && order.Id == x.OrderId && order.DateOrdered == null)
+                    int productAmountInCart = await db.OrderLines.Where(x => x.ProductId == product.Id && order.Id == x.OrderId && order.DateOrdered == null)
                         .Select(x => x.Amount)
-                        .FirstOrDefault();
+                        .FirstOrDefaultAsync();
 
                     // Wenn schon 10 Stk von einem Product im Warenkorb sind
                     if (productAmountInCart >= MaxItemsInCart.MaxItemsInShoppingCart)

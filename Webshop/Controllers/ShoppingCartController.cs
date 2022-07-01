@@ -37,11 +37,8 @@ namespace Webshop.Controllers
         }
 
         [HttpPost]
-        public IActionResult AddToShoppingCart(string amount, int id)
+        public async Task<IActionResult> AddToShoppingCart(int amount, int id)
         {
-            // Parsen weil die Menge von der DDL als string kommt
-            int.TryParse(amount, out int amountInt);
-
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
             string email = User.FindFirstValue(ClaimTypes.Email);
 
@@ -52,10 +49,10 @@ namespace Webshop.Controllers
             }
 
             // Customer aus der DB holen
-            var customer = _userService.GetCurrentUser(email);
+            var customer = await _userService.GetCurrentUser(email);
 
             // Das gewählte Produkt aus DB holen
-            var product = _productService.GetProductWithManufacturerAndCategory(id);
+            var product = await _productService.GetProductWithManufacturerAndCategory(id);
 
             // Wenn es das Produkt nicht gibt
             if (product == null)
@@ -64,17 +61,17 @@ namespace Webshop.Controllers
             }
 
             // Die offene Order des Users heraussuchen (DateOrdered == null)
-            var order = _orderService.GetOrder(customer);
+            var order = await _orderService.GetOrder(customer);
 
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
-            _orderLineService.AddProductToShoppingCart(product, order, amountInt);
+            _orderLineService.AddProductToShoppingCart(product, order, amount);
 
             // Die Details Seite mit dem Produkt und geändertem DDL laden (wenn aus der Details Seite aufgerufen
             // wurde, direkt aus Shop wird die Seite nicht neu geladen (jQuery im Shop.cshtml))
             return RedirectToAction("Details", "Product", product);
         }
 
-        public IActionResult Cart()
+        public async Task<IActionResult> Cart()
         {
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
             string email = User.FindFirstValue(ClaimTypes.Email);
@@ -85,10 +82,10 @@ namespace Webshop.Controllers
                 return RedirectToAction("Login", "Customer");
             }
 
-            var customer = _userService.GetCurrentUser(email);
-            var order = _orderService.GetOrder(customer);
+            var customer = await _userService.GetCurrentUser(email);
+            var order = await _orderService.GetOrder(customer);
             var categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();
-            List<OrderLine> orderLines = _orderLineService.GetOrderLinesOfOrder(order);
+            List<OrderLine> orderLines =  _orderLineService.GetOrderLinesOfOrder(order);
 
             if (customer == null || order == null || categoryAndTaxRate == null || orderLines == null)
             {
@@ -100,7 +97,7 @@ namespace Webshop.Controllers
                 foreach (var item in orderLines)
                 {
 
-                    var product = _productService.GetProductWithManufacturer(item.ProductId);
+                    var product = await _productService.GetProductWithManufacturer(item.ProductId);
                     viewModelList.Add(new CustomerOrderViewModel
                     {
                         ProductNumber = item.ProductId,
@@ -131,20 +128,33 @@ namespace Webshop.Controllers
             {
                 string email = User.FindFirstValue(ClaimTypes.Email);
 
+                if (email == null)
+                {
+                    return RedirectToAction("Login", "Customer");
+                }
+
                 _orderLineService.DeleteOrderLine(email, id.Value);
 
                 return RedirectToAction("Cart", "ShoppingCart");
             }
         }
 
-        public IActionResult DecrementValue(int? id, string amountInCart)
+        public IActionResult DecrementValue(int? id, int amountInCart)
         {
+            string email = User.FindFirstValue(ClaimTypes.Email);
+
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Customer");
+            }
+
             if (!id.HasValue)
             {
                 return RedirectToAction("Cart", "ShoppingCart");
             }
             else
             {
+                _orderLineService.DecrementAmountOfProduct(id.Value, amountInCart, email);
                 return RedirectToAction("Cart", "ShoppingCart");
             }
         }

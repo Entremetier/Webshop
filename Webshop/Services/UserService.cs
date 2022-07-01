@@ -105,12 +105,12 @@ namespace Webshop.Services
             return new ClaimsPrincipal(claimsIdentity);
         }
 
-        public Customer GetCurrentUser(string email)
+        public async Task<Customer> GetCurrentUser(string email)
         {
             using (var db = new LapWebshopContext())
             {
-                var customer = db.Customers.Where(e => e.Email == email)
-                        .FirstOrDefault();
+                var customer = await db.Customers.Where(e => e.Email == email)
+                        .FirstOrDefaultAsync();
 
                 return customer;
             }

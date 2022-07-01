@@ -3,17 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Webshop.Services
 {
     public class OrderService
     {
-        public Order GetOrder(Customer customer)
+        public async Task<Order> GetOrder(Customer customer)
         {
             using (var db = new LapWebshopContext())
             {
-                var order = db.Orders.Where(x => x.CustomerId == customer.Id)
-                    .FirstOrDefault(e => e.DateOrdered == null);
+                var order = await db.Orders.Where(x => x.CustomerId == customer.Id)
+                    .FirstOrDefaultAsync(e => e.DateOrdered == null);
 
                 // Neue Order erstellen wenn keine vorhanden ist
                 if (order == null)
@@ -21,7 +22,7 @@ namespace Webshop.Services
                     CreateOrder(customer);
 
                      // Neu erstellte Order aus der DB holen
-                    order = GetOrder(customer);
+                    order = await GetOrder(customer);
                 }
                 return order;
             }

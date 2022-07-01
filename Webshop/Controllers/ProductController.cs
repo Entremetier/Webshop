@@ -48,7 +48,7 @@ namespace Webshop.Controllers
         //}
 
         // Get Product Details
-        public IActionResult Details(int? id)
+        public async Task<IActionResult> Details(int? id)
         {
             if (!id.HasValue)
             {
@@ -56,7 +56,7 @@ namespace Webshop.Controllers
             }
             else
             {
-                Product product = _productService.GetProductWithManufacturer(id.Value);
+                Product product = await _productService.GetProductWithManufacturer(id.Value);
 
                 if (product == null)
                 {
@@ -70,7 +70,7 @@ namespace Webshop.Controllers
                 // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
                 string email = User.FindFirstValue(ClaimTypes.Email);
 
-                List<SelectListItem> itemAmount =  _productService.GetMaxItemAmount(product, email);
+                List<SelectListItem> itemAmount = await _productService.GetMaxItemAmount(product, email);
 
                 ViewBag.Amount = itemAmount;
                 ViewBag.ImagePath = product.ImagePath;

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Webshop.Services
 {
@@ -20,13 +21,14 @@ namespace Webshop.Services
             _orderService = orderService;
             _userService = userService;
         }
-        public void AddProductToShoppingCart(Product product, Order order, int amount)
+
+        public async void AddProductToShoppingCart(Product product, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
             {
                 // Kontrollieren ob ein Produkt schon im Warenkorb, des angemeldeten users, ist
-                var productAlreadyInCart = db.OrderLines.Where(x => x.ProductId == product.Id && order.Id == x.OrderId && order.DateOrdered == null)
-                    .FirstOrDefault();
+                var productAlreadyInCart = await db.OrderLines.Where(x => x.ProductId == product.Id && order.Id == x.OrderId && order.DateOrdered == null)
+                    .FirstOrDefaultAsync();
 
                 if (productAlreadyInCart != null)
                 {
@@ -34,7 +36,6 @@ namespace Webshop.Services
                     {
                         return;
                     }
-
                     IncrementAmountOfProduct(productAlreadyInCart, order, amount);
                 }
                 else
@@ -54,6 +55,47 @@ namespace Webshop.Services
                 db.Update(productAlreadyInCart);
                 await db.SaveChangesAsync();
 
+                UpdateOrderTotalPrice(order);
+            }
+        }
+
+        public async void DecrementAmountOfProduct(int productId, int newAmount, string email)
+        {
+            var customer = await _userService.GetCurrentUser(email);
+            var order = await _orderService.GetOrder(customer);
+
+            using (var db = new LapWebshopContext())
+            {
+                var orderLine = await db.OrderLines
+                    .Where(o => o.ProductId == productId && order.DateOrdered == null && o.OrderId == order.Id)
+                    .FirstOrDefaultAsync();
+
+                orderLine.Amount = newAmount;
+
+                db.Update(orderLine);
+                await db.SaveChangesAsync();
+
+                UpdateOrderTotalPrice(order);
+            }
+        }
+
+        public async void DeleteOrderLine(string email, int productId)
+        {
+            var customer = await _userService.GetCurrentUser(email);
+            var order = await _orderService.GetOrder(customer);
+
+            using (var db = new LapWebshopContext())
+            {
+                // Die gesuchte OrderLine aus DB holen
+                OrderLine orderLine = await db.OrderLines
+                    .Where(o => o.ProductId == productId && order.DateOrdered == null && o.OrderId == order.Id)
+                    .FirstOrDefaultAsync();
+
+                // OrderLine löschen
+                db.Remove(orderLine);
+                await db.SaveChangesAsync();
+
+                // Neuen Gesamtpreis berechnen
                 UpdateOrderTotalPrice(order);
             }
         }
@@ -115,30 +157,9 @@ namespace Webshop.Services
             List<SelectListItem> listItems = new List<SelectListItem>();
             for (int i = amount; i > 0; i--)
             {
-                listItems.Add(new SelectListItem{ Value = i.ToString(), Text = i.ToString()});
+                listItems.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
             }
             return listItems;
-        }
-
-        public void DeleteOrderLine(string email, int productId)
-        {
-            var customer = _userService.GetCurrentUser(email);
-            var order = _orderService.GetOrder(customer);
-
-            using (var db = new LapWebshopContext())
-            {
-                // Die gesuchte OrderLine aus DB holen
-                OrderLine orderLine = db.OrderLines
-                    .Where(o => o.ProductId == productId && order.DateOrdered == null && o.OrderId == order.Id)
-                    .FirstOrDefault();
-
-                // OrderLine löschen
-                db.Remove(orderLine);
-                db.SaveChanges();
-
-                // Neuen Gesamtpreis berechnen
-                UpdateOrderTotalPrice(order);
-            }
         }
     }
 }
