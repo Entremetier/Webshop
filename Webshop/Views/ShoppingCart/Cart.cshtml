@@ -16,7 +16,7 @@
 </div>
 
 <div class="row">
-    <div class="col-sm-12 col-md-3">
+    <div class="col-sm-12 col-lg-3 mb-sm-3">
         <div>
             <h3>Lieferadresse</h3>
             <p>Sollte die Lieferadresse von der Rechnungsadresse abweichen können Sie diese hier ändern.</p>
@@ -48,26 +48,35 @@
             </div>
         </form>
     </div>
-    <div class="col-sm-12 col-md-5 offset-md-1 mb-3">
+    <div class="text-center col-sm-12 col-lg-7 mb-sm-3">
         <h3>Produkte</h3> <br />
         @foreach (var item in Model)
         {
-            <div class="d-inline">
-                <img src="@item.ImagePath" asp-append-version="true" alt="@item.Manufacturer @item.ProductName" style="height:8rem; width:auto" />
-                <span class="align-top ml-2"><b>@item.Manufacturer&nbsp;@item.ProductName</b></span>
-                <span class="" style="font-size:0.8rem">Produktnummer:&nbsp;@item.ProductNumber</span>
-                <span class="ml-2">Stück:&nbsp;@item.BruttoPrice&nbsp;€</span>
-                <span class="ml-2">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>
+            <div class="container">
+                <div class="row" style="height:10rem">
+                    <div class="d-flex col-6 justify-content-center align-items-center">
+                        <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductNumber">
+                            <img src="@item.ImagePath" asp-append-version="true" alt="@item.Manufacturer @item.ProductName" style="height:8rem; width:auto" />
+                        </a>
+                    </div>
+                    <div class="d-flex flex-column col-6 text-left justify-content-center">
+                        <span>
+                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductNumber" class="noTextDecoration">
+                                <b class="noTextDecoration">@item.Manufacturer&nbsp;@item.ProductName</b>
+                            </a>
+                            <a asp-controller="Product" asp-action="DeleteFromCart" asp-route-id="@item.ProductNumber"
+                               class="float-right warningColor productDetailsInCart noTextDecoration">X</a>
+                        </span>
+                        <span class="">Produktnummer:&nbsp;@item.ProductNumber</span>
+                        <span class="">Stück:&nbsp;@item.BruttoPrice&nbsp;€</span>
+                        <span class="">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>
+                        <span>Menge<select name="amountInCart" asp-items="@item.SelectList" class="form-control d-inline btn btn-outline-dark ml-2" style="width: 4rem; height:2.1rem"></select></span>
+                    </div>
+                </div>
             </div>
-            <br />
-            @item.Orderline.Amount
-
-            <br />
-            <select name="miau" asp-items="@item.SelectList" class="form-control d-inline btn btn-outline-dark" style="width: 4rem"></select>
-            <br />
         }
     </div>
-    <div class="col-sm-12 col-md-3 text-md-right">
+    <div class="col-sm-12 col-xl-2 text-sm-center text-xl-right">
         <h3>Gesamtpreis</h3>
         <span style="font-size:1.3rem">@order.PriceTotal&nbsp;€</span>
         <div class="mt-3">

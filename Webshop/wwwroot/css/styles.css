@@ -22,13 +22,18 @@ a {
     margin-bottom: 10rem;
 }
 
-.agbColor{
+.warningColor{
     color: red !important;
 }
 
 .custom-btn-size{
     width: 10rem;
 }
+
+.productDetailsInCart {
+    font-size: 0.8rem;
+}
+
 /* Navbar */
 .navbar-nav .nav-item > .nav-link {
     color: #343a40 !important;
