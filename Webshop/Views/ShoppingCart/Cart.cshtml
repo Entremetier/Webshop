@@ -60,13 +60,17 @@
                         </a>
                     </div>
                     <div class="d-flex flex-column col-6 text-left justify-content-center">
-                        <span>
-                            <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductNumber" class="noTextDecoration">
-                                <b class="noTextDecoration">@item.Manufacturer&nbsp;@item.ProductName</b>
-                            </a>
-                            <a asp-controller="Product" asp-action="DeleteFromCart" asp-route-id="@item.ProductNumber"
-                               class="float-right warningColor productDetailsInCart noTextDecoration">X</a>
-                        </span>
+                        <form asp-controller="ShoppingCart" asp-action="DeleteFromCart" asp-route-id="@item.ProductNumber">
+                            <span>
+                                <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductNumber" class="noTextDecoration">
+                                    <b class="noTextDecoration">@item.Manufacturer&nbsp;@item.ProductName</b>
+                                </a>
+                                <a asp-controller="ShoppingCart" asp-action="DeleteFromCart" asp-route-id="@item.ProductNumber"
+                                   class="float-right warningColor productDetailsInCart noTextDecoration">
+                                    <b>X</b>
+                                </a>
+                            </span>
+                        </form>
                         <span class="">Produktnummer:&nbsp;@item.ProductNumber</span>
                         <span class="">Stück:&nbsp;@item.BruttoPrice&nbsp;€</span>
                         <span class="">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>

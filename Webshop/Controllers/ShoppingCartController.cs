@@ -120,5 +120,21 @@ namespace Webshop.Controllers
                 return View(viewModelList);
             }
         }
+
+        public IActionResult DeleteFromCart(int? id)
+        {
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Cart", "ShoppingCart");
+            }
+            else
+            {
+                string email = User.FindFirstValue(ClaimTypes.Email);
+
+                _orderLineService.DeleteOrderLine(email, id.Value);
+
+                return RedirectToAction("Cart", "ShoppingCart");
+            }
+        }
     }
 }

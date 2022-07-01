@@ -11,10 +11,14 @@ namespace Webshop.Services
     public class OrderLineService : Controller
     {
         private readonly LapWebshopContext _context;
+        private readonly OrderService _orderService;
+        private readonly UserService _userService;
 
-        public OrderLineService(LapWebshopContext context)
+        public OrderLineService(LapWebshopContext context, OrderService orderService, UserService userService)
         {
             _context = context;
+            _orderService = orderService;
+            _userService = userService;
         }
         public void AddProductToShoppingCart(Product product, Order order, int amount)
         {
@@ -114,6 +118,27 @@ namespace Webshop.Services
                 listItems.Add(new SelectListItem{ Value = i.ToString(), Text = i.ToString()});
             }
             return listItems;
+        }
+
+        public void DeleteOrderLine(string email, int productId)
+        {
+            var customer = _userService.GetCurrentUser(email);
+            var order = _orderService.GetOrder(customer);
+
+            using (var db = new LapWebshopContext())
+            {
+                // Die gesuchte OrderLine aus DB holen
+                OrderLine orderLine = db.OrderLines
+                    .Where(o => o.ProductId == productId && order.DateOrdered == null && o.OrderId == order.Id)
+                    .FirstOrDefault();
+
+                // OrderLine löschen
+                db.Remove(orderLine);
+                db.SaveChanges();
+
+                // Neuen Gesamtpreis berechnen
+                UpdateOrderTotalPrice(order);
+            }
         }
     }
 }
