@@ -60,7 +60,7 @@
                         </a>
                     </div>
                     <div class="d-flex flex-column col-6 text-left justify-content-center">
-                        <form asp-controller="ShoppingCart" asp-action="DeleteFromCart" asp-route-id="@item.ProductNumber">
+                        <form>
                             <span>
                                 <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductNumber" class="noTextDecoration">
                                     <b class="noTextDecoration">@item.Manufacturer&nbsp;@item.ProductName</b>
@@ -74,7 +74,16 @@
                         <span class="">Produktnummer:&nbsp;@item.ProductNumber</span>
                         <span class="">Stück:&nbsp;@item.BruttoPrice&nbsp;€</span>
                         <span class="">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>
-                        <span>Menge<select name="amountInCart" asp-items="@item.SelectList" class="form-control d-inline btn btn-outline-dark ml-2" style="width: 4rem; height:2.1rem"></select></span>
+                        <form asp-controller="ShoppingCart" asp-action="DecrementValue" asp-route-id="@item.ProductNumber" method="post">
+                            <span>
+                                Menge
+                                <select name="amountInCart" asp-items="@item.SelectList"
+                                        class="form-control d-inline btn btn-outline-dark ml-2" style="width: 4rem;">
+                                </select>
+                                <input type="submit"
+                                       class="btn btn-outline-dark text-center ml-2" value="Bestätigen">
+                            </span>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -89,4 +98,14 @@
     </div>
 </div>
 
+@*<script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script type="text/javascript">
 
+        function updateValue(amount, productNumber) {
+            alert(amount.value);
+            alert(productNumber);
+            if (amount && productNumber) {
+                $.post("/ShoppingCart/DecrementValue", { "id": productNumber, "amountInCart": amount })
+            }
+        }
+    </script>*@

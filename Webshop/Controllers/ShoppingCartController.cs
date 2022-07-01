@@ -136,5 +136,17 @@ namespace Webshop.Controllers
                 return RedirectToAction("Cart", "ShoppingCart");
             }
         }
+
+        public IActionResult DecrementValue(int? id, string amountInCart)
+        {
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Cart", "ShoppingCart");
+            }
+            else
+            {
+                return RedirectToAction("Cart", "ShoppingCart");
+            }
+        }
     }
 }
