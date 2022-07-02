@@ -11,7 +11,7 @@
 
 <div class="row pl-3">
     <div class="mb-5">
-        <h1>Warenkorb</h1>
+        <h1>Bestelldetails</h1>
     </div>
 </div>
 
@@ -20,31 +20,47 @@
         <div>
             <h3>Lieferadresse</h3>
             <p>Sollte die Lieferadresse von der Rechnungsadresse abweichen können Sie diese hier ändern.</p>
+            @if (TempData["Warning"] != null)
+            {
+                <div class="alert alert-danger text-center">
+                    @TempData["Warning"]
+                </div>
+            }
         </div>
         <div class="form-group">
             <label for="title">Anrede</label>
             <input type="text" name="title" class="form-control" value="@customer.Title">
         </div>
-        <form>
+        <form asp-controller="Order" asp-action="Checkout" method="post" id="checkOutForm">
             <div class="form-group">
                 <label for="firstName">Vorname</label>
-                <input type="text" name="firstName" class="form-control" value="@customer.FirstName">
+                <input type="text" name="firstName" maxlength="50"
+                       oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                       class="form-control" value="@customer.FirstName">
             </div>
             <div class="form-group">
                 <label for="lastName">Nachname</label>
-                <input type="text" name="lastName" class="form-control" value="@customer.LastName">
+                <input type="text" name="lastName" maxlength="50"
+                       oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                       class="form-control" value="@customer.LastName">
             </div>
             <div class="form-group">
                 <label for="street">Straße und Nr.</label>
-                <input type="text" name="street" class="form-control" value="@customer.Street">
+                <input type="text" name="street" maxlength="80"
+                       oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                       class="form-control" value="@customer.Street">
             </div>
             <div class="form-group">
                 <label for="zip">Postleitzahl</label>
-                <input type="text" name="zip" class="form-control" value="@customer.Zip">
+                <input type="number" name="zip" maxlength="4"
+                       oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                       class="form-control" value="@customer.Zip">
             </div>
             <div class="form-group">
                 <label for="city">Stadt</label>
-                <input type="text" name="city" class="form-control" value="@customer.City">
+                <input type="text" name="city" maxlength="50"
+                       oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                       class="form-control" value="@customer.City">
             </div>
         </form>
     </div>
@@ -72,6 +88,17 @@
                         <span class="">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>
                     </div>
                 </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center mt-3 mb-3">
+                            <input class="form-check-input" type="checkbox" id="cartCheckbox">
+                            <label class="form-check-label">
+                                Ich möchte kostenpflichtig bestellen.
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
             </div>
         }
     </div>
@@ -79,7 +106,27 @@
         <h3>Gesamtpreis</h3>
         <span style="font-size:1.3rem">@order.PriceTotal&nbsp;€</span>
         <div class="mt-3">
-            <input type="submit" name="orderNowBtn" value="Bestellen" class="btn btn-outline-success custom-btn-size" />
+            @* form gibt an auf welches Formular der button hört *@
+            <input type="submit" id="orderNowBtn" value="Bestellen" form="checkOutForm" class="btn btn-outline-success custom-btn-size" />
         </div>
     </div>
 </div>
+
+
+<script>
+    const orderNowBtn = document.getElementById("orderNowBtn");
+    const cartCheckbox = document.getElementById("cartCheckbox");
+
+    // Button zu Beginn disablen
+    orderNowBtn.disabled = true;
+
+    // Wenn sich was an der Checkbox ändert orderNowBtn aktivieren und deaktivieren
+    cartCheckbox.addEventListener("change", (e) => {
+        if (e.target.checked) {
+            orderNowBtn.disabled = false;
+        }
+        else {
+            orderNowBtn.disabled = true;
+        }
+    });
+</script>

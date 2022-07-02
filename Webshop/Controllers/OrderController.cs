@@ -50,6 +50,12 @@ namespace Webshop.Controllers
             var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
             List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrder(order);
 
+            // Wenn der Gesamtpreis der Waren im Warenkorb kleiner gleich 0 ist in den Shop umleiten
+            if (order.PriceTotal <= 0)
+            {
+                return RedirectToAction("Shop", "Home");
+            }
+
             if (customer == null || order == null || categoryAndTaxRate == null || orderLines == null)
             {
                 return RedirectToAction("Shop", "Home");
@@ -66,11 +72,10 @@ namespace Webshop.Controllers
                         ProductNumber = item.ProductId,
                         ProductName = product.ProductName,
                         Manufacturer = product.Manufacturer.Name,
-                        // Bruttopreis auf zwei Nachkommastellen runden
-                        BruttoPrice = Math.Round(_productService.CalcPrice(product, categoryAndTaxRate), 2),
+                        BruttoPrice = _productService.CalcPrice(product, categoryAndTaxRate),
                         ImagePath = product.ImagePath,
                         Orderline = item,
-                        RowPrice = Math.Round(item.Amount * _productService.CalcPrice(product, categoryAndTaxRate), 2),
+                        RowPrice = item.Amount * _productService.CalcPrice(product, categoryAndTaxRate),
                         SelectList = _orderLineService.FillSelectList(item.Amount)
                     });
                 }
@@ -84,6 +89,37 @@ namespace Webshop.Controllers
                 ViewBag.Customer = customer;
                 return View(viewModelList);
             }
+        }
+
+        [Authorize]
+        public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city)
+        {
+            if (firstName == null || lastName == null || street == null || zip == null || city == null)
+            {
+                TempData["Warning"] = "Fehlende Daten bei der Lieferadresse!";
+                return RedirectToAction("Order", "Order");
+            }
+            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
+            string email = User.FindFirstValue(ClaimTypes.Email);
+
+            // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Customer");
+            }
+
+            var customer = await _userService.GetCurrentUser(email);
+            var order = await _orderService.GetOrder(customer);
+
+            if (order.PriceTotal <= 0)
+            {
+                return RedirectToAction("Shop", "Home");
+            }
+
+            _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
+
+            ViewBag.Customer = customer;
+            return View();
         }
     }
 }

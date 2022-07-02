@@ -21,7 +21,7 @@ namespace Webshop.Services
                 {
                     CreateOrder(customer);
 
-                     // Neu erstellte Order aus der DB holen
+                    // Neu erstellte Order aus der DB holen
                     order = await GetOrder(customer);
                 }
                 return order;
@@ -44,6 +44,22 @@ namespace Webshop.Services
                 };
 
                 db.Orders.Add(newOrder);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async void MakeOrder(Order order, string firstName, string lastName, string street, string zip, string city)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                order.DateOrdered = DateTime.Now;
+                order.FirstName = firstName;
+                order.LastName = lastName;
+                order.Street = street;
+                order.Zip = zip;
+                order.City = city;
+
+                db.Update(order);
                 await db.SaveChangesAsync();
             }
         }

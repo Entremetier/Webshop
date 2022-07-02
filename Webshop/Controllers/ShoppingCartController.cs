@@ -105,11 +105,10 @@ namespace Webshop.Controllers
                         ProductNumber = item.ProductId,
                         ProductName = product.ProductName,
                         Manufacturer = product.Manufacturer.Name,
-                        // Bruttopreis auf zwei Nachkommastellen runden
-                        BruttoPrice = Math.Round(_productService.CalcPrice(product, categoryAndTaxRate), 2),
+                        BruttoPrice = _productService.CalcPrice(product, categoryAndTaxRate),
                         ImagePath = product.ImagePath,
                         Orderline = item,
-                        RowPrice = Math.Round(item.Amount * _productService.CalcPrice(product, categoryAndTaxRate), 2),
+                        RowPrice = item.Amount * _productService.CalcPrice(product, categoryAndTaxRate),
                         SelectList = _orderLineService.FillSelectList(item.Amount)
                     });
                 }

@@ -56,10 +56,11 @@ namespace Webshop.Services
                     itemBruttoPrice = product.NetUnitPrice / 100 * (100 + cat.TaxRate);
                 }
             }
-            return itemBruttoPrice;
+            // Auf 2 Nachkommastellen runden
+            return Math.Round(itemBruttoPrice, 2);
         }
 
-        public async Task<List<SelectListItem>> GetMaxItemAmount(Product product,string email)
+        public async Task<List<SelectListItem>> GetMaxItemAmount(Product product, string email)
         {
             List<SelectListItem> itemAmount = new List<SelectListItem>();
 

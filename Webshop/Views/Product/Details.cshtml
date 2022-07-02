@@ -8,7 +8,7 @@
     @Html.DisplayFor(model => model.Manufacturer.Name)
     @Html.DisplayFor(model => model.ProductName)
 </h1>
-<span style="font-size: 1.2rem">Preis:&nbsp;@Html.DisplayFor(model => model.NetUnitPrice)&nbsp;€</span>
+<span style="font-size: 1.2rem">Preis:&nbsp;@ViewBag.BruttoPrice&nbsp;€</span>
 
 <div class="row justify-content-end mr-2 mt-3">
     <span class="pt-2 mr-3">Menge:</span>

@@ -1,0 +1,12 @@
+﻿@{
+    ViewData["Title"] = "Danke";
+}
+
+@{ 
+    Customer customer = ViewBag.Customer;
+}
+
+<div class="row">
+    <h1>Vielen Dank für deine Bestellung</h1>
+    <span>Hallo @customer.FirstName @customer.LastName, das ganze Team von Tron dankt dir für deine Bestellung.</span>
+</div>

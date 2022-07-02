@@ -65,7 +65,8 @@ namespace Webshop.Controllers
 
                 var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
 
-                product.NetUnitPrice = _productService.CalcPrice(product, categoryAndTaxRate);
+                // Auf 2 Nachkommastellen runden
+                ViewBag.BruttoPrice = _productService.CalcPrice(product, categoryAndTaxRate);
 
                 // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
                 string email = User.FindFirstValue(ClaimTypes.Email);
