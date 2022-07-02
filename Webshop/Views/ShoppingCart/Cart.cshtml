@@ -28,7 +28,6 @@
         {
             <div class="container">
                 <div class="row mb-3">
-                    <hr />
                     <div class="d-flex col-sm-12 col-md-5 justify-content-center mb-3">
                         <a asp-controller="Product" asp-action="Details" asp-route-id="@item.ProductNumber">
                             <img src="@item.ImagePath" asp-append-version="true" alt="@item.Manufacturer @item.ProductName" style="height:8rem; width:auto" />
@@ -80,12 +79,12 @@
 </div>
 
 @*<script type="text/javascript">
-    const deleteBtn = document.getElementById("deleteBtn");
-    deleteBtn.addEventListener("click", checkPriceTotal);
+        const deleteBtn = document.getElementById("deleteBtn");
+        deleteBtn.addEventListener("click", checkPriceTotal);
 
-    function checkPriceTotal() {
-        if (@order.PriceTotal <= 0.00) {
-            document.getElementById("checkOutBtn").disabled = true;
+        function checkPriceTotal() {
+            if (@order.PriceTotal <= 0.00) {
+                document.getElementById("checkOutBtn").disabled = true;
+            }
         }
-    }
-</script>*@
+    </script>*@

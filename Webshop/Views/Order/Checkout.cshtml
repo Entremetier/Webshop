@@ -2,11 +2,46 @@
     ViewData["Title"] = "Danke";
 }
 
-@{ 
+@{
     Customer customer = ViewBag.Customer;
+    Order order = ViewBag.Order;
 }
 
 <div class="row">
-    <h1>Vielen Dank für deine Bestellung</h1>
-    <span>Hallo @customer.FirstName @customer.LastName, das ganze Team von Tron dankt dir für deine Bestellung.</span>
+    <div class="col-12 text-center mb-5">
+        <div style="height: 10rem; width:auto;">
+            <img src="/icons8-tron-64.png" alt="Tron-Logo" style="height: 5rem; width:auto;"/>
+        </div>
+        <div class="text-left">
+            <h1>
+                Hallo @customer.FirstName @customer.LastName,
+            </h1>
+            <br />
+        </div>
+        <div class="text-left">
+            <p>
+                wir gratulieren zum erfolgreichen Abschluss deiner Bestellung, deine Bestellnummer ist @order.Id.
+            </p>
+            <span>
+                Unser Team macht sich sofort an die
+                arbeit um deine Bestellung schnellstmöglich abzuschicken.
+            </span>
+            <p>
+                Sollten Probleme mit deiner Bestellung auftreten kannst Du dich jederzeit an unseren Support unter,<br /><br />
+                Telefon: 0000-1111-2222-3333 <br>
+                Email: support@tron.at <br /><br />
+                wenden.
+            </p>
+            <p>
+                Bitte überweise den offenen Betrag innerhalb der nächsten 14 Tage an: <br /><br />
+                <span>Bank: Wiener Bankenhaus</span><br />
+                <span>IBAN: AT82 1982 1977 1986 1956</span><br />
+                <span>BIC:  BKAUATWW</span> <br />
+                <span>Verwendungszweck: Bestellnummer @order.Id</span> <br />
+            </p>
+            <p>
+                Vielen Dank für deine Bestellung, dein Tron-Team!
+            </p>
+        </div>
+    </div>
 </div>

@@ -118,6 +118,7 @@ namespace Webshop.Controllers
 
             _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
 
+            ViewBag.Order = order;
             ViewBag.Customer = customer;
             return View();
         }
