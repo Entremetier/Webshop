@@ -75,7 +75,7 @@ namespace Webshop.Services
                 db.Update(orderLine);
                 await db.SaveChangesAsync();
 
-                UpdateOrderTotalPrice(order);
+                //UpdateOrderTotalPrice(order);
             }
         }
 
@@ -95,8 +95,7 @@ namespace Webshop.Services
                 db.Remove(orderLine);
                 await db.SaveChangesAsync();
 
-                // Neuen Gesamtpreis berechnen
-                UpdateOrderTotalPrice(order);
+                //UpdateOrderTotalPrice(order);
             }
         }
 
@@ -123,7 +122,7 @@ namespace Webshop.Services
         }
 
         // Den TotalPrice in Order berechnen und speichern
-        private async void UpdateOrderTotalPrice(Order order)
+        public async void UpdateOrderTotalPrice(Order order)
         {
             decimal totalPrice = 0;
 
@@ -147,9 +146,9 @@ namespace Webshop.Services
             }
         }
 
-        public List<OrderLine> GetOrderLinesOfOrder(Order order)
+        public async Task<List<OrderLine>> GetOrderLinesOfOrder(Order order)
         {
-            return _context.OrderLines.Where(x => x.OrderId == order.Id).ToList();
+            return await _context.OrderLines.Where(x => x.OrderId == order.Id).ToListAsync();
         }
 
         public List<SelectListItem> FillSelectList(int amount)

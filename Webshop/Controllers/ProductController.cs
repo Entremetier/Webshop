@@ -63,7 +63,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Home", "Shop");
                 }
 
-                var categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();
+                var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
 
                 product.NetUnitPrice = _productService.CalcPrice(product, categoryAndTaxRate);
 

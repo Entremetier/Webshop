@@ -34,7 +34,7 @@ namespace Webshop.Controllers
             return View();
         }
 
-        public IActionResult Shop(string searchString, string categorie, string manufacturer)
+        public async Task<IActionResult> Shop(string searchString, string categorie, string manufacturer)
         {
             //TODO: Filter speichern und ausführen wenn man zurück zur Liste geht
             //TODO: Filter löschen einbauen
@@ -43,7 +43,7 @@ namespace Webshop.Controllers
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden
-            List<Category> categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();
+            List<Category> categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
 
             // Bruttopreis für alle Produkte berechnen
             foreach (var product in products)
@@ -52,8 +52,8 @@ namespace Webshop.Controllers
             }
 
             // Die DDL`s befüllen
-            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
-            List<SelectListItem> allCategories = _categoryService.GetAllCategories();
+            List<SelectListItem> allManufacturer =  _manufacturerService.GetAllManufacturers();
+            List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
 
             ViewBag.Manufacturers = allManufacturer;
             ViewBag.Category = allCategories;

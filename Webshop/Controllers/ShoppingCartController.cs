@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Extensions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -71,6 +72,7 @@ namespace Webshop.Controllers
             return RedirectToAction("Details", "Product", product);
         }
 
+        [Authorize]
         public async Task<IActionResult> Cart()
         {
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
@@ -84,8 +86,8 @@ namespace Webshop.Controllers
 
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);
-            var categoryAndTaxRate = _categoryService.GetAllCategoriesAndTaxRates();
-            List<OrderLine> orderLines =  _orderLineService.GetOrderLinesOfOrder(order);
+            var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
+            List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrder(order);
 
             if (customer == null || order == null || categoryAndTaxRate == null || orderLines == null)
             {
@@ -112,13 +114,18 @@ namespace Webshop.Controllers
                     });
                 }
 
+                if (viewModelList.Count <= 0)
+                {
+                    TempData["NoItems"] = "Es befinden sich keine Produkte im Warenkorb!";
+                }
+
                 ViewBag.Order = order;
                 ViewBag.Customer = customer;
                 return View(viewModelList);
             }
         }
 
-        public IActionResult DeleteFromCart(int? id)
+        public async Task<IActionResult> DeleteFromCart(int? id)
         {
             if (!id.HasValue)
             {
@@ -133,13 +140,16 @@ namespace Webshop.Controllers
                     return RedirectToAction("Login", "Customer");
                 }
 
+                var customer = await _userService.GetCurrentUser(email);
                 _orderLineService.DeleteOrderLine(email, id.Value);
+                var order = await _orderService.GetOrder(customer);
+                _orderLineService.UpdateOrderTotalPrice(order);
 
                 return RedirectToAction("Cart", "ShoppingCart");
             }
         }
 
-        public IActionResult DecrementValue(int? id, int amountInCart)
+        public async Task<IActionResult> DecrementValue(int? id, int amountInCart)
         {
             string email = User.FindFirstValue(ClaimTypes.Email);
 
@@ -148,13 +158,17 @@ namespace Webshop.Controllers
                 return RedirectToAction("Login", "Customer");
             }
 
-            if (!id.HasValue)
+            if (!id.HasValue || amountInCart != 1)
             {
                 return RedirectToAction("Cart", "ShoppingCart");
             }
             else
             {
+                var customer = await _userService.GetCurrentUser(email);
                 _orderLineService.DecrementAmountOfProduct(id.Value, amountInCart, email);
+                var order = await _orderService.GetOrder(customer);
+                _orderLineService.UpdateOrderTotalPrice(order);
+
                 return RedirectToAction("Cart", "ShoppingCart");
             }
         }

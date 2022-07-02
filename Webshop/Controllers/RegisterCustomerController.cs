@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,7 +25,7 @@ namespace Webshop.Controllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
             return View();
         }
@@ -45,7 +46,7 @@ namespace Webshop.Controllers
             else
             {
                 // Schauen ob die angegebene Mailadresse schon in der DB ist
-                Customer existingCustomer = _context.Customers.FirstOrDefault(m => m.Email.Trim() == customer.Email.Trim());
+                Customer existingCustomer = await _context.Customers.FirstOrDefaultAsync(m => m.Email.Trim() == customer.Email.Trim());
 
                 // Wenn es schon einen Customer mit der Mailadresse gibt eine Warnung ausgeben das er schon existiert
                 if (existingCustomer != null)
