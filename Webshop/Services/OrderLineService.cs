@@ -22,7 +22,7 @@ namespace Webshop.Services
             _userService = userService;
         }
 
-        public async void AddProductToShoppingCart(Product product, Order order, int amount)
+        public async Task AddProductToShoppingCart(Product product, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
             {
@@ -36,16 +36,16 @@ namespace Webshop.Services
                     {
                         return;
                     }
-                    IncrementAmountOfProduct(productAlreadyInCart, order, amount);
+                    await IncrementAmountOfProduct(productAlreadyInCart, order, amount);
                 }
                 else
                 {
-                    CreateNewOrderLine(product, order, amount);
+                    await CreateNewOrderLine(product, order, amount);
                 }
             }
         }
 
-        private async void IncrementAmountOfProduct(OrderLine productAlreadyInCart, Order order, int amount)
+        private async Task IncrementAmountOfProduct(OrderLine productAlreadyInCart, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
             {
@@ -55,11 +55,11 @@ namespace Webshop.Services
                 db.Update(productAlreadyInCart);
                 await db.SaveChangesAsync();
 
-                UpdateOrderTotalPrice(order);
+                await UpdateOrderTotalPrice(order);
             }
         }
 
-        public async void DecrementAmountOfProduct(int productId, int newAmount, string email)
+        public async Task DecrementAmountOfProduct(int productId, int newAmount, string email)
         {
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);
@@ -75,11 +75,11 @@ namespace Webshop.Services
                 db.Update(orderLine);
                 await db.SaveChangesAsync();
 
-                //UpdateOrderTotalPrice(order);
+                await UpdateOrderTotalPrice(order);
             }
         }
 
-        public async void DeleteOrderLine(string email, int productId)
+        public async Task DeleteOrderLine(string email, int productId)
         {
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);
@@ -95,11 +95,11 @@ namespace Webshop.Services
                 db.Remove(orderLine);
                 await db.SaveChangesAsync();
 
-                //UpdateOrderTotalPrice(order);
+                await UpdateOrderTotalPrice(order);
             }
         }
 
-        private async void CreateNewOrderLine(Product product, Order order, int amount)
+        private async Task CreateNewOrderLine(Product product, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
             {
@@ -117,12 +117,12 @@ namespace Webshop.Services
                 db.OrderLines.Add(newOrderLine);
                 await db.SaveChangesAsync();
 
-                UpdateOrderTotalPrice(order);
+                await UpdateOrderTotalPrice(order);
             }
         }
 
         // Den TotalPrice in Order berechnen und speichern
-        public async void UpdateOrderTotalPrice(Order order)
+        private async Task UpdateOrderTotalPrice(Order order)
         {
             decimal totalPrice = 0;
 

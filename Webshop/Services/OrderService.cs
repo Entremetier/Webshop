@@ -13,13 +13,13 @@ namespace Webshop.Services
         {
             using (var db = new LapWebshopContext())
             {
-                var order = await db.Orders.Where(x => x.CustomerId == customer.Id)
+                var order =  await db.Orders.Where(x => x.CustomerId == customer.Id)
                     .FirstOrDefaultAsync(e => e.DateOrdered == null);
 
                 // Neue Order erstellen wenn keine vorhanden ist
                 if (order == null)
                 {
-                    CreateOrder(customer);
+                    await CreateOrder(customer);
 
                     // Neu erstellte Order aus der DB holen
                     order = await GetOrder(customer);
@@ -28,7 +28,7 @@ namespace Webshop.Services
             }
         }
 
-        private async void CreateOrder(Customer customer)
+        private async Task CreateOrder(Customer customer)
         {
             using (var db = new LapWebshopContext())
             {
@@ -48,7 +48,7 @@ namespace Webshop.Services
             }
         }
 
-        public async void MakeOrder(Order order, string firstName, string lastName, string street, string zip, string city)
+        public async Task MakeOrder(Order order, string firstName, string lastName, string street, string zip, string city)
         {
             using (var db = new LapWebshopContext())
             {

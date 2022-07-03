@@ -65,7 +65,7 @@ namespace Webshop.Controllers
             var order = await _orderService.GetOrder(customer);
 
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
-            _orderLineService.AddProductToShoppingCart(product, order, amount);
+            await _orderLineService.AddProductToShoppingCart(product, order, amount);
 
             // Die Details Seite mit dem Produkt und geändertem DDL laden (wenn aus der Details Seite aufgerufen
             // wurde, direkt aus Shop wird die Seite nicht neu geladen (jQuery im Shop.cshtml))
@@ -139,10 +139,7 @@ namespace Webshop.Controllers
                     return RedirectToAction("Login", "Customer");
                 }
 
-                var customer = await _userService.GetCurrentUser(email);
-                _orderLineService.DeleteOrderLine(email, id.Value);
-                var order = await _orderService.GetOrder(customer);
-                _orderLineService.UpdateOrderTotalPrice(order);
+                await _orderLineService.DeleteOrderLine(email, id.Value);
 
                 return RedirectToAction("Cart", "ShoppingCart");
             }
@@ -157,16 +154,13 @@ namespace Webshop.Controllers
                 return RedirectToAction("Login", "Customer");
             }
 
-            if (!id.HasValue || amountInCart != 1)
+            if (!id.HasValue)
             {
                 return RedirectToAction("Cart", "ShoppingCart");
             }
             else
             {
-                var customer = await _userService.GetCurrentUser(email);
-                _orderLineService.DecrementAmountOfProduct(id.Value, amountInCart, email);
-                var order = await _orderService.GetOrder(customer);
-                _orderLineService.UpdateOrderTotalPrice(order);
+                await _orderLineService.DecrementAmountOfProduct(id.Value, amountInCart, email);
 
                 return RedirectToAction("Cart", "ShoppingCart");
             }

@@ -27,7 +27,7 @@ namespace Webshop.Controllers
         [HttpGet]
         public async Task<IActionResult> Register()
         {
-            return View();
+            return  View();
         }
 
         // POST: Customer/Create

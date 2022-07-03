@@ -116,7 +116,7 @@ namespace Webshop.Controllers
                 return RedirectToAction("Shop", "Home");
             }
 
-            _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
+            await _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
 
             ViewBag.Order = order;
             ViewBag.Customer = customer;
