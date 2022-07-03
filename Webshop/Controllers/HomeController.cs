@@ -42,8 +42,6 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> Shop(string searchString, string categorie, string manufacturer)
         {
-            int amountOfProductInCard = 0;
-
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
             string email = User.FindFirstValue(ClaimTypes.Email);
 
