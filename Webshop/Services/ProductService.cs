@@ -83,7 +83,7 @@ namespace Webshop.Services
                     // Wenn schon 10 Stk von einem Product im Warenkorb sind
                     if (productAmountInCart >= MaxItemsInCart.MaxItemsInShoppingCart)
                     {
-                        itemAmount.Add(new SelectListItem { Value = "0", Text = "0" });
+                        //itemAmount.Add(new SelectListItem { Value = "0", Text = "0" });
                     }
                     else
                     {

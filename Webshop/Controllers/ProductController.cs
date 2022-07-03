@@ -73,6 +73,11 @@ namespace Webshop.Controllers
 
                 List<SelectListItem> itemAmount = await _productService.GetMaxItemAmount(product, email);
 
+                if (itemAmount.Count == 0)
+                {
+                    TempData["EnoughItemsInCart"] = "Maximale Anzahl im Warenkorb!";
+                }
+
                 ViewBag.Amount = itemAmount;
                 ViewBag.ImagePath = product.ImagePath;
 
