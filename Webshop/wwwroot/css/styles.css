@@ -34,6 +34,10 @@ a {
     font-size: 0.8rem;
 }
 
+.dropDownListSize {
+    width: 4.8rem;
+}
+
 /* inputfelder vom typ number haben keine inkrement/decrement Pfeile*/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {

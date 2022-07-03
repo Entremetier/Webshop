@@ -18,15 +18,21 @@ namespace Webshop.Controllers
         private readonly CategoryService _categoryService;
         private readonly ProductService _productService;
         private readonly ManufacturerService _manufacturerService;
+        private readonly UserService _userService;
+        private readonly OrderLineService _orderLineService;
 
         public HomeController(
             CategoryService categoryService,
             ProductService productService,
-            ManufacturerService manufacturerService)
+            ManufacturerService manufacturerService,
+            UserService userService,
+            OrderLineService orderLineService)
         {
             _categoryService = categoryService;
             _productService = productService;
             _manufacturerService = manufacturerService;
+            _userService = userService;
+            _orderLineService = orderLineService;
         }
 
         public IActionResult Index()
@@ -36,6 +42,25 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> Shop(string searchString, string categorie, string manufacturer)
         {
+            int amountOfProductInCard = 0;
+
+            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
+            string email = User.FindFirstValue(ClaimTypes.Email);
+
+            // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Customer");
+            }
+
+            // Customer aus der DB holen
+            var customer = await _userService.GetCurrentUser(email);
+
+            if (customer == null)
+            {
+                return RedirectToAction("Login", "Customer");
+            }
+
             //TODO: Filter speichern und ausführen wenn man zurück zur Liste geht
             //TODO: Filter löschen einbauen
             // Produktliste befüllen
@@ -52,7 +77,7 @@ namespace Webshop.Controllers
             }
 
             // Die DDL`s befüllen
-            List<SelectListItem> allManufacturer =  _manufacturerService.GetAllManufacturers();
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
             List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
 
             ViewBag.Manufacturers = allManufacturer;

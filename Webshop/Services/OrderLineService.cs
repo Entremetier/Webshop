@@ -148,8 +148,29 @@ namespace Webshop.Services
 
         public async Task<List<OrderLine>> GetOrderLinesOfOrder(Order order)
         {
-            return await _context.OrderLines.Where(x => x.OrderId == order.Id).ToListAsync();
+            using (var db = new LapWebshopContext())
+            {
+                return await db.OrderLines.Where(x => x.OrderId == order.Id).ToListAsync();
+            }
         }
+
+
+        //public async Task<int> GetAmountOfProductInCard(Customer customer, Product product)
+        //{
+        //    int amountInCart = 0;
+        //    var order = await _orderService.GetOrder(customer);
+        //    var orderLines = await GetOrderLinesOfOrder(order);
+
+        //    foreach (var orderLine in orderLines)
+        //    {
+        //        if (orderLine.Id == product.Id)
+        //        {
+        //            amountInCart = orderLine.Amount;
+        //        }
+        //    }
+
+        //    return amountInCart;
+        //}
 
         public List<SelectListItem> FillSelectList(int amount)
         {
