@@ -32,6 +32,7 @@ namespace Webshop
             services.AddScoped<CategoryService>();
             services.AddScoped<OrderService>();
             services.AddScoped<OrderLineService>();
+            services.AddScoped<PdfService>();
 
             services.AddDbContext<LapWebshopContext>();
             services.AddControllersWithViews();
@@ -50,8 +51,11 @@ namespace Webshop
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        [Obsolete]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment)env);
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

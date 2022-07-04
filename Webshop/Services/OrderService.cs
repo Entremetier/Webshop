@@ -28,6 +28,18 @@ namespace Webshop.Services
             }
         }
 
+        public async Task<Order> GetLastFinishedOrder(Customer customer)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                var order = await db.Orders.Where(x => x.CustomerId == customer.Id)
+                    .OrderBy(x => x)
+                    .LastOrDefaultAsync(e => e.DateOrdered != null);
+
+                return order;
+            }
+        }
+
         private async Task CreateOrder(Customer customer)
         {
             using (var db = new LapWebshopContext())
