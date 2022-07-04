@@ -36,21 +36,19 @@ namespace Webshop.Controllers
             // Customer aus der DB holen
             var customer = await _userService.GetCurrentUser(email);
 
+            string customPdf =
+                $"--footer-left \" {DateTime.Now.Date.ToString("dd/MM/yyyy")}\" " +
+                $"--footer-right \"Seite[page] von [toPage]\" " +
+                $"--footer-font-size\"8\" ";
+
+            //string viewName = "UserCheck";
+
             // Letzte abgeschlossenes Bestellung holen
             var order = await _orderService.GetLastFinishedOrder(customer);
 
-            string customPdf =
-                $"--footer-left \" {DateTime.Now.Date.ToString("dd/MM/yyyy")}\" " +
-                $"--footer-right \"Seite[page] von [toPage]\"" +
-                $"--footer-font-size\"8\"";
+            var completeOrder = await _pdfService.GetPdfData(order);
 
-            string viewName = "UserCheck";
-
-            var pdfData = await _orderService.GetLastFinishedOrder(customer);
-
-            var x = await _pdfService.GetPdfData(order);
-
-            return new ViewAsPdf(viewName, pdfData)
+            return new ViewAsPdf(completeOrder)
             {
                 PageOrientation = Orientation.Portrait,
                 PageSize = Size.A4,
