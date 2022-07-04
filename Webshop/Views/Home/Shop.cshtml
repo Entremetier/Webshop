@@ -57,13 +57,13 @@
                         if (User.Identity.IsAuthenticated)
                         {
                             @* Kein Formular, damit die Methode nicht die Seite neu lädt *@
-                            <input type="submit" data-id="@item.Id" value="In den Warenkorb legen" 
+                            <input type="submit" data-id="@item.Id" value="In den Warenkorb legen"
                                    class="btn btn-outline-dark addToCartButton mt-3" />
                         }
                         else
                         {
                             @* Wenn der User nicht angemeldet ist, die Methode durchlaufen um zum Login zu schicken *@
-                            <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id" 
+                            <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id"
                                   method="post">
                                 <input type="submit" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
                             </form>

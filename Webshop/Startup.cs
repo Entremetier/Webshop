@@ -1,3 +1,5 @@
+using AspNetCoreHero.ToastNotification;
+using AspNetCoreHero.ToastNotification.Extensions;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -26,6 +28,9 @@ namespace Webshop
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // Notify Einstellungen einbinden
+            services.AddNotyf(config => { config.DurationInSeconds = 10; config.IsDismissable = true; config.Position = NotyfPosition.BottomRight; });
+
             services.AddScoped<ManufacturerService>();
             services.AddScoped<UserService>();
             services.AddScoped<ProductService>();
@@ -72,6 +77,9 @@ namespace Webshop
             // Authentifizierung einbinden
             app.UseAuthentication();
             app.UseAuthorization();
+
+            // Notify einbinden, da mit jQuery die Seite auf der Notify verwendet wird nicht neu laden
+            app.UseNotyf();
 
             app.UseEndpoints(endpoints =>
             {

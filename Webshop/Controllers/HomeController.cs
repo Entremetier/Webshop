@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AspNetCoreHero.ToastNotification.Abstractions;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -20,19 +21,22 @@ namespace Webshop.Controllers
         private readonly ManufacturerService _manufacturerService;
         private readonly UserService _userService;
         private readonly OrderLineService _orderLineService;
+        private readonly INotyfService _notyf;
 
         public HomeController(
             CategoryService categoryService,
             ProductService productService,
             ManufacturerService manufacturerService,
             UserService userService,
-            OrderLineService orderLineService)
+            OrderLineService orderLineService,
+            INotyfService notyf)
         {
             _categoryService = categoryService;
             _productService = productService;
             _manufacturerService = manufacturerService;
             _userService = userService;
             _orderLineService = orderLineService;
+            _notyf = notyf;
         }
 
         public IActionResult Index()
@@ -81,6 +85,9 @@ namespace Webshop.Controllers
             ViewBag.Manufacturers = allManufacturer;
             ViewBag.Category = allCategories;
             ViewBag.ProductsCount = products.Count();
+
+            // TODO: Soll nur erscheinen wenn vorher der Button geklickt wurde (besser im JS)
+            _notyf.Success("Success Notification");
 
             return View(products);
         }
