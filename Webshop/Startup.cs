@@ -87,6 +87,8 @@ namespace Webshop
                     name: "default",
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
+
+            //RotativaConfiguration.Setup(env.WebRootPath, "Rotativa");
         }
     }
 }

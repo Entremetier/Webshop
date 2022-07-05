@@ -53,7 +53,7 @@ namespace Webshop.Controllers
                 PageOrientation = Orientation.Portrait,
                 PageSize = Size.A4,
                 PageMargins = new Margins(15, 20, 15, 25),
-                CustomSwitches = customPdf // Konfiguration der PDF-Seite einbinden
+                //CustomSwitches = customPdf // Konfiguration der PDF-Seite einbinden
             };
         }
     }
