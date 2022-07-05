@@ -49,22 +49,14 @@ namespace Webshop.Controllers
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
             string email = User.FindFirstValue(ClaimTypes.Email);
 
-            // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
-            if (email == null)
-            {
-                return RedirectToAction("Login", "Customer");
-            }
-
             // Customer aus der DB holen
-            var customer = await _userService.GetCurrentUser(email);
+            var customer = _userService.GetCurrentUser(email);
 
             if (customer == null)
             {
                 return RedirectToAction("Login", "Customer");
             }
 
-            //TODO: Filter speichern und ausführen wenn man zurück zur Liste geht
-            //TODO: Filter löschen einbauen
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(searchString, categorie, manufacturer);
 
@@ -86,17 +78,6 @@ namespace Webshop.Controllers
             ViewBag.Category = allCategories;
             ViewBag.ProductsCount = products.Count();
 
-            //TODO: Menge des Artikels abfragen und jeweilige message in ViewBag mitgeben
-            //if (amount <= MaxItemsInCart.MaxItemsInShoppingCart)
-            //{
-            //    //  Send "Success"
-            //    return Json(new { success = true, responseText = "Wurde dem Warenkorb hinzugefügt" });
-            //}
-            //else
-            //{
-            //    //  Send "false"
-            //    return Json(new { success = false, responseText = "Es befindet sich die maximale Anzahl dieses Artikels im Warenkorb" });
-            //}
             return View(products);
         }
 

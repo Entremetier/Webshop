@@ -87,7 +87,6 @@
             if (idOfItem != '') {
                 $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
                     .done(function () {
-                        //ViewBag in toaster setzen
                         toastr.success("Wurde dem Warenkorb hinzugefügt!");
                     })
                 .fail(function () {
