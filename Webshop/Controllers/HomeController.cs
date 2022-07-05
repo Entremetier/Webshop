@@ -87,7 +87,16 @@ namespace Webshop.Controllers
             ViewBag.ProductsCount = products.Count();
 
             //TODO: Menge des Artikels abfragen und jeweilige message in ViewBag mitgeben
-            ViewBag.Added = "Wurde dem Warenkorb hinzugefügt!";
+            //if (amount <= MaxItemsInCart.MaxItemsInShoppingCart)
+            //{
+            //    //  Send "Success"
+            //    return Json(new { success = true, responseText = "Wurde dem Warenkorb hinzugefügt" });
+            //}
+            //else
+            //{
+            //    //  Send "false"
+            //    return Json(new { success = false, responseText = "Es befindet sich die maximale Anzahl dieses Artikels im Warenkorb" });
+            //}
             return View(products);
         }
 

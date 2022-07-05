@@ -89,7 +89,10 @@
                     .done(function () {
                         //ViewBag in toaster setzen
                         toastr.success("Wurde dem Warenkorb hinzugefügt!");
-                    });
+                    })
+                .fail(function () {
+                    console.log("jQuery Methode im Shop ")
+                });
             }
         });
     });
