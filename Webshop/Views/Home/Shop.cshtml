@@ -77,6 +77,8 @@
 
 @* jQuery damit die Seite nicht neu geladen wird wenn man dem Warenkorb einen Item hinzufügt (User ist angemeldet) *@
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+<link href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css" rel="stylesheet" />
 <script type="text/javascript">
     $(function () {
         $(".addToCartButton").click(function () {
@@ -84,6 +86,10 @@
             var amount = 1;
             if (idOfItem != '') {
                 $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
+                    .done(function () {
+                        //ViewBag in toaster setzen
+                        toastr.success("Wurde dem Warenkorb hinzugefügt!");
+                    })
             }
         });
     });

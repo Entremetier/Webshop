@@ -86,9 +86,8 @@ namespace Webshop.Controllers
             ViewBag.Category = allCategories;
             ViewBag.ProductsCount = products.Count();
 
-            // TODO: Soll nur erscheinen wenn vorher der Button geklickt wurde (besser im JS)
-            _notyf.Success("Success Notification");
-
+            //TODO: Menge des Artikels abfragen und jeweilige message in ViewBag mitgeben
+            ViewBag.Added = "Wurde dem Warenkorb hinzugefügt!";
             return View(products);
         }
 
