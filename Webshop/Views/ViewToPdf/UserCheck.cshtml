@@ -40,44 +40,46 @@
 @* Die Orderlines durchlaufen und in Tabelle schreiben *@
 @foreach (var item in Model.OrderLines)
 {
-<table class="table table-striped">
+<table class="table col-12">
     <thead>
         <tr>
-            <th></th>
-            <th></th>
-            <th></th>
-            <th></th>
+            <th>
+                Hersteller
+            </th>
+            <th>
+                Modell
+            </th>
+            <th>
+                Menge
+            </th>
+            <th>
+                Nettopreis in €
+            </th>
+            <th>
+                Steuer in %
+            </th>
         </tr>
     </thead>
     <tbody>
         <tr>
-            <th></th>
-            <td></td>
-            <td></td>
-            <td></td>
+            <th>
+                @Html.DisplayFor(modelItem => item.Product.Manufacturer.Name)
+            </th>
+            <th>
+                @Html.DisplayFor(modelItem => item.Product.ProductName)
+            </th>
+            <td>
+                @Html.DisplayFor(modelItem => item.Amount)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NetUnitPrice)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TaxRate)
+            </td>
         </tr>
         </tbody>
 </table>
-        <tr>
-            <td>
-                @item.Product.ProductName
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @item.Amount
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @item.NetUnitPrice&nbsp;€
-            </td>
-        </tr>
-        <tr>
-            <td>
-                @item.TaxRate
-            </td>
-        </tr>
 }
 <p>
     Bitte bezahle den offenen Betrag bis zum oben angegebenen Fälligkeitsdatum.
