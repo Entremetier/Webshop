@@ -22,6 +22,7 @@ namespace Webshop.Controllers
         private readonly UserService _userService;
         private readonly OrderLineService _orderLineService;
         private readonly INotyfService _notyf;
+        private readonly OrderService _orderService;
 
         public HomeController(
             CategoryService categoryService,
@@ -29,7 +30,8 @@ namespace Webshop.Controllers
             ManufacturerService manufacturerService,
             UserService userService,
             OrderLineService orderLineService,
-            INotyfService notyf)
+            INotyfService notyf,
+            OrderService orderService)
         {
             _categoryService = categoryService;
             _productService = productService;
@@ -37,6 +39,7 @@ namespace Webshop.Controllers
             _userService = userService;
             _orderLineService = orderLineService;
             _notyf = notyf;
+            _orderService = orderService;
         }
 
         public IActionResult Index()
@@ -50,12 +53,18 @@ namespace Webshop.Controllers
             string email = User.FindFirstValue(ClaimTypes.Email);
 
             // Customer aus der DB holen
-            var customer = _userService.GetCurrentUser(email);
+            var customer = await _userService.GetCurrentUser(email);
 
-            if (customer == null)
+            // Wenn der Customer angemeldet ist
+            if (customer != null)
             {
-                return RedirectToAction("Login", "Customer");
+                var order = await _orderService.GetOrder(customer);
+                ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
             }
+            //else
+            //{
+            //    return RedirectToAction("Login", "Customer");
+            //}
 
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(searchString, categorie, manufacturer);
@@ -74,6 +83,7 @@ namespace Webshop.Controllers
             List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
             List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
 
+            ViewBag.MaxItems = MaxItemsInCart.MaxItemsInShoppingCart;
             ViewBag.Manufacturers = allManufacturer;
             ViewBag.Category = allCategories;
             ViewBag.ProductsCount = products.Count();

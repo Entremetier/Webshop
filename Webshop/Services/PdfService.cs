@@ -24,6 +24,7 @@ namespace Webshop.Services
                     .Include(c => c.Customer)
                     .Include(ol => ol.OrderLines)
                     .ThenInclude(x => x.Product)
+                    .ThenInclude(m => m.Manufacturer)
                     .OrderBy(o => o)
                     .LastOrDefaultAsync();
             }

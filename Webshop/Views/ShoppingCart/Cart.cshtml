@@ -78,13 +78,13 @@
     </div>
 </div>
 
-@*<script type="text/javascript">
-        const deleteBtn = document.getElementById("deleteBtn");
-        deleteBtn.addEventListener("click", checkPriceTotal);
+<script type="text/javascript">
+    //const checkOutBtn = document.getElementById("checkOutBtn");
+    //checkOutBtn.addEventListener("click", checkPriceTotal);
 
-        function checkPriceTotal() {
-            if (@order.PriceTotal <= 0.00) {
+    window.onload = function () {
+            if (@order.PriceTotal <= 0) {
                 document.getElementById("checkOutBtn").disabled = true;
             }
         }
-    </script>*@
+    </script>

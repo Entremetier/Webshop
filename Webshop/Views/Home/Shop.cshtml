@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Tron-Webshop";
+    int maxItems = ViewBag.MaxItems;
+    List<OrderLine> orderLines = ViewBag.OrderLines;
 }
 
 <div class="container">
@@ -87,7 +89,12 @@
             if (idOfItem != '') {
                 $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
                     .done(function () {
-                        toastr.success("Wurde dem Warenkorb hinzugefügt!");
+                        foreach (var orderLine in @orderLines)
+                        {
+                            if (orderLine.Amount < @maxItems) {
+                                toastr.success("Wurde dem Warenkorb hinzugefügt!");
+                            }
+                        }
                     })
                 .fail(function () {
                     console.log("jQuery Methode im Shop ")
