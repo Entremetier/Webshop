@@ -4,10 +4,10 @@
 }
 
 @*<div class="row">
-    <div class="col-12 text-center">
-        <img src="@Server.MapPath("~/wwwroot/icons8-tron-64-png")"  alt="Tron-Webshop Logo" style="height:5rem; width:auto;" />
-    </div>
-</div>*@
+        <div class="col-12 text-center">
+            <img src="@Server.MapPath("~/wwwroot/icons8-tron-64-png")"  alt="Tron-Webshop Logo" style="height:5rem; width:auto;" />
+        </div>
+    </div>*@
 
 @Html.DisplayFor(model => model.FirstName)&nbsp;@Html.DisplayFor(model => model.LastName)
 <br />
@@ -38,7 +38,47 @@
 </p>
 
 @* Die Orderlines durchlaufen und in Tabelle schreiben *@
-
+@foreach (var item in Model.OrderLines)
+{
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th></th>
+            <th></th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <th></th>
+            <td></td>
+            <td></td>
+            <td></td>
+        </tr>
+        </tbody>
+</table>
+        <tr>
+            <td>
+                @item.Product.ProductName
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @item.Amount
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @item.NetUnitPrice&nbsp;€
+            </td>
+        </tr>
+        <tr>
+            <td>
+                @item.TaxRate
+            </td>
+        </tr>
+}
 <p>
     Bitte bezahle den offenen Betrag bis zum oben angegebenen Fälligkeitsdatum.
 </p>
