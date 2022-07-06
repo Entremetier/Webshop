@@ -89,16 +89,11 @@
             if (idOfItem != '') {
                 $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
                     .done(function () {
-                        foreach (var orderLine in @orderLines)
-                        {
-                            if (orderLine.Amount < @maxItems) {
-                                toastr.success("Wurde dem Warenkorb hinzugefügt!");
-                            }
-                        }
+                        toastr.success("Wurde dem Warenkorb hinzugefügt!");
                     })
-                .fail(function () {
-                    console.log("jQuery Methode im Shop ")
-                });
+                    .fail(function () {
+                        console.log("jQuery Methode im Shop ")
+                    });
             }
         });
     });

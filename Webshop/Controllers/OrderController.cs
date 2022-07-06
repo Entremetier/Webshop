@@ -90,37 +90,5 @@ namespace Webshop.Controllers
                 return View(viewModelList);
             }
         }
-
-        [Authorize]
-        public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city)
-        {
-            if (firstName == null || lastName == null || street == null || zip == null || city == null)
-            {
-                TempData["Warning"] = "Fehlende Daten bei der Lieferadresse!";
-                return RedirectToAction("Order", "Order");
-            }
-            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
-            string email = User.FindFirstValue(ClaimTypes.Email);
-
-            // Wenn es keine Email gibt, user ist nicht eingeloggt, zum Login schicken
-            if (email == null)
-            {
-                return RedirectToAction("Login", "Customer");
-            }
-
-            var customer = await _userService.GetCurrentUser(email);
-            var order = await _orderService.GetOrder(customer);
-
-            if (order.PriceTotal <= 0)
-            {
-                return RedirectToAction("Shop", "Home");
-            }
-
-            await _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
-
-            ViewBag.Order = order;
-            ViewBag.Customer = customer;
-            return View();
-        }
     }
 }

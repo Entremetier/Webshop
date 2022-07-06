@@ -31,7 +31,7 @@
             <label for="title">Anrede</label>
             <input type="text" name="title" class="form-control" value="@customer.Title">
         </div>
-        <form asp-controller="Order" asp-action="Checkout" method="post" id="checkOutForm">
+        <form asp-controller="ViewToPdf" asp-action="Checkout" method="post" id="checkOutForm">
             <div class="form-group">
                 <label for="firstName">Vorname</label>
                 <input type="text" name="firstName" maxlength="50"

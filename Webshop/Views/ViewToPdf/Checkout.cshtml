@@ -1,10 +1,6 @@
-﻿@{
-    ViewData["Title"] = "Danke";
-}
-
+﻿@model Webshop.ViewModels.CustomerAndOrderIDViewModel
 @{
-    Customer customer = ViewBag.Customer;
-    Order order = ViewBag.Order;
+    ViewData["Title"] = "Danke";
 }
 
 <div class="row">
@@ -14,13 +10,13 @@
         </div>
         <div class="text-left">
             <h1>
-                Hallo @customer.FirstName @customer.LastName,
+                Hallo @Model.FirstName @Model.LastName,
             </h1>
             <br />
         </div>
         <div class="text-left">
             <p>
-                danke für deine Bestellung, die Bestellnummer lautet @order.Id.
+                danke für deine Bestellung, die Bestellnummer lautet @Model.OrderId.
             </p>
             <span>
                 Unser Team macht sich sofort an die Arbeit um deine Bestellung schnellstmöglich abzuschicken.
@@ -39,7 +35,7 @@
                 <span>Bank:&emsp;Bankenhaus</span><br />
                 <span>IBAN:&emsp;AT82 1982 1977 1986 1956</span><br />
                 <span>BIC:&emsp;&ensp;BKAUATWW</span> <br />
-                <span>Verwendungszweck: Bestellnummer @order.Id</span> <br />
+                <span>Verwendungszweck: Bestellnummer @Model.OrderId</span> <br />
             </p>
             <p>
                 Vielen Dank für deine Bestellung, dein Tron-Team!
