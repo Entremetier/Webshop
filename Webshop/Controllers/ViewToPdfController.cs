@@ -27,7 +27,7 @@ namespace Webshop.Controllers
             _pdfService = pdfService;
         }
 
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city)
         {
             if (firstName == null || lastName == null || street == null || zip == null || city == null)
@@ -62,21 +62,26 @@ namespace Webshop.Controllers
                 FirstName = customer.FirstName,
                 LastName = customer.LastName,
                 OrderId = order.Id
-
             };
-
-            await UserCheck(customer);
-
-            return View(customerOrderVM);
-        }
-        public async Task UserCheck(Customer customer)
-        {
             // Letzte abgeschlossenes Bestellung holen
-            var order = await _orderService.GetLastFinishedOrder(customer);
+            //var order = await _orderService.GetLastFinishedOrder(customer);
 
             var completeOrder = await _pdfService.GetPdfData(order);
 
-            var pdf = new ViewAsPdf(completeOrder)
+            var pdf =
+                UserCheck(customer, completeOrder);
+            byte[] y = await pdf.BuildFile(ControllerContext);
+            //string fullPath = @"~\Pdf\" + pdf.FileName;
+            Stream fileStream = new MemoryStream(y);
+            MailService.SendMail(customer.Email, fileStream);
+            return RedirectToAction("Checkout", customerOrderVM);
+        }
+        public ViewAsPdf UserCheck(Customer customer, Order completeOrder)
+        {
+
+
+            string viewName = "UserCheck";
+            return new ViewAsPdf(viewName, completeOrder)
             {
                 FileName = "Rechnung",
                 PageOrientation = Orientation.Portrait,
@@ -85,10 +90,7 @@ namespace Webshop.Controllers
                 //CustomSwitches = customPdf // Konfiguration der PDF-Seite einbinden
             };
 
-            byte[] y = await pdf.BuildFile(ControllerContext);
-            string fullPath = @"~\Pdf\" + pdf.FileName;
-            Stream fileStream = new MemoryStream(y);
-            MailService.SendMail(customer.Email, fileStream);
+        
 
         }
     }
