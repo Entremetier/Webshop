@@ -54,9 +54,6 @@ namespace Webshop.Controllers
 
             await _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
 
-            ViewBag.Order = 1;
-            TempData["Customer"] = customer;
-
             CustomerAndOrderIDViewModel customerOrderVM = new CustomerAndOrderIDViewModel
             {
                 FirstName = customer.FirstName,
@@ -68,18 +65,15 @@ namespace Webshop.Controllers
 
             var completeOrder = await _pdfService.GetPdfData(order);
 
-            var pdf =
-                UserCheck(customer, completeOrder);
-            byte[] y = await pdf.BuildFile(ControllerContext);
+            var viewAsPdf = UserCheck(completeOrder);
+            byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
             //string fullPath = @"~\Pdf\" + pdf.FileName;
-            Stream fileStream = new MemoryStream(y);
+            Stream fileStream = new MemoryStream(pdfAsByteArray);
             MailService.SendMail(customer.Email, fileStream);
             return RedirectToAction("Checkout", customerOrderVM);
         }
-        public ViewAsPdf UserCheck(Customer customer, Order completeOrder)
+        private static ViewAsPdf UserCheck(Order completeOrder)
         {
-
-
             string viewName = "UserCheck";
             return new ViewAsPdf(viewName, completeOrder)
             {
@@ -89,16 +83,6 @@ namespace Webshop.Controllers
                 PageMargins = new Margins(15, 20, 15, 25),
                 //CustomSwitches = customPdf // Konfiguration der PDF-Seite einbinden
             };
-
-        
-
-        }
-    }
-
-    internal class CustomerAndOrderIdViewModel
-    {
-        public CustomerAndOrderIdViewModel()
-        {
         }
     }
 }

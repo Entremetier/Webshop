@@ -23,9 +23,11 @@ namespace Webshop.Services
             //mailer.Send(message);
 
             Attachment attachment = new Attachment(pdf, $"{email}Rechnung.pdf");
-            var message = new MailMessage(@"tronShop@gmx.at", email);
-            message.Subject = "Rechnung Tron";
-            message.Body = "Hier die Rechnung du Affe!";
+            var message = new MailMessage(@"tronShop@gmx.at", email)
+            {
+                Subject = "Rechnung Tron",
+                Body = "Hier die Rechnung du Affe!"
+            };
             message.Attachments.Add(attachment);
             SmtpClient mailer = new SmtpClient("mail.gmx.net", 587); // das wären die Servereinstellungen für die qualimail
             mailer.Credentials = new NetworkCredential("tronShop@gmx.at", "Entremetier82"); // hier müssen Ihre Anmeldedaten zum Emailaccount drinnen stehen
