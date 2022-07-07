@@ -90,17 +90,6 @@
                 </div>
             </div>
         }
-        <div class="container">
-            <div class="row">
-                <div class="col-12 text-center mt-3 mb-3">
-                    <hr />
-                    <input class="form-check-input" type="checkbox" id="cartCheckbox">
-                    <label class="form-check-label">
-                        Ich möchte kostenpflichtig bestellen.
-                    </label>
-                </div>
-            </div>
-        </div>
     </div>
     <div class="col-sm-12 col-lg-2 text-center text-lg-right">
         <h3>Gesamtpreis</h3>
@@ -111,22 +100,3 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    const orderNowBtn = document.getElementById("orderNowBtn");
-    const cartCheckbox = document.getElementById("cartCheckbox");
-
-    // Button zu Beginn disablen
-    orderNowBtn.disabled = true;
-
-    // Wenn sich was an der Checkbox ändert orderNowBtn aktivieren und deaktivieren
-    cartCheckbox.addEventListener("change", (e) => {
-        if (e.target.checked) {
-            orderNowBtn.disabled = false;
-        }
-        else {
-            orderNowBtn.disabled = true;
-        }
-    });
-</script>
