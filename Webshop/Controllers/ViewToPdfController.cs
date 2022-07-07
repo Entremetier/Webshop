@@ -47,10 +47,10 @@ namespace Webshop.Controllers
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);
 
-            if (order.PriceTotal <= 0)
-            {
-                return RedirectToAction("Shop", "Home");
-            }
+            //if (order.PriceTotal <= 0)
+            //{
+            //    return RedirectToAction("Shop", "Home");
+            //}
 
             await _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
 
@@ -70,6 +70,7 @@ namespace Webshop.Controllers
             //string fullPath = @"~\Pdf\" + pdf.FileName;
             Stream fileStream = new MemoryStream(pdfAsByteArray);
             MailService.SendMail(customer.Email, fileStream);
+
             return RedirectToAction("Checkout", customerOrderVM);
         }
         private static ViewAsPdf UserCheck(Order completeOrder)
