@@ -98,7 +98,6 @@ namespace Webshop.Controllers
                 List<CustomerOrderViewModel> viewModelList = new List<CustomerOrderViewModel>();
                 foreach (var item in orderLines)
                 {
-
                     var product = await _productService.GetProductWithManufacturer(item.ProductId);
                     viewModelList.Add(new CustomerOrderViewModel
                     {

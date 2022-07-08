@@ -154,6 +154,14 @@ namespace Webshop.Services
             }
         }
 
+        public async Task<List<OrderLine>> GetOrderLinesOfOrderWithProductAndManufacturer(Order order)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                return await db.OrderLines.Include(p => p.Product).ThenInclude(m => m.Manufacturer).Where(x => x.OrderId == order.Id).ToListAsync();
+            }
+        }
+
 
         //public async Task<int> GetAmountOfProductInCard(Customer customer, Product product)
         //{

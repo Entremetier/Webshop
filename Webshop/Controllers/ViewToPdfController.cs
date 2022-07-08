@@ -19,12 +19,19 @@ namespace Webshop.Controllers
         private readonly UserService _userService;
         private readonly OrderService _orderService;
         private readonly PdfService _pdfService;
+        private readonly CategoryService _categoryService;
+        private readonly OrderLineService _orderLineService;
+        private readonly ProductService _productService;
 
-        public ViewToPdfController(UserService userService, OrderService orderService, PdfService pdfService)
+        public ViewToPdfController(UserService userService, OrderService orderService, PdfService pdfService, CategoryService categoryService,
+            OrderLineService orderLineService, ProductService productService)
         {
             _userService = userService;
             _orderService = orderService;
             _pdfService = pdfService;
+            _categoryService = categoryService;
+            _orderLineService = orderLineService;
+            _productService = productService;
         }
 
         [Authorize]
@@ -61,10 +68,29 @@ namespace Webshop.Controllers
 
             var completeOrder = await _pdfService.GetPdfData(finishedOrder);
 
-            var viewAsPdf = UserCheck(completeOrder);
+
+            //var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
+            List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrder(finishedOrder);
+
+            decimal fullNettoPrice = 0;
+            foreach (var item in orderLines)
+            {
+                fullNettoPrice += item.Amount * item.NetUnitPrice;
+            }
+
+            FinishedOrderViewModel finishedOrderVM = new FinishedOrderViewModel
+            {
+                Customer = customer,
+                Order = finishedOrder,
+                FullNettoPrice = fullNettoPrice,
+                Taxes = order.PriceTotal - fullNettoPrice,
+                OrderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder)
+            };
+
+            var viewAsPdf = UserCheck(finishedOrderVM);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
             Stream fileStream = new MemoryStream(pdfAsByteArray);
-            MailService.SendMail(customer.Email, customer.FirstName, customer.LastName, fileStream);
+            MailService.SendMail(customer.FirstName, customer.LastName, customer.Email, fileStream);
 
             return RedirectToAction("UserCheckout", customerOrderVM);
         }
@@ -75,10 +101,11 @@ namespace Webshop.Controllers
             return View(customerAndOrderVM);
         }
 
-        private static ViewAsPdf UserCheck(Order finishedOrder)
+        private static ViewAsPdf UserCheck(FinishedOrderViewModel finishedOrderVM)
         {
             string viewName = "UserCheck";
-            return new ViewAsPdf(viewName, finishedOrder)
+
+            return new ViewAsPdf(viewName, finishedOrderVM)
             {
                 FileName = "Rechnung",
                 PageOrientation = Orientation.Portrait,
