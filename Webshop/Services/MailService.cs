@@ -8,31 +8,22 @@ using System.Threading.Tasks;
 
 namespace Webshop.Services
 {
-    public class MailService
+    public static class MailService
     {
-        public static void SendMail(string email, Stream pdf)
+        public static void SendMail(string firstName, string lastName, string email, Stream pdf)
         {
-            //Attachment attachment = new Attachment(pdf, $"{email}Rechnung.pdf");
-            //var message = new MailMessage(@"webshop_lap@gmx.de", email);
-            //message.Subject = "MasterTest";
-            //message.Body = "Test TEST";
-            //message.Attachments.Add(attachment);
-            //SmtpClient mailer = new SmtpClient("mail.gmx.net", 587); // das wären die Servereinstellungen für die qualimail
-            //mailer.Credentials = new NetworkCredential("webshop_lap@gmx.de", "Admin2019$"); // hier müssen Ihre Anmeldedaten zum Emailaccount drinnen stehen
-            //mailer.EnableSsl = true;
-            //mailer.Send(message);
-
             Attachment attachment = new Attachment(pdf, $"{email}Rechnung.pdf");
             var message = new MailMessage(@"tronShop@gmx.at", email)
             {
                 Subject = "Rechnung Tron",
-                Body = "Hier die Rechnung du Affe!"
+                Body = "Hallo " + firstName + " " + lastName + ", \n\n im Anhang findest Du deine Rechnung vom " + 
+                        DateTime.Now.ToShortDateString() + ".\n\n Vielen Dank für deinen Einkauf bei Tron Webshop"
             };
             message.Attachments.Add(attachment);
-            SmtpClient mailer = new SmtpClient("mail.gmx.net", 587); // das wären die Servereinstellungen für die qualimail
-            mailer.Credentials = new NetworkCredential("tronShop@gmx.at", "Entremetier82"); // hier müssen Ihre Anmeldedaten zum Emailaccount drinnen stehen
+            SmtpClient mailer = new SmtpClient("mail.gmx.net", 587); // das wären die Servereinstellungen für die qualimail mit Port
+            mailer.Credentials = new NetworkCredential("tronShop@gmx.at", "Entremetier82"); // Anmeldedaten zum Emailaccount übergeben
             mailer.EnableSsl = true;
             mailer.Send(message);
         }
-        }
+    }
 }

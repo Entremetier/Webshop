@@ -60,7 +60,7 @@ namespace Webshop.Services
             }
         }
 
-        public async Task MakeOrder(Order order, string firstName, string lastName, string street, string zip, string city)
+        public async Task SetOrder(Order order, string firstName, string lastName, string street, string zip, string city)
         {
             using (var db = new LapWebshopContext())
             {

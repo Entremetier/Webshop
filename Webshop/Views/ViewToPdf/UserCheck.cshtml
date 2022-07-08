@@ -11,7 +11,12 @@
                     <table width="100%" cellspacing="0" cellpadding="0">
                         <tbody>
                             <tr>
-                                <td valign="bottom" width="50%" height="50"><div align="left"><img style="height:5rem;width:auto" src="D:\VisualStudio2019\Webshop\Webshop\wwwroot\icons8-tron-64.png"></div><br></td>
+                                <td valign="bottom" width="50%" height="50">
+                                    <div align="center">
+                                        <img style="height:5rem;width:auto" src="D:\VisualStudio2019\Webshop\Webshop\wwwroot\icons8-tron-64.png">
+                                    </div>
+                                    <br>
+                                </td>
                                 <td width="50%">&nbsp;</td>
                             </tr>
                         </tbody>
@@ -102,7 +107,7 @@
                                     Telefon: 0000-1111-2222-3333<br>
                                 </td>
                                 <td valign="top" width="34%" style="border-top:double medium #CCCCCC;font-size:12px;" align="right">
-                                    Bank: Bankenhaus<br> IBAN: AT82 1982 1977 1986 1956 <br>SWIFT/BIC: BKAUATWW 
+                                    Bank: Bankenhaus<br> IBAN: AT82 1982 1977 1986 1956 <br>SWIFT/BIC: BKAUATWW
                                 </td>
                             </tr>
                         </tbody>
@@ -112,182 +117,3 @@
         </tbody>
     </table>
 </body>
-
-<!--<div class="row">
-        <div class="">
-            <img src="D:\VisualStudio2019\Webshop\Webshop\wwwroot\icons8-tron-64.png"  alt="Tron-Webshop Logo" style="height:5rem; width:auto;" />
-        </div>
-    </div>
-
-@Html.DisplayFor(model => model.FirstName)&nbsp;@Html.DisplayFor(model => model.LastName)
-<br />
-@Html.DisplayFor(model => model.Street)
-<br />
-@Html.DisplayFor(model => model.Zip)&nbsp;@Html.DisplayFor(model => model.City)
-
-<p>
-    Rechnungsdatum:&nbsp;@DateTime.Now.ToShortDateString()
-</p>
-
-<p>
-    Kundennr.:&nbsp;@Html.DisplayFor(model => model.CustomerId)
-</p>
-<p>
-    Fälligkeitsdatum:&nbsp;@DateTime.Now.AddDays(14).ToShortDateString()
-</p>
-
-<h1>Rechnung Nr:&nbsp;@Html.DisplayFor(model => model.Id)</h1>
-
-<p>
-    Hallo @Html.DisplayFor(model => model.FirstName)&nbsp;@Html.DisplayFor(model => model.LastName),
-</p>
-<br />
-<p>
-    vielen Dank für deinen Einkauf!<br />
-    Unten findest Du eine Übersicht über die gekauften Produkte.
-</p>-->
-
-@* Die Orderlines durchlaufen und in Tabelle schreiben *@
-<!--@foreach (var item in Model.OrderLines)
-{
-<table class="table col-12">
-    <thead>
-        <tr>
-            <th>
-                Hersteller
-            </th>
-            <th>
-                Modell
-            </th>
-            <th>
-                Menge
-            </th>
-            <th>
-                Nettopreis in €
-            </th>
-            <th>
-                Steuer in %
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th>
-                @Html.DisplayFor(modelItem => item.Product.Manufacturer.Name)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.Product.ProductName)
-            </th>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetUnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaxRate)
-            </td>
-        </tr>
-        </tbody>
-</table>
-}
-<p>
-    Bitte bezahle den offenen Betrag bis zum oben angegebenen Fälligkeitsdatum.
-</p>
-<br />
-<p>
-    Mit freundlichen Grüßen
-</p>
-<br />
-<p>
-    Dein Tron-Team
-</p>-->
---<div class="row">
-        <div class="">
-            <img src="D:\VisualStudio2019\Webshop\Webshop\wwwroot\icons8-tron-64.png"  alt="Tron-Webshop Logo" style="height:5rem; width:auto;" />
-        </div>
-    </div>
-
-@Html.DisplayFor(model => model.FirstName)&nbsp;@Html.DisplayFor(model => model.LastName)
-<br />
-@Html.DisplayFor(model => model.Street)
-<br />
-@Html.DisplayFor(model => model.Zip)&nbsp;@Html.DisplayFor(model => model.City)
-
-<p>
-    Rechnungsdatum:&nbsp;@DateTime.Now.ToShortDateString()
-</p>
-
-<p>
-    Kundennr.:&nbsp;@Html.DisplayFor(model => model.CustomerId)
-</p>
-<p>
-    Fälligkeitsdatum:&nbsp;@DateTime.Now.AddDays(14).ToShortDateString()
-</p>
-
-<h1>Rechnung Nr:&nbsp;@Html.DisplayFor(model => model.Id)</h1>
-
-<p>
-    Hallo @Html.DisplayFor(model => model.FirstName)&nbsp;@Html.DisplayFor(model => model.LastName),
-</p>
-<br />
-<p>
-    vielen Dank für deinen Einkauf!<br />
-    Unten findest Du eine Übersicht über die gekauften Produkte.
-</p>-->
-
-@* Die Orderlines durchlaufen und in Tabelle schreiben *@
-<!--@foreach (var item in Model.OrderLines)
-{
-<table class="table col-12">
-    <thead>
-        <tr>
-            <th>
-                Hersteller
-            </th>
-            <th>
-                Modell
-            </th>
-            <th>
-                Menge
-            </th>
-            <th>
-                Nettopreis in €
-            </th>
-            <th>
-                Steuer in %
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <th>
-                @Html.DisplayFor(modelItem => item.Product.Manufacturer.Name)
-            </th>
-            <th>
-                @Html.DisplayFor(modelItem => item.Product.ProductName)
-            </th>
-            <td>
-                @Html.DisplayFor(modelItem => item.Amount)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.NetUnitPrice)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TaxRate)
-            </td>
-        </tr>
-        </tbody>
-</table>
-}
-<p>
-    Bitte bezahle den offenen Betrag bis zum oben angegebenen Fälligkeitsdatum.
-</p>
-<br />
-<p>
-    Mit freundlichen Grüßen
-</p>
-<br />
-<p>
-    Dein Tron-Team
-</p>-->

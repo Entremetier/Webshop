@@ -27,7 +27,7 @@ namespace Webshop.Controllers
             _pdfService = pdfService;
         }
 
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city)
         {
             if (firstName == null || lastName == null || street == null || zip == null || city == null)
@@ -47,12 +47,7 @@ namespace Webshop.Controllers
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);
 
-            //if (order.PriceTotal <= 0)
-            //{
-            //    return RedirectToAction("Shop", "Home");
-            //}
-
-            await _orderService.MakeOrder(order, firstName, lastName, street, zip, city);
+            await _orderService.SetOrder(order, firstName, lastName, street, zip, city);
 
             CustomerAndOrderIDViewModel customerOrderVM = new CustomerAndOrderIDViewModel
             {
@@ -60,29 +55,35 @@ namespace Webshop.Controllers
                 LastName = customer.LastName,
                 OrderId = order.Id
             };
-            // Letzte abgeschlossenes Bestellung holen
-            //var order = await _orderService.GetLastFinishedOrder(customer);
 
-            var completeOrder = await _pdfService.GetPdfData(order);
+            // Letzte abgeschlossenes Bestellung holen
+            var finishedOrder = await _orderService.GetLastFinishedOrder(customer);
+
+            var completeOrder = await _pdfService.GetPdfData(finishedOrder);
 
             var viewAsPdf = UserCheck(completeOrder);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
-            //string fullPath = @"~\Pdf\" + pdf.FileName;
             Stream fileStream = new MemoryStream(pdfAsByteArray);
-            MailService.SendMail(customer.Email, fileStream);
+            MailService.SendMail(customer.Email, customer.FirstName, customer.LastName, fileStream);
 
-            return RedirectToAction("Checkout", customerOrderVM);
+            return RedirectToAction("UserCheckout", customerOrderVM);
         }
-        private static ViewAsPdf UserCheck(Order completeOrder)
+
+        [Authorize]
+        public IActionResult UserCheckout(CustomerAndOrderIDViewModel customerAndOrderVM)
+        {
+            return View(customerAndOrderVM);
+        }
+
+        private static ViewAsPdf UserCheck(Order finishedOrder)
         {
             string viewName = "UserCheck";
-            return new ViewAsPdf(viewName, completeOrder)
+            return new ViewAsPdf(viewName, finishedOrder)
             {
                 FileName = "Rechnung",
                 PageOrientation = Orientation.Portrait,
                 PageSize = Size.A4,
                 PageMargins = new Margins(15, 20, 15, 25),
-                //CustomSwitches = customPdf // Konfiguration der PDF-Seite einbinden
             };
         }
     }
