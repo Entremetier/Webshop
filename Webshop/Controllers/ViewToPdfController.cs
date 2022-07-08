@@ -69,8 +69,8 @@ namespace Webshop.Controllers
             var completeOrder = await _pdfService.GetPdfData(finishedOrder);
 
 
-            //var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
-            List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrder(finishedOrder);
+            var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
+            List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(finishedOrder);
 
             decimal fullNettoPrice = 0;
             foreach (var item in orderLines)
@@ -78,14 +78,17 @@ namespace Webshop.Controllers
                 fullNettoPrice += item.Amount * item.NetUnitPrice;
             }
 
-            FinishedOrderViewModel finishedOrderVM = new FinishedOrderViewModel
+            FinishedOrderViewModel finishedOrderVM = new FinishedOrderViewModel();
+            foreach (var item in orderLines)
             {
-                Customer = customer,
-                Order = finishedOrder,
-                FullNettoPrice = fullNettoPrice,
-                Taxes = order.PriceTotal - fullNettoPrice,
-                OrderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder)
-            };
+                finishedOrderVM.Customer = customer;
+                finishedOrderVM.Order = finishedOrder;
+                finishedOrderVM.FullNettoPrice = fullNettoPrice;
+                finishedOrderVM.BruttoPrice = _productService.CalcPrice(item.Product, categoryAndTaxRate);
+                finishedOrderVM.RowPrice = item.Amount * _productService.CalcPrice(item.Product, categoryAndTaxRate);
+                finishedOrderVM.Taxes = order.PriceTotal - fullNettoPrice;
+                finishedOrderVM.OrderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
+            }
 
             var viewAsPdf = UserCheck(finishedOrderVM);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);

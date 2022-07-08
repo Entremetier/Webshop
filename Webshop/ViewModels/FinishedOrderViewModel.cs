@@ -11,6 +11,8 @@ namespace Webshop.ViewModels
         public Customer Customer { get; set; }
         public Order Order { get; set; }
         public decimal FullNettoPrice { get; set; }
+        public decimal BruttoPrice { get; set; }
+        public decimal RowPrice { get; set; }
         public decimal Taxes { get; set; }
         public List<OrderLine> OrderLines { get; set; }
     }

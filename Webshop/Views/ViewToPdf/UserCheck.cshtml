@@ -50,8 +50,8 @@
                             <tr>
                                 <td width="35%" bordercolor="#ccc" bgcolor="#f2f2f2" style="font-size:12px;"><strong>Beschreibung </strong></td>
                                 <td bordercolor="#ccc" bgcolor="#f2f2f2" style="font-size:12px;"><strong>Menge</strong></td>
-                                <td bordercolor="#ccc" bgcolor="#f2f2f2" style="font-size:12px;"><strong>Stückpreis in €</strong></td>
-                                <td bordercolor="#ccc" bgcolor="#f2f2f2" style="font-size:12px;"><strong>Steuer in %</strong></td>
+                                <td bordercolor="#ccc" bgcolor="#f2f2f2" style="font-size:12px;"><strong>Stückpreis</strong></td>
+                                <td bordercolor="#ccc" bgcolor="#f2f2f2" style="font-size:12px;"><strong>Zeilenpreis</strong></td>
                             </tr>
                             <tr style="display:none;"><td colspan="*"></td></tr>
                             @foreach (var item in Model.OrderLines)
@@ -59,8 +59,8 @@
                                 <tr>
                                     <td valign="top" style="font-size:12px;">@item.Product.Manufacturer.Name&nbsp;@item.Product.ProductName</td>
                                     <td valign="top" style="font-size:12px;">@item.Amount </td>
-                                    <td valign="top" style="font-size:12px;">@item.NetUnitPrice </td>
-                                    <td valign="top" style="font-size:12px;">@item.TaxRate </td>
+                                    <td valign="top" style="font-size:12px;">@Html.DisplayFor(model => model.BruttoPrice)&nbsp;€</td>
+                                    <td valign="top" style="font-size:12px;">@Html.DisplayFor(model => model.RowPrice)&nbsp;€</td>
                                 </tr>
                             }
                         </tbody>
