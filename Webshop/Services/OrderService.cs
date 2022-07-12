@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
 using Microsoft.EntityFrameworkCore;
+using Webshop.ViewModels;
 
 namespace Webshop.Services
 {
@@ -74,6 +75,17 @@ namespace Webshop.Services
                 db.Update(order);
                 await db.SaveChangesAsync();
             }
+        }
+
+        public decimal GetFullNettoPriceOfOrderLines(List<OrderLine> orderLines)
+        {
+            decimal fullNettoPrice = 0;
+            foreach (var orderLine in orderLines)
+            {
+                fullNettoPrice += orderLine.Amount * orderLine.NetUnitPrice;
+            }
+
+            return fullNettoPrice;
         }
     }
 }

@@ -68,29 +68,12 @@ namespace Webshop.Controllers
 
             var completeOrder = await _pdfService.GetPdfData(finishedOrder);
 
-            var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
             List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
 
-            decimal fullNettoPrice = 0;
-            foreach (var item in orderLines)
-            {
-                fullNettoPrice += item.Amount * item.NetUnitPrice;
-            }
+            decimal fullNettoPrice = _orderService.GetFullNettoPriceOfOrderLines(orderLines);
+            List<FinishedOrderViewModel> finishedOrderVMList = await _orderLineService.GetFinishedOrderVMList(orderLines);
 
             FinishedOrderContainerViewModel finishedOrderContainerVM = new FinishedOrderContainerViewModel();
-            FinishedOrderViewModel finishedOrderVM;
-            List<FinishedOrderViewModel> finishedOrderVMList = new List<FinishedOrderViewModel>();
-            foreach (var item in orderLines)
-            {
-                finishedOrderVM = new FinishedOrderViewModel
-                {
-                    BruttoPrice = _productService.CalcPrice(item.Product, categoryAndTaxRate),
-                    BruttoRowPrice = item.Amount * _productService.CalcPrice(item.Product, categoryAndTaxRate),
-                    OrderLine = item
-                };
-                finishedOrderVMList.Add(finishedOrderVM);
-            }
-
             finishedOrderContainerVM.Customer = customer;
             finishedOrderContainerVM.Order = order;
             finishedOrderContainerVM.FinishedOrderViewModels = finishedOrderVMList;
@@ -111,6 +94,7 @@ namespace Webshop.Controllers
             return View(customerAndOrderVM);
         }
 
+        [Authorize]
         private static ViewAsPdf UserCheck(FinishedOrderContainerViewModel finishedOrderVM)
         {
             string viewName = "UserCheck";

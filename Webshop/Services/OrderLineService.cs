@@ -6,20 +6,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
 using Microsoft.EntityFrameworkCore;
+using Webshop.ViewModels;
 
 namespace Webshop.Services
 {
     public class OrderLineService : Controller
     {
-        private readonly LapWebshopContext _context;
         private readonly OrderService _orderService;
         private readonly UserService _userService;
+        private readonly ProductService _productService;
+        private readonly CategoryService _categoryService;
 
-        public OrderLineService(LapWebshopContext context, OrderService orderService, UserService userService)
+        public OrderLineService(OrderService orderService, UserService userService, ProductService productService, CategoryService categoryService)
         {
-            _context = context;
             _orderService = orderService;
             _userService = userService;
+            _productService = productService;
+            _categoryService = categoryService;
         }
 
         public async Task AddProductToShoppingCart(Product product, Order order, int amount)
@@ -192,6 +195,26 @@ namespace Webshop.Services
                 listItems.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
             }
             return listItems;
+        }
+
+        public async Task<List<FinishedOrderViewModel>> GetFinishedOrderVMList(List<OrderLine> orderLines)
+        {
+            FinishedOrderViewModel finishedOrderVM;
+            List<FinishedOrderViewModel> finishedOrderVMList = new List<FinishedOrderViewModel>();
+
+            var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
+
+            foreach (var item in orderLines)
+            {
+                finishedOrderVM = new FinishedOrderViewModel
+                {
+                    BruttoPrice = _productService.CalcPrice(item.Product, categoryAndTaxRate),
+                    BruttoRowPrice = item.Amount * _productService.CalcPrice(item.Product, categoryAndTaxRate),
+                    OrderLine = item
+                };
+                finishedOrderVMList.Add(finishedOrderVM);
+            }
+            return finishedOrderVMList;
         }
     }
 }
