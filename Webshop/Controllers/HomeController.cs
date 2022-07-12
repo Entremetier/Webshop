@@ -47,6 +47,7 @@ namespace Webshop.Controllers
             return View();
         }
 
+        [HttpPost]
         public async Task<IActionResult> Shop(string searchString, string categorie, string manufacturer)
         {
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
@@ -55,19 +56,74 @@ namespace Webshop.Controllers
             // Customer aus der DB holen
             var customer = await _userService.GetCurrentUser(email);
 
-            // Wenn der Customer angemeldet ist
+            // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
             if (customer != null)
             {
                 var order = await _orderService.GetOrder(customer);
                 ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
             }
-            //else
-            //{
-            //    return RedirectToAction("Login", "Customer");
-            //}
 
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(searchString, categorie, manufacturer);
+
+            // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
+            // bestehen würden
+            List<Category> categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
+
+            // Bruttopreis für alle Produkte berechnen
+            foreach (var product in products)
+            {
+                product.NetUnitPrice = _productService.CalcPrice(product, categoryAndTaxRate);
+            }
+
+            // Die DDL`s befüllen
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+
+            foreach (var item in allManufacturer)
+            {
+                if (item.Value == manufacturer)
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+            List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
+
+            foreach (var item in allCategories)
+            {
+                if (item.Value == categorie)
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+
+            ViewBag.MaxItems = MaxItemsInCart.MaxItemsInShoppingCart;
+            ViewBag.Manufacturers = allManufacturer;
+            ViewBag.Category = allCategories;
+            ViewBag.ProductsCount = products.Count();
+
+            return View(products);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Shop()
+        {
+            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
+            string email = User.FindFirstValue(ClaimTypes.Email);
+
+            // Customer aus der DB holen
+            var customer = await _userService.GetCurrentUser(email);
+
+            // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
+            if (customer != null)
+            {
+                var order = await _orderService.GetOrder(customer);
+                ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
+            }
+
+            // Produktliste befüllen
+            IQueryable<Product> products = _productService.FilterList(null, null, null);
 
             // Locale Liste, würde sonst zu Problemen führen wenn es DbSet wäre da zwei offene DB Verbindungen
             // bestehen würden
