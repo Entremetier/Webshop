@@ -6,13 +6,12 @@ using Webshop.Models;
 
 namespace Webshop.ViewModels
 {
-    public class AnotherViewModel
+    public class FinishedOrderContainerViewModel
     {
         public Customer Customer { get; set; }
         public Order Order { get; set; }
         public decimal FullNettoPrice { get; set; }
         public decimal Taxes { get; set; }
-
         public List<FinishedOrderViewModel> FinishedOrderViewModels { get; set; }
     }
 }

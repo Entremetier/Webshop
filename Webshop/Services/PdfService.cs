@@ -8,14 +8,7 @@ using Webshop.Models;
 namespace Webshop.Services
 {
     public class PdfService
-    {
-        private readonly OrderService _orderService;
-
-        public PdfService(OrderService orderService)
-        {
-            _orderService = orderService;
-        }
-
+    { 
         public async Task<Order> GetPdfData(Order order)
         {
             using (var db = new LapWebshopContext())

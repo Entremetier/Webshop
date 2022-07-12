@@ -70,7 +70,7 @@ namespace Webshop.Controllers
 
 
             var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
-            List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(finishedOrder);
+            List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
 
             decimal fullNettoPrice = 0;
             foreach (var item in orderLines)
@@ -78,27 +78,27 @@ namespace Webshop.Controllers
                 fullNettoPrice += item.Amount * item.NetUnitPrice;
             }
 
-            AnotherViewModel anotherViewModel = new AnotherViewModel();
-            FinishedOrderViewModel finishedOrderViewModel;
-            List<FinishedOrderViewModel> x = new List<FinishedOrderViewModel>();
+            FinishedOrderContainerViewModel finishedOrderContainerVM = new FinishedOrderContainerViewModel();
+            FinishedOrderViewModel finishedOrderVM;
+            List<FinishedOrderViewModel> finishedOrderVMList = new List<FinishedOrderViewModel>();
             foreach (var item in orderLines)
             {
-                finishedOrderViewModel = new FinishedOrderViewModel
+                finishedOrderVM = new FinishedOrderViewModel
                 {
                     BruttoPrice = _productService.CalcPrice(item.Product, categoryAndTaxRate),
                     BruttoRowPrice = item.Amount * _productService.CalcPrice(item.Product, categoryAndTaxRate),
                     OrderLine = item
                 };
-                x.Add(finishedOrderViewModel);
+                finishedOrderVMList.Add(finishedOrderVM);
             }
 
-            anotherViewModel.Customer = customer;
-            anotherViewModel.Order = order;
-            anotherViewModel.FinishedOrderViewModels = x;
-            anotherViewModel.FullNettoPrice = fullNettoPrice;
-            anotherViewModel.Taxes = order.PriceTotal - fullNettoPrice;
+            finishedOrderContainerVM.Customer = customer;
+            finishedOrderContainerVM.Order = order;
+            finishedOrderContainerVM.FinishedOrderViewModels = finishedOrderVMList;
+            finishedOrderContainerVM.FullNettoPrice = fullNettoPrice;
+            finishedOrderContainerVM.Taxes = order.PriceTotal - fullNettoPrice;
 
-            var viewAsPdf = UserCheck(anotherViewModel);
+            var viewAsPdf = UserCheck(finishedOrderContainerVM);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
             Stream fileStream = new MemoryStream(pdfAsByteArray);
             MailService.SendMail(customer.FirstName, customer.LastName, customer.Email, fileStream);
@@ -112,7 +112,7 @@ namespace Webshop.Controllers
             return View(customerAndOrderVM);
         }
 
-        private static ViewAsPdf UserCheck(AnotherViewModel finishedOrderVM)
+        private static ViewAsPdf UserCheck(FinishedOrderContainerViewModel finishedOrderVM)
         {
             string viewName = "UserCheck";
 

@@ -12,7 +12,7 @@ namespace Webshop.Services
     {
         public static void SendMail(string firstName, string lastName, string email, Stream pdf)
         {
-            Attachment attachment = new Attachment(pdf, $"{email}Rechnung.pdf");
+            Attachment attachment = new Attachment(pdf, "Rechnung.pdf");
             var message = new MailMessage(@"tronShop@gmx.at", email)
             {
                 Subject = "Rechnung Tron",
