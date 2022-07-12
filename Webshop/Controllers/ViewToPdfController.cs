@@ -68,7 +68,6 @@ namespace Webshop.Controllers
 
             var completeOrder = await _pdfService.GetPdfData(finishedOrder);
 
-
             var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
             List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
 
