@@ -126,6 +126,19 @@ input[type=number]::-webkit-outer-spin-button {
     .bigScreen {
         display: none;
     }
+
+    .carousel-inner > .carousel-item > a > img {
+        height: 9.5rem;
+        width: auto;
+    }
+
+    .section {
+        margin-bottom: 2rem;
+    }
+
+    #productDetailsImage {
+        height: 12rem;
+    }
 }
 
 @media (min-width: 576px) and (max-width: 767px) {
