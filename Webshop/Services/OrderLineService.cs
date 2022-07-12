@@ -158,7 +158,11 @@ namespace Webshop.Services
         {
             using (var db = new LapWebshopContext())
             {
-                return await db.OrderLines.Include(p => p.Product).ThenInclude(m => m.Manufacturer).Where(x => x.OrderId == order.Id).ToListAsync();
+                return await db.OrderLines.
+                    Include(p => p.Product)
+                    .ThenInclude(m => m.Manufacturer)
+                    .Where(x => x.OrderId == order.Id)
+                    .ToListAsync();
             }
         }
 

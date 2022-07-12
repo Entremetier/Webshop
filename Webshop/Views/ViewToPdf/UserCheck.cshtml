@@ -1,9 +1,9 @@
-﻿@model Webshop.ViewModels.FinishedOrderViewModel
+﻿@model Webshop.ViewModels.AnotherViewModel
 @{
     Layout = null;
 }
 
-<body style="font-family:Tahoma;font-size:12px;color: #333333;background-color:#FFFFFF;">
+<body style="font-size:12px;color: #333333;background-color:#FFFFFF;">
     <table align="center" border="0" cellpadding="0" cellspacing="0" style="height:842px; width:595px;font-size:12px;">
         <tbody>
             <tr>
@@ -54,13 +54,13 @@
                                 <td bordercolor="#ccc" bgcolor="#f2f2f2" style="font-size:12px;"><strong>Zeilenpreis</strong></td>
                             </tr>
                             <tr style="display:none;"><td colspan="*"></td></tr>
-                            @foreach (var item in Model.OrderLines)
+                            @foreach (var item in Model.FinishedOrderViewModels)
                             {
                                 <tr>
-                                    <td valign="top" style="font-size:12px;">@item.Product.Manufacturer.Name&nbsp;@item.Product.ProductName</td>
-                                    <td valign="top" style="font-size:12px;">@item.Amount </td>
-                                    <td valign="top" style="font-size:12px;">@Html.DisplayFor(model => model.BruttoPrice)&nbsp;€</td>
-                                    <td valign="top" style="font-size:12px;">@Html.DisplayFor(model => model.RowPrice)&nbsp;€</td>
+                                    <td valign="top" style="font-size:12px;">@item.OrderLine.Product.Manufacturer.Name&nbsp;@item.OrderLine.Product.ProductName</td>
+                                    <td valign="top" style="font-size:12px;">@item.OrderLine.Amount </td>
+                                    <td valign="top" style="font-size:12px;">@item.BruttoPrice&nbsp;€</td>
+                                    <td valign="top" style="font-size:12px;">@item.BruttoRowPrice&nbsp;€</td>
                                 </tr>
                             }
                         </tbody>
@@ -84,7 +84,7 @@
                                             </tr>
                                             <tr>
                                                 <td align="right" style="font-size:12px;"><b>Gesamtpreis</b></td>
-                                                <td align="right" style="font-size:12px;"><b>@Html.DisplayFor(modelItem => modelItem.Order.PriceTotal)&nbsp;€</b></td>
+                                                <td align="right" style="font-size:12px;"><b>@Html.DisplayFor(model => model.Order.PriceTotal)&nbsp;€</b></td>
                                             </tr>
                                         </tbody>
                                     </table>

@@ -78,19 +78,27 @@ namespace Webshop.Controllers
                 fullNettoPrice += item.Amount * item.NetUnitPrice;
             }
 
-            FinishedOrderViewModel finishedOrderVM = new FinishedOrderViewModel();
+            AnotherViewModel anotherViewModel = new AnotherViewModel();
+            FinishedOrderViewModel finishedOrderViewModel;
+            List<FinishedOrderViewModel> x = new List<FinishedOrderViewModel>();
             foreach (var item in orderLines)
             {
-                finishedOrderVM.Customer = customer;
-                finishedOrderVM.Order = finishedOrder;
-                finishedOrderVM.FullNettoPrice = fullNettoPrice;
-                finishedOrderVM.BruttoPrice = _productService.CalcPrice(item.Product, categoryAndTaxRate);
-                finishedOrderVM.RowPrice = item.Amount * _productService.CalcPrice(item.Product, categoryAndTaxRate);
-                finishedOrderVM.Taxes = order.PriceTotal - fullNettoPrice;
-                finishedOrderVM.OrderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
+                finishedOrderViewModel = new FinishedOrderViewModel
+                {
+                    BruttoPrice = _productService.CalcPrice(item.Product, categoryAndTaxRate),
+                    BruttoRowPrice = item.Amount * _productService.CalcPrice(item.Product, categoryAndTaxRate),
+                    OrderLine = item
+                };
+                x.Add(finishedOrderViewModel);
             }
 
-            var viewAsPdf = UserCheck(finishedOrderVM);
+            anotherViewModel.Customer = customer;
+            anotherViewModel.Order = order;
+            anotherViewModel.FinishedOrderViewModels = x;
+            anotherViewModel.FullNettoPrice = fullNettoPrice;
+            anotherViewModel.Taxes = order.PriceTotal - fullNettoPrice;
+
+            var viewAsPdf = UserCheck(anotherViewModel);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
             Stream fileStream = new MemoryStream(pdfAsByteArray);
             MailService.SendMail(customer.FirstName, customer.LastName, customer.Email, fileStream);
@@ -104,7 +112,7 @@ namespace Webshop.Controllers
             return View(customerAndOrderVM);
         }
 
-        private static ViewAsPdf UserCheck(FinishedOrderViewModel finishedOrderVM)
+        private static ViewAsPdf UserCheck(AnotherViewModel finishedOrderVM)
         {
             string viewName = "UserCheck";
 
