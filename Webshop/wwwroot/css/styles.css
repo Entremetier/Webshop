@@ -38,6 +38,7 @@ a {
     width: 4.8rem;
 }
 
+/* Einkaufswagenicon im jeweiligen toaster einbinden*/
 #toast-container .toast.toast-success{
     background-image: url("/src/images/icons/shopping-cart.png") !important;
     background-size: 24px 24px;

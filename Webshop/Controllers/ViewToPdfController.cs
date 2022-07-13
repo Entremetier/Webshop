@@ -11,6 +11,7 @@ using System.IO;
 using Microsoft.AspNetCore.Authorization;
 using Webshop.Models;
 using Webshop.ViewModels;
+using System.Diagnostics;
 
 namespace Webshop.Controllers
 {
