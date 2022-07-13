@@ -51,17 +51,17 @@ namespace Webshop.Controllers
         public async Task<IActionResult> Shop(string searchString, string categorie, string manufacturer)
         {
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
-            string email = User.FindFirstValue(ClaimTypes.Email);
+            //string email = User.FindFirstValue(ClaimTypes.Email);
 
             // Customer aus der DB holen
-            var customer = await _userService.GetCurrentUser(email);
+            //var customer = await _userService.GetCurrentUser(email);
 
             // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
-            if (customer != null)
-            {
-                var order = await _orderService.GetOrder(customer);
-                ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
-            }
+            //if (customer != null)
+            //{
+            //    var order = await _orderService.GetOrder(customer);
+            //    ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
+            //}
 
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(searchString, categorie, manufacturer);
@@ -110,17 +110,17 @@ namespace Webshop.Controllers
         public async Task<IActionResult> Shop()
         {
             // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
-            string email = User.FindFirstValue(ClaimTypes.Email);
+            //string email = User.FindFirstValue(ClaimTypes.Email);
 
             // Customer aus der DB holen
-            var customer = await _userService.GetCurrentUser(email);
+            //var customer = await _userService.GetCurrentUser(email);
 
             // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
-            if (customer != null)
-            {
-                var order = await _orderService.GetOrder(customer);
-                ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
-            }
+            //if (customer != null)
+            //{
+            //    var order = await _orderService.GetOrder(customer);
+            //    ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
+            //}
 
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(null, null, null);

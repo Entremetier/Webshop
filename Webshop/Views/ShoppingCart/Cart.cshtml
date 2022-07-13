@@ -79,11 +79,9 @@
 </div>
 
 <script type="text/javascript">
-    //const checkOutBtn = document.getElementById("checkOutBtn");
-    //checkOutBtn.addEventListener("click", checkPriceTotal);
-
     window.onload = function () {
-            if (@order.PriceTotal <= 0) {
+        const price = parseFloat(@order.PriceTotal).toFixed(2);
+            if (price <= 0) {
                 document.getElementById("checkOutBtn").disabled = true;
             }
         }
