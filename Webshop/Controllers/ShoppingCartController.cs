@@ -65,7 +65,12 @@ namespace Webshop.Controllers
             var order = await _orderService.GetOrder(customer);
 
             // Im Warenkorb schauen ob es das Produkt mit der gesuchten ProduktId schon gibt
-            await _orderLineService.AddProductToShoppingCart(product, order, amount);
+            string isAddedSuccessfully = await _orderLineService.AddProductToShoppingCart(product, order, amount);
+
+            if (isAddedSuccessfully == "false")
+            {
+                return Content(isAddedSuccessfully, "text/html");
+            }
 
             // Die Details Seite mit dem Produkt und geändertem DDL laden (wenn aus der Details Seite aufgerufen
             // wurde, direkt aus Shop wird die Seite nicht neu geladen (jQuery im Shop.cshtml))
@@ -189,6 +194,7 @@ namespace Webshop.Controllers
             }
             else
             {
+                // Sicherstellen das man nicht mehr als die Maximale Menge in den Warenkorb legen kann
                 if (amountInCart <= MaxItemsInCart.MaxItemsInShoppingCart)
                 {
                     await _orderLineService.IncrementAmountOfProductByOne(id.Value, amountInCart, email);

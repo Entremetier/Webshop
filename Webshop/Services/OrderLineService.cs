@@ -26,7 +26,7 @@ namespace Webshop.Services
         }
 
         // In den Details die ausgesuchte Menge in den Warenkorb legen
-        public async Task AddProductToShoppingCart(Product product, Order order, int amount)
+        public async Task<string> AddProductToShoppingCart(Product product, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
             {
@@ -38,7 +38,7 @@ namespace Webshop.Services
                 {
                     if (productAlreadyInCart.Amount >= MaxItemsInCart.MaxItemsInShoppingCart)
                     {
-                        return;
+                        return "false";
                     }
                     await IncrementAmountOfProduct(productAlreadyInCart, order, amount);
                 }
@@ -46,6 +46,7 @@ namespace Webshop.Services
                 {
                     await CreateNewOrderLine(product, order, amount);
                 }
+                return "true";
             }
         }
 

@@ -91,12 +91,19 @@
             var idOfItem = $(this).attr("data-id");
             var amount = 1;
             if (idOfItem != '') {
-                $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem })
-                    .done(function () {
+                $.post("/ShoppingCart/AddToShoppingCart", { "amount": amount, "id": idOfItem }, function (data) {
+                    console.log(data);
+                    if (data === "false") {
+                        toastr.options.positionClass = "toast-bottom-right";
+                        toastr.error("Maximale Menge im Warenkorb!")
+                    }
+                    else {
+                        toastr.options.positionClass = "toast-bottom-right";
                         toastr.success("Wurde dem Warenkorb hinzugefügt!");
-                    })
+                    }
+                })
                     .fail(function () {
-                        console.log("jQuery Methode im Shop")
+                        console.log("jQuery Methode im Shop ")
                     });
             }
         });

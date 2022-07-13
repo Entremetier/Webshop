@@ -38,6 +38,16 @@ a {
     width: 4.8rem;
 }
 
+#toast-container .toast.toast-success{
+    background-image: url("/src/images/icons/shopping-cart.png") !important;
+    background-size: 24px 24px;
+}
+
+#toast-container .toast.toast-error {
+    background-image: url("/src/images/icons/shopping-cart.png") !important;
+    background-size: 24px 24px;
+}
+
 /* inputfelder vom typ number haben keine inkrement/decrement Pfeile*/
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
