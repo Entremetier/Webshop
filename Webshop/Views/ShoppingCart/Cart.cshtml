@@ -41,22 +41,39 @@
                                 </a>
                                 <a asp-controller="ShoppingCart" asp-action="DeleteFromCart" asp-route-id="@item.ProductNumber"
                                    class="float-right warningColor productDetailsInCart noTextDecoration">
-                                    <img src="/src/images/icons/minus.png" id="deleteBtn" alt="minus" style="height:1.8rem; width:auto;" />
+                                    <img src="/src/images/icons/stornieren.png" id="deleteBtn" alt="Aus Warenkorb entfernen" style="height:1.8rem; width:auto;" />
                                 </a>
                             </span>
                         </form>
                         <span class="">Produktnummer:&nbsp;@item.ProductNumber</span>
                         <span class="">Stückpreis:&nbsp;@item.BruttoPrice&nbsp;€</span>
                         <span class="">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>
-                        <form asp-controller="ShoppingCart" asp-action="DecrementValue" asp-route-id="@item.ProductNumber" method="post">
+                        @*<form asp-controller="ShoppingCart" asp-action="DecrementValue" asp-route-id="@item.ProductNumber" method="post">*@
                             <span>
-                                Menge:
-                                <select name="amountInCart" asp-items="@item.SelectList"
-                                        class="form-control d-inline btn btn-outline-dark dropDownListSize ml-2">
-                                </select>
-                                <input type="submit" class="btn btn-outline-dark text-center ml-2" value="Bestätigen">
+                                Menge:&nbsp;@item.Orderline.Amount
+                                @*<select name="amountInCart" asp-items="@item.SelectList"
+                                            class="form-control d-inline btn btn-outline-dark dropDownListSize ml-2">
+                                    </select>*@
+                                @*<input value="1" type="hidden">*@
+                                <a 
+                                   asp-controller="ShoppingCart" 
+                                   asp-action="IncrementValue" 
+                                   asp-route-id="@item.ProductNumber" 
+                                   asp-route-amountInCart="@item.Orderline.Amount"
+                                   class="ml-3 noTextDecoration">
+                                    <img src="/src/images/icons/hinzufugen.png" alt="Dem Warenkorb eins hinzufügen" style="height:1.3rem; width:auto;" />
+                                </a>
+                                <a 
+                                   asp-controller="ShoppingCart" 
+                                   asp-action="DecrementValue" 
+                                   asp-route-id="@item.ProductNumber" 
+                                   asp-route-amountInCart="@item.Orderline.Amount"
+                                   class="ml-2 noTextDecoration">
+                                    <img src="/src/images/icons/minus.png" alt="Aus dem Warenkorb eins entfernen" style="height:1.3rem; width:auto;" />
+                                </a>
+                                @*<input type="submit" class="btn btn-outline-dark text-center ml-2" value="Bestätigen">*@
                             </span>
-                        </form>
+                        @*</form>*@
                     </div>
                 </div>
             </div>
@@ -85,4 +102,4 @@
                 document.getElementById("checkOutBtn").disabled = true;
             }
         }
-    </script>
+</script>

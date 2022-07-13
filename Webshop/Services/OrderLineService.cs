@@ -25,6 +25,7 @@ namespace Webshop.Services
             _categoryService = categoryService;
         }
 
+        // In den Details die ausgesuchte Menge in den Warenkorb legen
         public async Task AddProductToShoppingCart(Product product, Order order, int amount)
         {
             using (var db = new LapWebshopContext())
@@ -62,7 +63,29 @@ namespace Webshop.Services
             }
         }
 
-        public async Task DecrementAmountOfProduct(int productId, int newAmount, string email)
+        // Im Warenkorb die Menge um eins verringern
+        public async Task DecrementAmountOfProductByOne(int productId, int newAmount, string email)
+        {
+            var customer = await _userService.GetCurrentUser(email);
+            var order = await _orderService.GetOrder(customer);
+
+            using (var db = new LapWebshopContext())
+            {
+                var orderLine = await db.OrderLines
+                    .Where(o => o.ProductId == productId && order.DateOrdered == null && o.OrderId == order.Id)
+                    .FirstOrDefaultAsync();
+
+                orderLine.Amount = newAmount;
+
+                db.Update(orderLine);
+                await db.SaveChangesAsync();
+
+                await UpdateOrderTotalPrice(order);
+            }
+        }
+
+        // Im Warenkorb die Menge um eins erhöhen
+        public async Task IncrementAmountOfProductByOne(int productId, int newAmount, string email)
         {
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);

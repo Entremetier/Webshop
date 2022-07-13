@@ -146,6 +146,7 @@ namespace Webshop.Controllers
 
         public async Task<IActionResult> DecrementValue(int? id, int amountInCart)
         {
+            amountInCart -= 1;
             string email = User.FindFirstValue(ClaimTypes.Email);
 
             if (email == null)
@@ -159,7 +160,35 @@ namespace Webshop.Controllers
             }
             else
             {
-                await _orderLineService.DecrementAmountOfProduct(id.Value, amountInCart, email);
+                if (amountInCart <= 0)
+                {
+                    await DeleteFromCart(id);
+                }
+                else
+                {
+                    await _orderLineService.DecrementAmountOfProductByOne(id.Value, amountInCart, email);
+                }
+
+                return RedirectToAction("Cart", "ShoppingCart");
+            }
+        }
+
+        public async Task<IActionResult> IncrementValue(int? id, int amountInCart)
+        {
+            string email = User.FindFirstValue(ClaimTypes.Email);
+
+            if (email == null)
+            {
+                return RedirectToAction("Login", "Customer");
+            }
+
+            if (!id.HasValue)
+            {
+                return RedirectToAction("Cart", "ShoppingCart");
+            }
+            else
+            {
+                await _orderLineService.IncrementAmountOfProductByOne(id.Value, amountInCart + 1, email);
 
                 return RedirectToAction("Cart", "ShoppingCart");
             }

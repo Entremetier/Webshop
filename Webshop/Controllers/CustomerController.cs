@@ -106,7 +106,7 @@ namespace Webshop.Controllers
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, claimsPrincipal,
                 new AuthenticationProperties
                 {
-                IsPersistent = true,
+                    IsPersistent = true,
                     ExpiresUtc = DateTime.UtcNow.AddMinutes(15)
                 });
 
