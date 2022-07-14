@@ -1,13 +1,19 @@
-﻿/* Customized CSS
+﻿/* Customized CSS cuz the default is sometimes not loading
 -------------------------------------------------- */
 
 
 /* Allgemein
 -------------------------------------------------- */
-/*body {
-    font-family: 'Kdam Thmor Pro', sans-serif;
-    color: #343a40;
-}*/
+/* Font einbinden*/
+@font-face {
+    font-family: 'customFont';
+    src: url(/Fonts/KdamThmorPro-Regular.ttf);
+}
+
+/* Font zuweisen*/
+body {
+    font-family: 'customFont';
+}
 
 a {
     color: #343a40 !important;
@@ -39,7 +45,7 @@ a {
 }
 
 /* Einkaufswagenicon im jeweiligen toaster einbinden*/
-#toast-container .toast.toast-success{
+#toast-container .toast.toast-success {
     background-image: url("/src/images/icons/shopping-cart.png") !important;
     background-size: 24px 24px;
 }
@@ -63,13 +69,10 @@ input[type=number]::-webkit-outer-spin-button {
     color: #343a40 !important;
 }
 
-    .navbar-nav .nav-item > .nav-link:hover {
-        color: #A9A9A9 !important;
-    }
-
-.myButton {
-    width: 20rem !important;
+.navbar-nav .nav-item > .nav-link:hover {
+    color: #A9A9A9 !important;
 }
+
 
 /* Index
 -------------------------------------------------- */
@@ -90,18 +93,22 @@ input[type=number]::-webkit-outer-spin-button {
     width: auto;
 }
 
-/* ShopView */
+/* ShopView
+-------------------------------------------------- */
 #productListImage {
     height: 13rem;
     width: auto;
 }
 
-/* DetailsView */
+/* DetailsView
+-------------------------------------------------- */
 #productDetailsImage {
     height: 20rem;
 }
 
-/* Darstellungen auf verschiedenen Geräten */
+/* Darstellungen auf verschiedenen Geräten 
+-------------------------------------------------- */
+/* Für Geräte die kleiner als Bootstraps sm sind (iPhone SE)*/
 @media (min-width: 374px) and (max-width: 575.9px) {
     .smallScreenBottomMargin {
         margin-bottom: 0.8rem;
