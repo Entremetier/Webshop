@@ -20,19 +20,18 @@ namespace Webshop.Controllers
         private readonly UserService _userService;
         private readonly OrderService _orderService;
         private readonly PdfService _pdfService;
-        private readonly CategoryService _categoryService;
         private readonly OrderLineService _orderLineService;
-        private readonly ProductService _productService;
 
-        public ViewToPdfController(UserService userService, OrderService orderService, PdfService pdfService, CategoryService categoryService,
-            OrderLineService orderLineService, ProductService productService)
+        public ViewToPdfController(
+            UserService userService, 
+            OrderService orderService, 
+            PdfService pdfService, 
+            OrderLineService orderLineService)
         {
             _userService = userService;
             _orderService = orderService;
             _pdfService = pdfService;
-            _categoryService = categoryService;
             _orderLineService = orderLineService;
-            _productService = productService;
         }
 
         [Authorize]
@@ -81,10 +80,13 @@ namespace Webshop.Controllers
             finishedOrderContainerVM.FullNettoPrice = fullNettoPrice;
             finishedOrderContainerVM.Taxes = order.PriceTotal - fullNettoPrice;
 
+            //Task.Run(async () =>
+            //{
             var viewAsPdf = UserCheck(finishedOrderContainerVM);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
             Stream fileStream = new MemoryStream(pdfAsByteArray);
             MailService.SendMail(customer.FirstName, customer.LastName, customer.Email, fileStream);
+            //});
 
             return RedirectToAction("UserCheckout", customerOrderVM);
         }

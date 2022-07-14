@@ -15,7 +15,7 @@ namespace Webshop.Services
         private readonly OrderService _orderService;
         private readonly UserService _userService;
 
-        public ProductService(LapWebshopContext context, OrderService orderService, UserService userService)
+        public ProductService(LapWebshopContext context, UserService userService, OrderService orderService)
         {
             _context = context;
             _orderService = orderService;

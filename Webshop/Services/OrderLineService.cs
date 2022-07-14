@@ -10,14 +10,18 @@ using Webshop.ViewModels;
 
 namespace Webshop.Services
 {
-    public class OrderLineService : Controller
+    public class OrderLineService
     {
         private readonly OrderService _orderService;
         private readonly UserService _userService;
         private readonly ProductService _productService;
         private readonly CategoryService _categoryService;
 
-        public OrderLineService(OrderService orderService, UserService userService, ProductService productService, CategoryService categoryService)
+        public OrderLineService
+            (OrderService orderService,
+            UserService userService,
+            ProductService productService,
+            CategoryService categoryService)
         {
             _orderService = orderService;
             _userService = userService;

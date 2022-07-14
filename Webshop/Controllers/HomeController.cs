@@ -1,5 +1,4 @@
-﻿using AspNetCoreHero.ToastNotification.Abstractions;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -21,7 +20,6 @@ namespace Webshop.Controllers
         private readonly ManufacturerService _manufacturerService;
         private readonly UserService _userService;
         private readonly OrderLineService _orderLineService;
-        private readonly INotyfService _notyf;
         private readonly OrderService _orderService;
 
         public HomeController(
@@ -30,7 +28,6 @@ namespace Webshop.Controllers
             ManufacturerService manufacturerService,
             UserService userService,
             OrderLineService orderLineService,
-            INotyfService notyf,
             OrderService orderService)
         {
             _categoryService = categoryService;
@@ -38,7 +35,6 @@ namespace Webshop.Controllers
             _manufacturerService = manufacturerService;
             _userService = userService;
             _orderLineService = orderLineService;
-            _notyf = notyf;
             _orderService = orderService;
         }
 
