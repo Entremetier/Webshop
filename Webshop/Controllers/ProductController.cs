@@ -85,6 +85,13 @@ namespace Webshop.Controllers
             }
         }
 
+        public async Task<IActionResult> ProductOfTheMonth()
+        {
+            Product product = await _productService.GetProductOfTheMonth();
+
+            return View(product);
+        }
+
         // GET: Product/Create
         //public IActionResult Create()
         //{

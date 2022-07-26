@@ -27,7 +27,7 @@ namespace Webshop.Services
             {
                 var product = await db.Products.Include(m => m.Manufacturer)
                     .Include(c => c.Category)
-                    .FirstOrDefaultAsync(x => x.Id == id);                    
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 return product;
             }
@@ -102,8 +102,35 @@ namespace Webshop.Services
                         itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
                     }
                 }
-                    return itemAmount;
+                return itemAmount;
             }
+        }
+
+        public async Task<Product> GetProductOfTheMonth()
+        {
+            Product product = new Product();
+            List<Product> products = new List<Product>();
+            using (var db = new LapWebshopContext())
+            {
+                var productList = await db.OrderLines.OrderBy(p => p.ProductId)
+                    .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
+                    .ToListAsync();
+
+                foreach (var prod in productList)
+                {
+                    //int year = prod.DateOrdered.Year;
+                    //int month = prod.DateOrdered.Month;
+
+                    if (prod.DateOrdered.Year == DateTime.Now.Year && prod.DateOrdered.Month == DateTime.Now.Month)
+                    {
+
+                    }
+
+
+                }
+            }
+
+            return product;
         }
 
         public IQueryable<Product> FilterList(string searchString, string categorie, string manufacturer)
