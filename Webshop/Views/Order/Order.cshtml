@@ -138,8 +138,8 @@
     selectList.addEventListener("change", checkSelectedValue);
 
     function checkSelectedValue() {
-        //console.log(selectList.value);
-        if (selectList.value != 1) {
+        console.log(selectList.value);
+        if (selectList.value != "0") {
             creditCardCredentials.style.display = "none";
         }
         else {

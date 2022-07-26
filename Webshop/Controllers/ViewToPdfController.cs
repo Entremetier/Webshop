@@ -40,7 +40,7 @@ namespace Webshop.Controllers
         [Authorize]
         public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city, string payment, decimal cardnumber, string cardOwner, int secureNumber)
         {
-            if (payment == "1")
+            if (payment == "0")
             {
                 bool isCardValid = _paymentService.CreditCardValidation(cardnumber);
                 if (isCardValid == false || cardnumber == 0 || cardOwner == null || secureNumber == 0)

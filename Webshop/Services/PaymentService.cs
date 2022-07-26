@@ -1,30 +1,35 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Webshop.Models;
 
 namespace Webshop.Services
 {
     public class PaymentService
     {
+        public List<SelectListItem> GetListOfPayments()
+        {
+            List<SelectListItem> methodsOfPayments = new List<SelectListItem>();
+
+            using (var db = new LapWebshopContext())
+            {
+                var payments = db.Payments.Select(p => p.PaymentName).ToList();
+
+                for (int i = 0; i < payments.Count(); i++)
+                {
+                    methodsOfPayments.Add(new SelectListItem { Value = i.ToString(), Text = payments[i]});
+                }
+            }
+
+            return methodsOfPayments;
+        }
+
         public bool CreditCardValidation(decimal cardNumber)
         {
-            int sum = 0;
             // cardnumber zu einem Array machen
             int[] cardNumberArray = cardNumber.ToString().Select(num => Convert.ToInt32(num)).ToArray();
-
-            // Array durchlaufen
-            //for (int i = 0; i < cardNumberArray.Length; i++)
-            //{
-            //    int digit = cardNumberArray[cardNumberArray.Length - i - 1];
-            //    if (i % 2 == 1)
-            //    {
-            //        digit *= 2;
-            //    }
-            //    sum += digit > 9 ? digit - 9 : digit;
-            //}
-
-            //return sum % 10 == 0;
 
             int nDigits = cardNumberArray.Length;
 

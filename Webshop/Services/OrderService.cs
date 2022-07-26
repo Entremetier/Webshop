@@ -14,7 +14,7 @@ namespace Webshop.Services
         {
             using (var db = new LapWebshopContext())
             {
-                var order =  await db.Orders.Where(x => x.CustomerId == customer.Id)
+                var order = await db.Orders.Where(x => x.CustomerId == customer.Id)
                     .FirstOrDefaultAsync(e => e.DateOrdered == null);
 
                 // Neue Order erstellen wenn keine vorhanden ist
@@ -73,6 +73,22 @@ namespace Webshop.Services
                 order.City = city;
 
                 db.Update(order);
+
+                OrderPayment orderPayment = new OrderPayment();
+                if (payment == "0")
+                {
+                    orderPayment.CreditCardNumber = cardnumber.ToString();
+                    orderPayment.SecureCode = secureNumber.ToString();
+                    orderPayment.CardOwnerName = cardOwner;
+                }
+                orderPayment.OrderId = order.Id;
+                int paymentValue = int.Parse(payment);
+                paymentValue++;
+                orderPayment.PaymentId = paymentValue;
+
+                db.OrderPayments.Add(orderPayment);
+
+
                 await db.SaveChangesAsync();
             }
         }

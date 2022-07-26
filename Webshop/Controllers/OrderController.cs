@@ -19,19 +19,22 @@ namespace Webshop.Controllers
         private readonly OrderLineService _orderLineService;
         private readonly ProductService _productService;
         private readonly CategoryService _categoryService;
+        private readonly PaymentService _paymentService;
 
         public OrderController(
             UserService userService,
             OrderService orderService,
             OrderLineService orderLineService,
             ProductService productService,
-            CategoryService categoryService)
+            CategoryService categoryService,
+            PaymentService paymentService)
         {
             _userService = userService;
             _orderService = orderService;
             _orderLineService = orderLineService;
             _productService = productService;
             _categoryService = categoryService;
+            _paymentService = paymentService;
         }
 
         [Authorize]
@@ -86,9 +89,7 @@ namespace Webshop.Controllers
                     TempData["NoItems"] = "Es befinden sich keine Produkte im Warenkorb!";
                 }
 
-                List<SelectListItem> payment = new List<SelectListItem>();
-                payment.Add(new SelectListItem { Value = "1", Text = "Kreditkarte" });
-                payment.Add(new SelectListItem { Value = "2", Text = "Überweisung" });
+                List<SelectListItem> payment = _paymentService.GetListOfPayments();
 
                 ViewBag.Payment = payment;
                 ViewBag.Order = order;

@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Webshop.ViewModels;
 
 #nullable disable
 
@@ -23,6 +22,8 @@ namespace Webshop.Models
         public virtual DbSet<Manufacturer> Manufacturers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderLine> OrderLines { get; set; }
+        public virtual DbSet<OrderPayment> OrderPayments { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Product> Products { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -153,6 +154,36 @@ namespace Webshop.Models
                     .HasConstraintName("FK_OrderLine_Product");
             });
 
+            modelBuilder.Entity<OrderPayment>(entity =>
+            {
+                entity.ToTable("OrderPayment");
+
+                entity.Property(e => e.CardOwnerName).HasMaxLength(100);
+
+                entity.Property(e => e.CreditCardNumber)
+                    .HasMaxLength(16)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SecureCode)
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderPayments)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_OrderPayment_Order");
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.OrderPayments)
+                    .HasForeignKey(d => d.PaymentId)
+                    .HasConstraintName("FK_OrderPayment_Payments");
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.Property(e => e.PaymentName).HasMaxLength(30);
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("Product");
@@ -184,6 +215,5 @@ namespace Webshop.Models
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
     }
 }
