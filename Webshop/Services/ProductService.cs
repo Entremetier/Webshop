@@ -106,31 +106,51 @@ namespace Webshop.Services
             }
         }
 
-        public async Task<Product> GetProductOfTheMonth()
+        //TODO: Den amount aller produkte mit der gleichen ID zusammenzählen, am ende das Produkt mit den meisten verkäufen zurückgeben (id zurückgeben)
+        public async Task<int> GetProductOfTheMonth()
         {
-            Product product = new Product();
-            List<Product> products = new List<Product>();
+            int productId = 0;
+            int amountProductOne = 0;
+            int amountProductTwo = 0;
+
             using (var db = new LapWebshopContext())
             {
                 var productList = await db.OrderLines.OrderBy(p => p.ProductId)
-                    .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
-                    .ToListAsync();
+                .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
+                .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered.Month == DateTime.Now.Month)
+                .ToListAsync();
+
+                ProductOfTheMonth productOfTheMonth1 = new ProductOfTheMonth();
+                ProductOfTheMonth productOfTheMonth2 = new ProductOfTheMonth();
 
                 foreach (var prod in productList)
                 {
-                    //int year = prod.DateOrdered.Year;
-                    //int month = prod.DateOrdered.Month;
-
-                    if (prod.DateOrdered.Year == DateTime.Now.Year && prod.DateOrdered.Month == DateTime.Now.Month)
+                    if (productOfTheMonth1.ProductId == 0 || productOfTheMonth1.ProductId == prod.ProductId)
                     {
-
+                        productOfTheMonth1.ProductId = prod.ProductId;
+                        amountProductOne += prod.Amount;
+                        productOfTheMonth1.Amount = amountProductOne;
+                    }
+                    else if (productOfTheMonth2.ProductId == 0 || productOfTheMonth2.ProductId == prod.ProductId)
+                    {
+                        productOfTheMonth2.ProductId = prod.ProductId;
+                        amountProductTwo += prod.Amount;
+                        productOfTheMonth2.Amount = amountProductTwo;
                     }
 
-
+                    //Produkt 2 in Produkt 1 schreiben und Produkt 2 Werte auf 0 setzen um es erneut zu verwenden
+                    if (amountProductTwo > amountProductOne)
+                    {
+                        productOfTheMonth1.ProductId = productOfTheMonth2.ProductId;
+                        productOfTheMonth1.Amount = productOfTheMonth2.Amount;
+                        productOfTheMonth2.ProductId = 0;
+                        productOfTheMonth2.Amount = 0;
+                    }
                 }
+                //int x = productOfTheMonth1.Amount;
+                productId = productOfTheMonth1.ProductId;
             }
-
-            return product;
+            return productId;
         }
 
         public IQueryable<Product> FilterList(string searchString, string categorie, string manufacturer)
