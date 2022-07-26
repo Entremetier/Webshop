@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,6 +86,11 @@ namespace Webshop.Controllers
                     TempData["NoItems"] = "Es befinden sich keine Produkte im Warenkorb!";
                 }
 
+                List<SelectListItem> payment = new List<SelectListItem>();
+                payment.Add(new SelectListItem { Value = "1", Text = "Kreditkarte" });
+                payment.Add(new SelectListItem { Value = "2", Text = "Überweisung" });
+
+                ViewBag.Payment = payment;
                 ViewBag.Order = order;
                 ViewBag.Customer = customer;
                 return View(viewModelList);

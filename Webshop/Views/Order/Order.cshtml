@@ -17,21 +17,51 @@
 
 <div class="row">
     <div class="col-sm-12 col-lg-3 mb-sm-3">
-        <div>
-            <h3>Lieferadresse</h3>
-            <p>Sollte die Lieferadresse von der Rechnungsadresse abweichen können Sie diese hier ändern.</p>
-            @if (TempData["Warning"] != null)
+        <div class="mb-1">
+            <h3>Zahlungsdaten</h3>
+            @if (TempData["CreditCardWarning"] != null)
             {
                 <div class="alert alert-danger text-center">
-                    @TempData["Warning"]
+                    @TempData["CreditCardWarning"]
                 </div>
             }
         </div>
-        <div class="form-group">
-            <label for="title">Anrede</label>
-            <input type="text" name="title" class="form-control" value="@customer.Title">
-        </div>
         <form asp-controller="ViewToPdf" asp-action="Checkout" method="post" id="checkOutForm">
+            <div class="form-group">
+                <label for="payment">Zahlungsart</label><br />
+                <select id="selectList" name="payment" asp-items="@ViewBag.Payment" class="form-control d-inline btn btn-outline-dark"></select>
+            </div>
+            <div id="creditCardCredentials">
+                <div class="form-group">
+                    <label for="cardnumber">Kartennummer</label>
+                    <input type="number" name="cardnumber" class="form-control" maxlength="16"
+                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                </div>
+                <div class="form-group">
+                    <label for="cardOwner">Name des Karteninhaber</label>
+                    <input type="text" name="cardOwner" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="secureNumber">Sicherheitsnummer</label>
+                    <input type="number" name="secureNumber" class="form-control" maxlength="3"
+                           oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);">
+                </div>
+            </div>
+
+            <div>
+                <h3>Lieferadresse</h3>
+                <p>Sollte die Lieferadresse von der Rechnungsadresse abweichen können Sie diese hier ändern.</p>
+                @if (TempData["Warning"] != null)
+                {
+                    <div class="alert alert-danger text-center">
+                        @TempData["Warning"]
+                    </div>
+                }
+            </div>
+            <div class="form-group">
+                <label for="title">Anrede</label>
+                <input type="text" name="title" class="form-control" value="@customer.Title">
+            </div>
             <div class="form-group">
                 <label for="firstName">Vorname</label>
                 <input type="text" name="firstName" maxlength="50"
@@ -100,3 +130,20 @@
         </div>
     </div>
 </div>
+
+<script type="text/javascript">
+    const selectList = document.getElementById("selectList");
+    const creditCardCredentials = document.getElementById("creditCardCredentials");
+
+    selectList.addEventListener("change", checkSelectedValue);
+
+    function checkSelectedValue() {
+        //console.log(selectList.value);
+        if (selectList.value != 1) {
+            creditCardCredentials.style.display = "none";
+        }
+        else {
+            creditCardCredentials.style.display = "block";
+        }
+    }
+</script>

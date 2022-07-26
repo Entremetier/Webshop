@@ -61,7 +61,7 @@ namespace Webshop.Services
             }
         }
 
-        public async Task SetOrder(Order order, string firstName, string lastName, string street, string zip, string city)
+        public async Task SetOrder(Order order, string firstName, string lastName, string street, string zip, string city, string payment, decimal cardnumber, string cardOwner, int secureNumber)
         {
             using (var db = new LapWebshopContext())
             {

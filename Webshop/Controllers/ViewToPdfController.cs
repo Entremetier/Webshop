@@ -21,22 +21,35 @@ namespace Webshop.Controllers
         private readonly OrderService _orderService;
         private readonly PdfService _pdfService;
         private readonly OrderLineService _orderLineService;
+        private readonly PaymentService _paymentService;
 
         public ViewToPdfController(
-            UserService userService, 
-            OrderService orderService, 
-            PdfService pdfService, 
-            OrderLineService orderLineService)
+            UserService userService,
+            OrderService orderService,
+            PdfService pdfService,
+            OrderLineService orderLineService,
+            PaymentService paymentService)
         {
             _userService = userService;
             _orderService = orderService;
             _pdfService = pdfService;
             _orderLineService = orderLineService;
+            _paymentService = paymentService;
         }
 
         [Authorize]
-        public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city)
+        public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city, string payment, decimal cardnumber, string cardOwner, int secureNumber)
         {
+            if (payment == "1")
+            {
+                bool isCardValid = _paymentService.CreditCardValidation(cardnumber);
+                if (isCardValid == false || cardnumber == 0 || cardOwner == null || secureNumber == 0)
+                {
+                    TempData["CreditCardWarning"] = "Gültige Kreditkarte angeben!";
+                    return RedirectToAction("Order", "Order");
+                }
+            }
+
             if (firstName == null || lastName == null || street == null || zip == null || city == null)
             {
                 TempData["Warning"] = "Fehlende Daten bei der Lieferadresse!";
@@ -54,7 +67,7 @@ namespace Webshop.Controllers
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);
 
-            await _orderService.SetOrder(order, firstName, lastName, street, zip, city);
+            await _orderService.SetOrder(order, firstName, lastName, street, zip, city, payment, cardnumber, cardOwner, secureNumber);
 
             CustomerAndOrderIDViewModel customerOrderVM = new CustomerAndOrderIDViewModel
             {
