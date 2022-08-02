@@ -89,7 +89,6 @@ namespace Webshop.Controllers
         {
             //TODO: ProduktId zurückbekommen und mittels id auf die Detailsseite weiterleiten
             int product = await _productService.GetProductOfTheMonth();
-            //int product = 1;
 
             return RedirectToAction("Details", new { id = product });
         }

@@ -115,10 +115,21 @@ namespace Webshop.Services
 
             using (var db = new LapWebshopContext())
             {
-                var productList = await db.OrderLines.OrderBy(p => p.ProductId)
+                List<ProductOfTheMonth> productList; 
+
+                productList = await db.OrderLines.OrderBy(p => p.ProductId)
                 .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
                 .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered.Month == DateTime.Now.Month)
                 .ToListAsync();
+
+                // Wenn im aktuellen Monat noch nichts bestellt wurde wird der letzte Monat verwendet
+                if (productList.Count() == 0)
+                {
+                    productList = await db.OrderLines.OrderBy(p => p.ProductId)
+                    .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
+                    .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered.Month == DateTime.Now.Month - 1)
+                    .ToListAsync();
+                }
 
                 ProductOfTheMonth productOfTheMonth1 = new ProductOfTheMonth();
                 ProductOfTheMonth productOfTheMonth2 = new ProductOfTheMonth();
