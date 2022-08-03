@@ -116,14 +116,14 @@ namespace Webshop.Services
                 // Alle Produkte aus OrderLines holen die schon bestellt wurden
                 var productList = await db.OrderLines
                     .OrderBy(p => p.ProductId)
-                    .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
+                    .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Name = p.Product.ProductName, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
                     .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered > DateTime.Now.AddDays(-amountOfDays))
                     .ToListAsync();
 
                 // Die Summe aller Produkte zusammenrechnen und absteigend sortieren
                 var products = productList
                     .GroupBy(x => x.ProductId)
-                    .Select(prod => new ProductOfTheMonth { ProductId = prod.Key, Amount = prod.Sum(x => x.Amount) })
+                    .Select(prod => new ProductOfTheMonth { ProductId = prod.Key, Name = db.Products.Where(x => x.Id == prod.Key).Select(x => x.ProductName).FirstOrDefault(),  Amount = prod.Sum(x => x.Amount) })
                     .OrderByDescending(x => x.Amount)
                     .ToList();
 

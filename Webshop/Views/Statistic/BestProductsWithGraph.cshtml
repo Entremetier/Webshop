@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Webshop.Models.ProductOfTheMonth>
+
+<div id="chart"></div>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+
+    // Load the Visualization API and the corechart package.
+    google.charts.load('current', { 'packages': ['corechart'] });
+
+    // Set a callback to run when the Google Visualization API is loaded.
+    google.charts.setOnLoadCallback(drawChart);
+
+    // Callback that creates and populates a data table,
+    // instantiates the pie chart, passes in the data and
+    // draws it.
+    function drawChart() {
+
+        // Create the data table.
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Topping');
+        data.addColumn('number', 'Slices');
+
+        @{
+            var rows = Model.ToList().Select(x => x.Amount).ToList();
+            var names = Model.ToList().Select(x => x.Name).ToList();
+
+            var elementsDic = new Dictionary<string, string>();
+
+            for (int i = 0; i < rows.Count() - 1; i++)
+            {
+                elementsDic.Add(names[i].ToString(), rows[i].ToString());
+            }
+        }
+
+        let rowa = @Html.Raw(elementsDic);
+        let x = [];
+
+
+        rowa.forEach(element => x.push(["Miau: " + element, element]));
+        rowa.forEach(element => console.log(rowa));
+        data.addRows(x);
+
+        // Set chart options
+        var options = {
+            'title': 'Am besten verkaufte Produkte',
+            'width': 1300,
+            'height': 900
+        };
+
+        // Instantiate and draw our chart, passing in some options.
+        var chart = new google.visualization.PieChart(document.getElementById('chart'));
+        chart.draw(data, options);
+    }
+</script>
