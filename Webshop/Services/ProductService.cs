@@ -106,6 +106,31 @@ namespace Webshop.Services
             }
         }
 
+        //TODO: Den amount aller produkte mit der gleichen ID zusammenzählen, am ende das Produkt mit den meisten verkäufen zurückgeben (id zurückgeben)
+        public async Task<List<ProductOfTheMonth>> GetProductOfTheMonth()
+        {
+            using (var db = new LapWebshopContext())
+            {
+                int amountOfDays = 30;
+
+                // Alle Produkte aus OrderLines holen die schon bestellt wurden
+                var productList = await db.OrderLines
+                    .OrderBy(p => p.ProductId)
+                    .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
+                    .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered > DateTime.Now.AddDays(-amountOfDays))
+                    .ToListAsync();
+
+                // Die Summe aller Produkte zusammenrechnen und absteigend sortieren
+                var products = productList
+                    .GroupBy(x => x.ProductId)
+                    .Select(prod => new ProductOfTheMonth { ProductId = prod.Key, Amount = prod.Sum(x => x.Amount) })
+                    .OrderByDescending(x => x.Amount)
+                    .ToList();
+
+                return products;
+            }
+        }
+
         public IQueryable<Product> FilterList(string searchString, string categorie, string manufacturer)
         {
             IQueryable<Product> products = null;
