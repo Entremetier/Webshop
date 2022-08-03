@@ -88,9 +88,9 @@ namespace Webshop.Controllers
         public async Task<IActionResult> ProductOfTheMonth()
         {
             //TODO: ProduktId zurückbekommen und mittels id auf die Detailsseite weiterleiten
-            int product = await _productService.GetProductOfTheMonth();
+            List<ProductOfTheMonth> products = await _productService.GetProductOfTheMonth();
 
-            return RedirectToAction("Details", new { id = product });
+            return RedirectToAction("Details", new { id = products.First().ProductId });
         }
 
         // GET: Product/Create

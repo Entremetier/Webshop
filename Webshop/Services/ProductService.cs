@@ -107,61 +107,28 @@ namespace Webshop.Services
         }
 
         //TODO: Den amount aller produkte mit der gleichen ID zusammenzählen, am ende das Produkt mit den meisten verkäufen zurückgeben (id zurückgeben)
-        public async Task<int> GetProductOfTheMonth()
+        public async Task<List<ProductOfTheMonth>> GetProductOfTheMonth()
         {
-            int productId = 0;
-            int amountProductOne = 0;
-            int amountProductTwo = 0;
-
             using (var db = new LapWebshopContext())
             {
-                List<ProductOfTheMonth> productList; 
+                int amountOfDays = 30;
 
-                productList = await db.OrderLines.OrderBy(p => p.ProductId)
-                .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
-                .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered.Month == DateTime.Now.Month)
-                .ToListAsync();
-
-                // Wenn im aktuellen Monat noch nichts bestellt wurde wird der letzte Monat verwendet
-                if (productList.Count() == 0)
-                {
-                    productList = await db.OrderLines.OrderBy(p => p.ProductId)
+                // Alle Produkte aus OrderLines holen die schon bestellt wurden
+                var productList = await db.OrderLines
+                    .OrderBy(p => p.ProductId)
                     .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
-                    .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered.Month == DateTime.Now.Month - 1)
+                    .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered > DateTime.Now.AddDays(-amountOfDays))
                     .ToListAsync();
-                }
 
-                ProductOfTheMonth productOfTheMonth1 = new ProductOfTheMonth();
-                ProductOfTheMonth productOfTheMonth2 = new ProductOfTheMonth();
+                // Die Summe aller Produkte zusammenrechnen und absteigend sortieren
+                var products = productList
+                    .GroupBy(x => x.ProductId)
+                    .Select(prod => new ProductOfTheMonth { ProductId = prod.Key, Amount = prod.Sum(x => x.Amount) })
+                    .OrderByDescending(x => x.Amount)
+                    .ToList();
 
-                foreach (var prod in productList)
-                {
-                    if (productOfTheMonth1.ProductId == 0 || productOfTheMonth1.ProductId == prod.ProductId)
-                    {
-                        productOfTheMonth1.ProductId = prod.ProductId;
-                        amountProductOne += prod.Amount;
-                        productOfTheMonth1.Amount = amountProductOne;
-                    }
-                    else if (productOfTheMonth2.ProductId == 0 || productOfTheMonth2.ProductId == prod.ProductId)
-                    {
-                        productOfTheMonth2.ProductId = prod.ProductId;
-                        amountProductTwo += prod.Amount;
-                        productOfTheMonth2.Amount = amountProductTwo;
-                    }
-
-                    //Produkt 2 in Produkt 1 schreiben und Produkt 2 Werte auf 0 setzen um es erneut zu verwenden
-                    if (amountProductTwo > amountProductOne)
-                    {
-                        productOfTheMonth1.ProductId = productOfTheMonth2.ProductId;
-                        productOfTheMonth1.Amount = productOfTheMonth2.Amount;
-                        productOfTheMonth2.ProductId = 0;
-                        productOfTheMonth2.Amount = 0;
-                    }
-                }
-                //int x = productOfTheMonth1.Amount;
-                productId = productOfTheMonth1.ProductId;
+                return products;
             }
-            return productId;
         }
 
         public IQueryable<Product> FilterList(string searchString, string categorie, string manufacturer)
