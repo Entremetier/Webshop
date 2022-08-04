@@ -51,10 +51,9 @@ namespace Webshop
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        [Obsolete]
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            RotativaConfiguration.Setup((Microsoft.AspNetCore.Hosting.IHostingEnvironment)env);
+            RotativaConfiguration.Setup(env.WebRootPath, "Rotativa");
 
             if (env.IsDevelopment())
             {
@@ -80,7 +79,6 @@ namespace Webshop
                     pattern: "{controller=Home}/{action=Index}/{id?}");
             });
 
-            //RotativaConfiguration.Setup(env.WebRootPath, "Rotativa");
         }
     }
 }
