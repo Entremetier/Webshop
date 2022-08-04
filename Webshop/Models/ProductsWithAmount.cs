@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    public class ProductOfTheMonth
+    public class ProductsWithAmount
     {
         public int ProductId { get; set; }
         public string Name { get; set; }

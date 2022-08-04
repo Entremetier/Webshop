@@ -106,25 +106,27 @@ namespace Webshop.Services
             }
         }
 
-        //TODO: Den amount aller produkte mit der gleichen ID zusammenzählen, am ende das Produkt mit den meisten verkäufen zurückgeben (id zurückgeben)
-        public async Task<List<ProductOfTheMonth>> GetProductOfTheMonth()
+        //TODO: Den amount aller Produkte mit der gleichen ID zusammenzählen, am Ende eine Liste der Produkte zurückgeben
+        public async Task<List<ProductsWithAmount>> GetProductsWithAmount()
         {
             using (var db = new LapWebshopContext())
             {
                 int amountOfDays = 30;
+                int amountOfProductsToDisplay = 10;
 
                 // Alle Produkte aus OrderLines holen die schon bestellt wurden
                 var productList = await db.OrderLines
                     .OrderBy(p => p.ProductId)
-                    .Select(p => new ProductOfTheMonth { ProductId = p.ProductId, Name = p.Product.ProductName, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
+                    .Select(p => new ProductsWithAmount { ProductId = p.ProductId, Name = p.Product.ProductName, Amount = p.Amount, DateOrdered = p.Order.DateOrdered.Value })
                     .Where(x => x.DateOrdered.Year == DateTime.Now.Year && x.DateOrdered > DateTime.Now.AddDays(-amountOfDays))
                     .ToListAsync();
 
-                // Die Summe aller Produkte zusammenrechnen und absteigend sortieren
+                // Die Summe aller Produkte zusammenrechnen und absteigend sortieren, die top 10 darstellen
                 var products = productList
                     .GroupBy(x => x.ProductId)
-                    .Select(prod => new ProductOfTheMonth { ProductId = prod.Key, Name = db.Products.Where(x => x.Id == prod.Key).Select(x => x.ProductName).FirstOrDefault(),  Amount = prod.Sum(x => x.Amount) })
+                    .Select(prod => new ProductsWithAmount { ProductId = prod.Key, Name = db.Products.Where(x => x.Id == prod.Key).Select(x => x.ProductName).FirstOrDefault(), Amount = prod.Sum(x => x.Amount) })
                     .OrderByDescending(x => x.Amount)
+                    .Take(amountOfProductsToDisplay)
                     .ToList();
 
                 return products;

@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Google.DataTable.Net.Wrapper;
+using Google.DataTable.Net.Wrapper.Extension;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,9 +19,10 @@ namespace Webshop.Controllers
             _productService = productService;
         }
 
+        // TODO: Liste der Produkte holen und an die View übergeben
         public async Task<IActionResult> BestProductsWithGraph()
         {
-            List<ProductOfTheMonth> products = await _productService.GetProductOfTheMonth();
+            List<ProductsWithAmount> products = await _productService.GetProductsWithAmount();
             return View(products);
         }
     }
