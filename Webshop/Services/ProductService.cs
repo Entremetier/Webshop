@@ -142,7 +142,6 @@ namespace Webshop.Services
 
                 product.ProductName = productName;
 
-                // Zahlenformat ändern da in den Einstellung mit europ. Zahlen gearbeitet wird (also "," statt "."), damit ist einfaches parsen nicht möglich
                 decimal.TryParse(netUnitPrice, out decimal netUnitPriceAsDecimal);
                 product.NetUnitPrice = netUnitPriceAsDecimal;
 
