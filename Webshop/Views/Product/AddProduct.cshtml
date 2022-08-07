@@ -1,0 +1,59 @@
+﻿@model Webshop.Models.Product
+
+@{
+    ViewData["Title"] = "Produkt hinzufügen";
+}
+
+<h4>Produkt hinzufügen</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        @if (TempData["Warning"] != null)
+        {
+            <div class="alert alert-danger text-center">
+                @TempData["Warning"]
+            </div>
+        }
+        <form asp-action="AddProduct">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProductName" class="control-label">Produktname</label>
+                <input asp-for="ProductName" name="productName" class="form-control" />
+                <span asp-validation-for="ProductName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NetUnitPrice" class="control-label">Nettopreis in €</label>
+                @* Nur Zahlen zulassen und auf zwei Nachkommastellen setzen (kann immer um einen Cent erhöht werden) *@
+                <input asp-for="NetUnitPrice" name="netUnitPrice" type="number" step="0.01" class="form-control" />
+                <span asp-validation-for="NetUnitPrice" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImagePath" class="control-label">Bildpfad</label>
+                <input asp-for="ImagePath" name="imagePath" class="form-control" />
+                <span asp-validation-for="ImagePath" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label">Beschreibung</label>
+                <textarea asp-for="Description" name="description" class="form-control"></textarea>
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ManufacturerId" class="control-label">Hersteller</label>
+                <select name="manufacturer" class="form-control btn btn-outline-dark " asp-items="@ViewBag.Manufacturers"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label">Kategorie</label>
+                <select name="categorie" class="form-control btn btn-outline-dark" asp-items="@ViewBag.Category"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Hinzufügen" class="btn btn-outline-dark custom-btn-size" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-controller="Home" asp-action="Index">Zurück zur Startseite</a>
+</div>
+
+

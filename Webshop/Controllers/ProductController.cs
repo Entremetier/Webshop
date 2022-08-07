@@ -16,15 +16,19 @@ namespace Webshop.Controllers
         private readonly LapWebshopContext _context;
         private readonly ProductService _productService;
         private readonly CategoryService _categoryService;
+        private readonly ManufacturerService _manufacturerService;
+
 
         public ProductController(
             LapWebshopContext context,
             ProductService productService,
-            CategoryService categoryService)
+            CategoryService categoryService,
+            ManufacturerService manufacturerService)
         {
             _context = context;
             _productService = productService;
             _categoryService = categoryService;
+            _manufacturerService = manufacturerService;
         }
 
         // GET: Products/Details/5
@@ -83,6 +87,115 @@ namespace Webshop.Controllers
 
                 return View(product);
             }
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AddProduct()
+        {
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+            allManufacturer.Remove(allManufacturer.Where(x => x.Value == "0").Single());
+
+            List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
+            allCategories.Remove(allCategories.Where(x => x.Value == "0").Single());
+
+            ViewBag.Manufacturers = allManufacturer;
+            ViewBag.Category = allCategories;
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(string productName, string netUnitPrice, string imagePath, string description, string manufacturer, string categorie)
+        {
+            if (
+                string.IsNullOrWhiteSpace(productName) ||
+                string.IsNullOrWhiteSpace(netUnitPrice) ||
+                string.IsNullOrWhiteSpace(imagePath) ||
+                string.IsNullOrWhiteSpace(description) ||
+                string.IsNullOrWhiteSpace(manufacturer) ||
+                string.IsNullOrWhiteSpace(categorie)
+                )
+            {
+                TempData["Warning"] = "Eingabe kontrollieren";
+                return RedirectToAction("AddProduct");
+            }
+
+            await _productService.AddProduct(productName, netUnitPrice, imagePath, description, manufacturer, categorie);
+
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeProductDetails(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Product product = await _productService.GetProductWithManufacturerAndCategory(id.Value);
+
+            if (product == null)
+            {
+                return RedirectToAction("Home", "Shop");
+            }
+
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+            allManufacturer.Remove(allManufacturer.Where(x => x.Value == "0").Single());
+
+            // DDL auf den aktuellen Wert setzen
+            foreach (var item in allManufacturer)
+            {
+                if (item.Value == product.Manufacturer.Name)
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+
+            List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
+            allCategories.Remove(allCategories.Where(x => x.Value == "0").Single());
+
+            // DDL auf den aktuellen Wert setzen
+            foreach (var item in allCategories)
+            {
+                if (item.Value == product.Category.Name)
+                {
+                    item.Selected = true;
+                    break;
+                }
+            }
+
+            ViewBag.Manufacturers = allManufacturer;
+            ViewBag.Category = allCategories;
+
+            return View(product);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangeProductDetails(int id, string productName, string netUnitPrice, string imagePath, string description, string manufacturer, string categorie)
+        {
+            if (
+               string.IsNullOrWhiteSpace(productName) ||
+               string.IsNullOrWhiteSpace(netUnitPrice) ||
+               string.IsNullOrWhiteSpace(imagePath) ||
+               string.IsNullOrWhiteSpace(description) ||
+               string.IsNullOrWhiteSpace(manufacturer) ||
+               string.IsNullOrWhiteSpace(categorie)
+               )
+            {
+                TempData["Warning"] = "Eingabe kontrollieren";
+                return RedirectToAction("ChangeProductDetails");
+            }
+
+            await _productService.ChangeProductDetails(id, productName, netUnitPrice, imagePath, description, manufacturer, categorie);
+            return View();
+        }
+
+        public async Task<IActionResult> DeleteProduct(int id)
+        {
+            await _productService.DeleteProduct(id);
+            return RedirectToAction("Shop", "Home");
         }
 
         // GET: Product/Create

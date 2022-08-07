@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
@@ -21,6 +22,7 @@ namespace Webshop.Services
             _orderService = orderService;
             _userService = userService;
         }
+
         public async Task<Product> GetProductWithManufacturerAndCategory(int id)
         {
             using (var db = new LapWebshopContext())
@@ -103,6 +105,68 @@ namespace Webshop.Services
                     }
                 }
                     return itemAmount;
+            }
+        }
+
+        public async Task AddProduct(string productName, string netUnitPrice, string imagePath, string description, string manufacturer, string categorie)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                Product product = new Product();
+
+                product.ProductName = productName;
+
+                // Zahlenformat ändern da in den Einstellung mit europ. Zahlen gearbeitet wird (also "," statt "."), damit ist einfaches parsen nicht möglich
+                decimal.TryParse(netUnitPrice, NumberStyles.Any, CultureInfo.InvariantCulture,  out decimal netUnitPriceAsDecimal);
+                product.NetUnitPrice = netUnitPriceAsDecimal;
+
+                product.ImagePath = imagePath;
+                product.Description = description;
+
+                int manufactuerId = db.Manufacturers.Where(x => x.Name == manufacturer).Select(x => x.Id).FirstOrDefault();
+                product.ManufacturerId = manufactuerId;
+
+                int categoryId = db.Categories.Where(x => x.Name == categorie).Select(x => x.Id).FirstOrDefault();
+                product.CategoryId = categoryId;
+
+                db.Products.Add(product);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task ChangeProductDetails(int id, string productName, string netUnitPrice, string imagePath, string description, string manufacturer, string categorie)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                Product product = await db.Products.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+                product.ProductName = productName;
+
+                // Zahlenformat ändern da in den Einstellung mit europ. Zahlen gearbeitet wird (also "," statt "."), damit ist einfaches parsen nicht möglich
+                decimal.TryParse(netUnitPrice, out decimal netUnitPriceAsDecimal);
+                product.NetUnitPrice = netUnitPriceAsDecimal;
+
+                product.ImagePath = imagePath;
+                product.Description = description;
+
+                int manufactuerId = db.Manufacturers.Where(x => x.Name == manufacturer).Select(x => x.Id).FirstOrDefault();
+                product.ManufacturerId = manufactuerId;
+
+                int categoryId = db.Categories.Where(x => x.Name == categorie).Select(x => x.Id).FirstOrDefault();
+                product.CategoryId = categoryId;
+
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteProduct(int id)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                Product product = await db.Products.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+                db.Products.Remove(product);
+                db.SaveChanges();
             }
         }
 

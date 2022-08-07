@@ -80,13 +80,10 @@ namespace Webshop.Controllers
             finishedOrderContainerVM.FullNettoPrice = fullNettoPrice;
             finishedOrderContainerVM.Taxes = order.PriceTotal - fullNettoPrice;
 
-            //Task.Run(async () =>
-            //{
             var viewAsPdf = UserCheck(finishedOrderContainerVM);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
             Stream fileStream = new MemoryStream(pdfAsByteArray);
             MailService.SendMail(customer.FirstName, customer.LastName, customer.Email, fileStream);
-            //});
 
             return RedirectToAction("UserCheckout", customerOrderVM);
         }

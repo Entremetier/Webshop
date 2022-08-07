@@ -75,6 +75,13 @@
                             </form>
                         }
                     }
+
+                    <div class="mt-5 mb-3">
+                        <a asp-controller="Product" asp-action="DeleteProduct" asp-route-id="@item.Id">Löschen</a>
+                    </div>
+                    <div>
+                        <a asp-controller="Product" asp-action="ChangeProductDetails" asp-route-id="@item.Id">Bearbeiten</a>
+                    </div>
                 </div>
             </div>
         </div>
