@@ -128,6 +128,7 @@ namespace Webshop.Services
         {
             using (var db = new LapWebshopContext())
             {
+                //TODO: Schauen ob das Produkt schon in der DB vorhanden ist
                 Product product = new Product();
 
                 product.ProductName = productName;
