@@ -94,7 +94,7 @@ namespace Webshop.Controllers
         [HttpGet]
         public async Task<IActionResult> AddProduct()
         {
-            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturersAsSelectListItem();
             allManufacturer.Remove(allManufacturer.Where(x => x.Value == "0").Single());
 
             List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
@@ -172,7 +172,7 @@ namespace Webshop.Controllers
                 return RedirectToAction("Home", "Shop");
             }
 
-            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturersAsSelectListItem();
             allManufacturer.Remove(allManufacturer.Where(x => x.Value == "0").Single());
 
             // DDL auf den aktuellen Wert setzen

@@ -37,5 +37,13 @@ namespace Webshop.Services
                 return allCategories;
             }
         }
+
+        public int GetCategoryId(string categoryName)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                return db.Categories.Where(x => x.Name == categoryName).Select(x => x.Id).FirstOrDefault();
+            }
+        }
     }
 }

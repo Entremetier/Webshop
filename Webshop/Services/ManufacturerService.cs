@@ -9,7 +9,7 @@ namespace Webshop.Services
 {
     public class ManufacturerService
     {
-        public List<SelectListItem> GetAllManufacturers()
+        public List<SelectListItem> GetAllManufacturersAsSelectListItem()
         {
             List<SelectListItem> allManufacturer = new List<SelectListItem>();
 
@@ -26,6 +26,14 @@ namespace Webshop.Services
                 }
 
                 return allManufacturer;
+            }
+        }
+
+        public int GetManufacturerId(string manufactuerName)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                return db.Manufacturers.Where(x => x.Name == manufactuerName).Select(x => x.Id).FirstOrDefault();
             }
         }
     }

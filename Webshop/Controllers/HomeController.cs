@@ -73,7 +73,7 @@ namespace Webshop.Controllers
             }
 
             // Die DDL`s befüllen
-            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturersAsSelectListItem();
 
             foreach (var item in allManufacturer)
             {
@@ -132,7 +132,7 @@ namespace Webshop.Controllers
             }
 
             // Die DDL`s befüllen
-            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturers();
+            List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturersAsSelectListItem();
             List<SelectListItem> allCategories = await _categoryService.GetAllCategories();
 
             ViewBag.MaxItems = MaxItemsInCart.MaxItemsInShoppingCart;
