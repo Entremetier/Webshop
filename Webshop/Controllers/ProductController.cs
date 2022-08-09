@@ -136,7 +136,7 @@ namespace Webshop.Controllers
                     imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/notebooks/", imageName.FileName);
                     dataBaseImagePath = "~/src/images/notebooks/" + imageName.FileName;
                 }
-                else
+                else if (categorie == "Tablet")
                 {
                     imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/tablets/", imageName.FileName);
                     dataBaseImagePath = "~/src/images/tablets/" + imageName.FileName;
