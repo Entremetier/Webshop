@@ -14,7 +14,8 @@
                 @TempData["Warning"]
             </div>
         }
-        <form asp-action="AddProduct">
+        @* enctype um Wert vom file zu übermitteln, sonst null *@
+        <form asp-action="AddProduct" asp-controller="Product" enctype="multipart/form-data">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProductName" class="control-label">Produktname</label>
@@ -29,7 +30,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ImagePath" class="control-label">Bildpfad</label>
-                <input asp-for="ImagePath" name="imagePath" class="form-control" />
+                <input asp-for="ImagePath" name="imageName" type="file" accept=".jpg" class="form-control" />
                 <span asp-validation-for="ImagePath" class="text-danger"></span>
             </div>
             <div class="form-group">

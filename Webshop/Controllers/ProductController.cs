@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -105,22 +107,52 @@ namespace Webshop.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddProduct(string productName, string netUnitPrice, string imagePath, string description, string manufacturer, string categorie)
+        public async Task<IActionResult> AddProduct(string productName, string netUnitPrice, IFormFile imageName, string description, string manufacturer, string categorie)
         {
+            string imagePath = "";
+            string dataBaseImagePath = "";
+
             if (
                 string.IsNullOrWhiteSpace(productName) ||
                 string.IsNullOrWhiteSpace(netUnitPrice) ||
-                string.IsNullOrWhiteSpace(imagePath) ||
                 string.IsNullOrWhiteSpace(description) ||
                 string.IsNullOrWhiteSpace(manufacturer) ||
                 string.IsNullOrWhiteSpace(categorie)
                 )
             {
-                TempData["Warning"] = "Eingabe kontrollieren";
+                TempData["Warning"] = "Fehler bei der Eingabe";
                 return RedirectToAction("AddProduct");
             }
 
-            await _productService.AddProduct(productName, netUnitPrice, imagePath, description, manufacturer, categorie);
+            if (imageName != null && imageName.Length > 0 && imageName.ContentType == "image/jpeg")
+            {
+                if (categorie == "Smartphone")
+                {
+                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/smartphones/", imageName.FileName);
+                    dataBaseImagePath = "~/src/images/smartphones/" + imageName.FileName;
+                }
+                else if (categorie == "Notebook")
+                {
+                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/notebooks/", imageName.FileName);
+                    dataBaseImagePath = "~/src/images/notebooks/" + imageName.FileName;
+                }
+                else
+                {
+                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/tablets/", imageName.FileName);
+                    dataBaseImagePath = "~/src/images/tablets/" + imageName.FileName;
+                }
+            }
+            else
+            {
+                TempData["Warning"] = "Bildpfad kontrollieren";
+                return RedirectToAction("AddProduct");
+            }
+
+            // Bild in den Ordner kopieren
+            await _productService.AddImageToFolder(imagePath, imageName);
+
+            // Produkt der Datenbank hinzufügen
+            await _productService.AddProduct(productName, netUnitPrice, dataBaseImagePath, description, manufacturer, categorie);
 
             return View();
         }

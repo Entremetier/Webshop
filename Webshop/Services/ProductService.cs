@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Webshop.Models;
@@ -105,6 +107,20 @@ namespace Webshop.Services
                     }
                 }
                     return itemAmount;
+            }
+        }
+
+        public async Task AddImageToFolder(string path, IFormFile imageName)
+        {
+            // File löschen wenn es bereits existiert
+            if (File.Exists(path)) 
+            {
+                File.Delete(path);
+            }
+
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await imageName.CopyToAsync(fileStream);
             }
         }
 
