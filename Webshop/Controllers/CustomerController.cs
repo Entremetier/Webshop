@@ -98,7 +98,7 @@ namespace Webshop.Controllers
             }
 
             // Mit email und user.Id die IdentityClaims (Behauptungen) des Users holen und Cookie mitgeben
-            ClaimsIdentity claimsIdentity = _userService.GetClaimsIdentity(email, user.Id);
+            ClaimsIdentity claimsIdentity = _userService.GetClaimsIdentity(email, user);
 
             //Die Claims wandern in eine Identity, welche für den Principal (den Rechteinhaber) benötigt wird
             ClaimsPrincipal claimsPrincipal = _userService.GetClaimsPrincipal(claimsIdentity);
