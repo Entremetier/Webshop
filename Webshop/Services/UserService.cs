@@ -43,7 +43,9 @@ namespace Webshop.Services
                 Street = customer.Street.Trim(),
                 Zip = customer.Zip.Trim(),
                 PwHash = hash,
-                Salt = saltBytes
+                Salt = saltBytes,
+                // per default alle neuen Anmeldungen als Customer anlegen
+                Role = "Customer"
             };
 
             _context.Customers.Add(newCustomer);
