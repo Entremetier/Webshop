@@ -126,21 +126,10 @@ namespace Webshop.Controllers
 
             if (imageName != null && imageName.Length > 0 && imageName.ContentType == "image/jpeg")
             {
-                if (categorie == "Smartphone")
-                {
-                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/smartphones/", imageName.FileName);
-                    dataBaseImagePath = "~/src/images/smartphones/" + imageName.FileName;
-                }
-                else if (categorie == "Notebook")
-                {
-                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/notebooks/", imageName.FileName);
-                    dataBaseImagePath = "~/src/images/notebooks/" + imageName.FileName;
-                }
-                else if (categorie == "Tablet")
-                {
-                    imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/tablets/", imageName.FileName);
-                    dataBaseImagePath = "~/src/images/tablets/" + imageName.FileName;
-                }
+                // Pfad wohin das Bild kopiert werden soll
+                imagePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/src/images/" + categorie.ToLower() + "s/", imageName.FileName);
+                // Link der in der DB gespeichert wird
+                dataBaseImagePath = "~/src/images/" + categorie.ToLower() + "s/" + imageName.FileName;
             }
             else
             {
@@ -154,7 +143,7 @@ namespace Webshop.Controllers
             // Produkt der Datenbank hinzufügen
             await _productService.AddProduct(productName, netUnitPrice, dataBaseImagePath, description, manufacturer, categorie);
 
-            return View();
+            return RedirectToAction("AddProduct");
         }
 
         [HttpGet]
