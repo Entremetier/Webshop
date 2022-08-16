@@ -27,7 +27,7 @@ namespace Webshop.Services
             {
                 var product = await db.Products.Include(m => m.Manufacturer)
                     .Include(c => c.Category)
-                    .FirstOrDefaultAsync(x => x.Id == id);                    
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 return product;
             }
@@ -102,7 +102,104 @@ namespace Webshop.Services
                         itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
                     }
                 }
-                    return itemAmount;
+                return itemAmount;
+            }
+        }
+
+        // TODO: Methode um Gutscheincode zu ersellen
+        private void CreateVoucherCode()
+        {
+            //List<Gutscheine> allVoucherCodes;
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string numbers = "0123456789";
+            char[] stringChars = new char[10];
+            Random random = new Random();
+
+            for (int i = 0; i < 2; i++)
+            {
+                // ersten beiden Stellen als char
+                if (i <= 2)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+                // 2 Stellen als Zahlen
+                else if (i > 2 && i <= 4)
+                {
+                    stringChars[i] = numbers[random.Next(numbers.Length)];
+                }
+                // 2 Stellen als char 
+                else if (i > 4 && i <= 6)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+                // 2 Stellen als Zahl 
+                else if (i > 6 && i <= 8)
+                {
+                    stringChars[i] = numbers[random.Next(numbers.Length)];
+                }
+                // letzten 2 Stellen als char 
+                else if (i > 8 && i <= 10)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+            }
+
+            //string finalString = new String(stringChars);
+
+            //bool doesCodeExistInDb = SetVoucher(stringChars.ToString());
+
+            if (CheckIfVoucherCodeExists(stringChars.ToString()))
+            {
+                CreateVoucherCode();
+            }
+            else
+            {
+                // TODO: Methode zum speichern des Gutscheins aufrufen und finalString übergeben
+                //CreateAndSaveVoucherInDb(stringChars.ToString());
+            }
+        }
+
+        // TODO: Kontrollieren das es nicht schon einen Gutschein in der DB mit dem Code gibt
+        private bool CheckIfVoucherCodeExists(string voucherCode)
+        {
+            bool doesCodeExistInDb = false;
+            using (var db = new LapWebshopContext())
+            {
+                //allVoucherCodes = db.Gutscheine.Select(x => x.Code);
+            }
+
+            // TODO: Kontrollieren ob der Code schon in der DB ist, wenn ja einen neuen generieren
+            //foreach (var code in allVoucherCodes)
+            //{
+            //    if (code == finalString)
+            //    {
+            //        doesCodeExistInDb = true;
+            //    }
+            //}
+
+            return doesCodeExistInDb;
+        }
+
+        // TODO: Methode um Gutschein zu erstellen und in DB zu speichern (eigene Tabelle mit mit Id, Wert, Code)
+        public void SetVoucher(string voucherCode)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                //Voucher voucher = new Voucher();
+
+                //voucher.Code = CreateVoucherCode();
+
+                //db.Vouchers.Add(voucher);
+                db.SaveChanges();
+            }
+        }
+
+        // TODO: Mehtode um Gutschein aus der DB zu holen (anhand des Codes)
+        public async Task GetVoucher(string voucherCode)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                //var voucher = await db.Voucher.Where(x => x.Code == voucherCode).FirstOrDefaultAsync();
             }
         }
 

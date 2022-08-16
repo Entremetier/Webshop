@@ -70,7 +70,7 @@ namespace Webshop.Controllers
 
             List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
 
-            decimal fullNettoPrice = _orderService.GetFullNettoPriceOfOrderLines(orderLines);
+            decimal fullNettoPrice = await _orderService.GetFullNettoPriceOfOrderLines(orderLines);
             List<FinishedOrderViewModel> finishedOrderVMList = await _orderLineService.GetFinishedOrderVMList(orderLines);
 
             FinishedOrderContainerViewModel finishedOrderContainerVM = new FinishedOrderContainerViewModel();

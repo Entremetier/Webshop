@@ -14,7 +14,7 @@ namespace Webshop.Services
         {
             using (var db = new LapWebshopContext())
             {
-                var order =  await db.Orders.Where(x => x.CustomerId == customer.Id)
+                var order = await db.Orders.Where(x => x.CustomerId == customer.Id)
                     .FirstOrDefaultAsync(e => e.DateOrdered == null);
 
                 // Neue Order erstellen wenn keine vorhanden ist
@@ -77,13 +77,62 @@ namespace Webshop.Services
             }
         }
 
-        public decimal GetFullNettoPriceOfOrderLines(List<OrderLine> orderLines)
+        public async Task<decimal> GetFullNettoPriceOfOrderLines(List<OrderLine> orderLines)
         {
             decimal fullNettoPrice = 0;
-            foreach (var orderLine in orderLines)
+            List<OrderLine> voucherList = new List<OrderLine>();
+
+            using (var db = new LapWebshopContext())
             {
-                fullNettoPrice += orderLine.Amount * orderLine.NetUnitPrice;
+                // TODO: Den Gutschein des Users aus der DB holen (Methode in ProductService)
+                //voucherId = await db.Products.Where(x => x.ProductName == "Gutschein").Select(x => x.Id).FirstOrDefaultAsync();
+
+                // Liste mit Gutscheinen anlegen
+                //foreach (var orderline in orderLines)
+                //{
+                //    if (orderline.Id == voucherId)
+                //    {
+                //        voucherList.Add(orderline);
+                //        orderLines.Remove(orderline);
+                //    }
+                //}
+
+                // Gesamtpreis ohne Gutscheine berechnen
+                foreach (var orderLine in orderLines)
+                {
+                    fullNettoPrice += orderLine.Amount * orderLine.NetUnitPrice;
+                }
+
+                // TODO: Vom fullNettoPrice Geld abziehen bis Gutschein leer ist oder fullNettoPrice = 0
+                //foreach (var orderLineVoucher in voucherList)
+                //{
+                //    if (fullNettoPrice > 0)
+                //    {
+                //        decimal voucherValue = orderLineVoucher.Amount * orderLineVoucher.NetUnitPrice;
+                //        fullNettoPrice -= voucherValue;
+
+                //        // TODO: Gutscheinen den neuen Wert geben, wenn fullNettoPrice < 0 dann wieder gutschreiben
+                //        if (fullNettoPrice < 0)
+                //        {
+
+                //            break;
+                //        }
+                //    }
+                //    else
+                //    {
+                //        break;
+                //    }
+                //}
+
+                // TODO: fullNettoPrice kann nicht kleiner als 0 sein (eventuellen Übertrag wieder auf Gutschein schreiben)
+                //if (fullNettoPrice < 0)
+                //{
+                //    betragFuerGutscheinGutschrift = 
+                //}
+
+                // TODO: Gutschein wieder in der Datenbank mit neuen Werten speichern
             }
+
 
             return fullNettoPrice;
         }
