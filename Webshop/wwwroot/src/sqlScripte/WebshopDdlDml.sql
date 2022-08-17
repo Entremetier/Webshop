@@ -508,9 +508,13 @@ Programme ab und bietet immer genügend Leistungsreserven!',
 --'Gutschein über 200,-€. Kann verschenkt oder selber benutzt werden.',
 --12, 4);
 
+use LapWebshop;
+
 create table Vouchers(
 Id int identity(1,1) primary key,
 [Value] decimal(5,2) not null,
+[Purchase Date] DateTime default(GETDATE()),
+[Voucher Code] nvarchar(10) not null, 
 CustomerId int not null,
 constraint FK_Vouchers_Customer foreign key (CustomerId) references Customer(Id)
 );

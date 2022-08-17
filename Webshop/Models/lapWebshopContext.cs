@@ -1,7 +1,6 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Webshop.ViewModels;
 
 #nullable disable
 
@@ -23,7 +22,10 @@ namespace Webshop.Models
         public virtual DbSet<Manufacturer> Manufacturers { get; set; }
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderLine> OrderLines { get; set; }
+        public virtual DbSet<OrderPayment> OrderPayments { get; set; }
+        public virtual DbSet<Payment> Payments { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<Voucher> Vouchers { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -70,6 +72,8 @@ namespace Webshop.Models
                     .HasMaxLength(50);
 
                 entity.Property(e => e.PwHash).IsRequired();
+
+                entity.Property(e => e.Role).HasMaxLength(20);
 
                 entity.Property(e => e.Salt).IsRequired();
 
@@ -153,6 +157,36 @@ namespace Webshop.Models
                     .HasConstraintName("FK_OrderLine_Product");
             });
 
+            modelBuilder.Entity<OrderPayment>(entity =>
+            {
+                entity.ToTable("OrderPayment");
+
+                entity.Property(e => e.CardOwnerName).HasMaxLength(100);
+
+                entity.Property(e => e.CreditCardNumber)
+                    .HasMaxLength(16)
+                    .IsUnicode(false);
+
+                entity.Property(e => e.SecureCode)
+                    .HasMaxLength(3)
+                    .IsUnicode(false);
+
+                entity.HasOne(d => d.Order)
+                    .WithMany(p => p.OrderPayments)
+                    .HasForeignKey(d => d.OrderId)
+                    .HasConstraintName("FK_OrderPayment_Order");
+
+                entity.HasOne(d => d.Payment)
+                    .WithMany(p => p.OrderPayments)
+                    .HasForeignKey(d => d.PaymentId)
+                    .HasConstraintName("FK_OrderPayment_Payments");
+            });
+
+            modelBuilder.Entity<Payment>(entity =>
+            {
+                entity.Property(e => e.PaymentName).HasMaxLength(30);
+            });
+
             modelBuilder.Entity<Product>(entity =>
             {
                 entity.ToTable("Product");
@@ -180,10 +214,30 @@ namespace Webshop.Models
                     .HasConstraintName("FK_Product_Manufacturer");
             });
 
+            modelBuilder.Entity<Voucher>(entity =>
+            {
+                entity.Property(e => e.PurchaseDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("Purchase Date")
+                    .HasDefaultValueSql("(getdate())");
+
+                entity.Property(e => e.Value).HasColumnType("decimal(5, 2)");
+
+                entity.Property(e => e.VoucherCode)
+                    .IsRequired()
+                    .HasMaxLength(10)
+                    .HasColumnName("Voucher Code");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Vouchers)
+                    .HasForeignKey(d => d.CustomerId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_Vouchers_Customer");
+            });
+
             OnModelCreatingPartial(modelBuilder);
         }
 
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
     }
 }

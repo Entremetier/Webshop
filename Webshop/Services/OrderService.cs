@@ -10,6 +10,13 @@ namespace Webshop.Services
 {
     public class OrderService
     {
+        //private readonly ProductService _productService;
+
+        //public OrderService(ProductService productService)
+        //{
+        //    _productService = productService;
+        //}
+
         public async Task<Order> GetOrder(Customer customer)
         {
             using (var db = new LapWebshopContext())
@@ -61,10 +68,32 @@ namespace Webshop.Services
             }
         }
 
-        public async Task SetOrder(Order order, string firstName, string lastName, string street, string zip, string city)
+        public async Task SetOrder(Order order, List<OrderLine> orderLines, string firstName, string lastName, string street, string zip, string city)
         {
+            Voucher voucher = new Voucher();
+            List<Voucher> voucherList = new List<Voucher>();
+
             using (var db = new LapWebshopContext())
             {
+                // Die OrderLines durchlaufen und schauen ob Gutscheine enthalten sind
+                foreach (var item in orderLines)
+                {
+                    // Wenn Gutscheine enthalten sind die einzelnen Gutscheine erstellen
+                    if (item.Product.ProductName == "Gutschein")
+                    {
+                        for (int i = 0; i < item.Amount; i++)
+                        {
+                            voucher.Value = 200;
+                            voucher.VoucherCode = CreateVoucherCode();
+                            voucher.CustomerId = order.CustomerId;
+                            voucherList.Add(voucher);
+                        }
+                    }
+                }
+                await SaveListToDB(voucherList);
+                
+
+                // Order für den Customer speichern
                 order.DateOrdered = DateTime.Now;
                 order.FirstName = firstName;
                 order.LastName = lastName;
@@ -77,62 +106,98 @@ namespace Webshop.Services
             }
         }
 
-        public async Task<decimal> GetFullNettoPriceOfOrderLines(List<OrderLine> orderLines)
+        private async Task SaveListToDB(List<Voucher> voucherList)
         {
-            decimal fullNettoPrice = 0;
-            List<OrderLine> voucherList = new List<OrderLine>();
+            using (var db = new LapWebshopContext())
+            {
+                // TODO: Den neuen Gutschein in der DB speichern und weitere Gutscheine erstellen 
+                //await db.Vouchers.AddRangeAsync(voucherList);
+                foreach (var item in voucherList)
+                {
+                    db.Vouchers.Add(item);
+                }
+                await db.SaveChangesAsync();
+            }
+        }
+
+        // Methode um Gutscheincode zu ersellen
+        public string CreateVoucherCode()
+        {
+            string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            string numbers = "0123456789";
+            char[] stringChars = new char[10];
+            Random random = new Random();
+
+            for (int i = 0; i < stringChars.Length; i++)
+            {
+                // ersten beiden Stellen als char
+                if (i <= 1)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+                // 2 Stellen als Zahlen
+                else if (i > 1 && i <= 3)
+                {
+                    stringChars[i] = numbers[random.Next(numbers.Length)];
+                }
+                // 2 Stellen als char 
+                else if (i > 3 && i <= 5)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+                // 2 Stellen als Zahl 
+                else if (i > 5 && i <= 7)
+                {
+                    stringChars[i] = numbers[random.Next(numbers.Length)];
+                }
+                // letzten 2 Stellen als char 
+                else if (i > 7 && i <= 9)
+                {
+                    stringChars[i] = chars[random.Next(chars.Length)];
+                }
+            }
+
+            if (CheckIfVoucherCodeExists(stringChars.ToString()))
+            {
+                CreateVoucherCode();
+            }
+
+            return new string(stringChars);
+        }
+
+        // Kontrollieren das es nicht schon einen Gutschein in der DB mit dem Code gibt
+        private bool CheckIfVoucherCodeExists(string voucherCode)
+        {
+            bool doesCodeExistInDb = false;
 
             using (var db = new LapWebshopContext())
             {
-                // TODO: Den Gutschein des Users aus der DB holen (Methode in ProductService)
-                //voucherId = await db.Products.Where(x => x.ProductName == "Gutschein").Select(x => x.Id).FirstOrDefaultAsync();
+                var allVoucherCodes = db.Vouchers.Select(x => x.VoucherCode);
 
-                // Liste mit Gutscheinen anlegen
-                //foreach (var orderline in orderLines)
-                //{
-                //    if (orderline.Id == voucherId)
-                //    {
-                //        voucherList.Add(orderline);
-                //        orderLines.Remove(orderline);
-                //    }
-                //}
+                // Kontrollieren ob der Code schon in der DB ist
+                foreach (var code in allVoucherCodes)
+                {
+                    if (code == voucherCode)
+                    {
+                        doesCodeExistInDb = true;
+                    }
+                }
+            }
 
-                // Gesamtpreis ohne Gutscheine berechnen
+            return doesCodeExistInDb;
+        }
+
+        public decimal GetFullNettoPriceOfOrderLines(List<OrderLine> orderLines)
+        {
+            decimal fullNettoPrice = 0;
+
+            using (var db = new LapWebshopContext())
+            {
                 foreach (var orderLine in orderLines)
                 {
                     fullNettoPrice += orderLine.Amount * orderLine.NetUnitPrice;
                 }
-
-                // TODO: Vom fullNettoPrice Geld abziehen bis Gutschein leer ist oder fullNettoPrice = 0
-                //foreach (var orderLineVoucher in voucherList)
-                //{
-                //    if (fullNettoPrice > 0)
-                //    {
-                //        decimal voucherValue = orderLineVoucher.Amount * orderLineVoucher.NetUnitPrice;
-                //        fullNettoPrice -= voucherValue;
-
-                //        // TODO: Gutscheinen den neuen Wert geben, wenn fullNettoPrice < 0 dann wieder gutschreiben
-                //        if (fullNettoPrice < 0)
-                //        {
-
-                //            break;
-                //        }
-                //    }
-                //    else
-                //    {
-                //        break;
-                //    }
-                //}
-
-                // TODO: fullNettoPrice kann nicht kleiner als 0 sein (eventuellen Übertrag wieder auf Gutschein schreiben)
-                //if (fullNettoPrice < 0)
-                //{
-                //    betragFuerGutscheinGutschrift = 
-                //}
-
-                // TODO: Gutschein wieder in der Datenbank mit neuen Werten speichern
             }
-
 
             return fullNettoPrice;
         }

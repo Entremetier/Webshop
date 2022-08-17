@@ -53,8 +53,9 @@ namespace Webshop.Controllers
 
             var customer = await _userService.GetCurrentUser(email);
             var order = await _orderService.GetOrder(customer);
+            var orderLinesWithProdAndManuf = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(order);
 
-            await _orderService.SetOrder(order, firstName, lastName, street, zip, city);
+            await _orderService.SetOrder(order, orderLinesWithProdAndManuf, firstName, lastName, street, zip, city);
 
             CustomerAndOrderIDViewModel customerOrderVM = new CustomerAndOrderIDViewModel
             {
@@ -70,7 +71,7 @@ namespace Webshop.Controllers
 
             List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
 
-            decimal fullNettoPrice = await _orderService.GetFullNettoPriceOfOrderLines(orderLines);
+            decimal fullNettoPrice = _orderService.GetFullNettoPriceOfOrderLines(orderLines);
             List<FinishedOrderViewModel> finishedOrderVMList = await _orderLineService.GetFinishedOrderVMList(orderLines);
 
             FinishedOrderContainerViewModel finishedOrderContainerVM = new FinishedOrderContainerViewModel();
