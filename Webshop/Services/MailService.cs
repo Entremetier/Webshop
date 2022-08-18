@@ -5,10 +5,11 @@ using System.Linq;
 using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Webshop.Models;
 
 namespace Webshop.Services
 {
-    public static class MailService
+    public class MailService
     {
         public static void SendMail(string firstName, string lastName, string email, Stream pdf)
         {
@@ -22,6 +23,25 @@ namespace Webshop.Services
             {
                 Subject = "Rechnung Tron",
                 Body = "Hallo " + firstName + " " + lastName + ", \n\n im Anhang findest Du deine Rechnung vom " +
+                        DateTime.Now.ToShortDateString() + ".\n\n Vielen Dank für deinen Einkauf bei Tron Webshop"
+            };
+            message.Attachments.Add(attachment);
+
+            mailer.Send(message);
+        }
+
+        public static void SendMailWithVoucherCodes(string firstName, string lastName, string email, Stream pdf)
+        {
+            SmtpClient mailer = new SmtpClient("mail.gmx.net", 587); // das wären die Servereinstellungen für die qualimail mit Port
+            mailer.Credentials = new NetworkCredential("tronShop@gmx.at", "Entremetier82"); // Anmeldedaten zum Emailaccount übergeben
+            mailer.EnableSsl = true; // Secure Sockets Layer für die Verschlüsselung
+            mailer.DeliveryMethod = SmtpDeliveryMethod.Network;
+
+            Attachment attachment = new Attachment(pdf, "Gutschein.pdf");
+            var message = new MailMessage(@"tronShop@gmx.at", email)
+            {
+                Subject = "Gutschein von Tron Webshop",
+                Body = "Hallo " + firstName + " " + lastName + ", \n\n im Anhang findest Du deine Gutscheine mit Code" +
                         DateTime.Now.ToShortDateString() + ".\n\n Vielen Dank für deinen Einkauf bei Tron Webshop"
             };
             message.Attachments.Add(attachment);

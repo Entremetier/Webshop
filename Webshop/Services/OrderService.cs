@@ -5,18 +5,12 @@ using System.Threading.Tasks;
 using Webshop.Models;
 using Microsoft.EntityFrameworkCore;
 using Webshop.ViewModels;
+using Webshop.Controllers;
 
 namespace Webshop.Services
 {
     public class OrderService
     {
-        //private readonly ProductService _productService;
-
-        //public OrderService(ProductService productService)
-        //{
-        //    _productService = productService;
-        //}
-
         public async Task<Order> GetOrder(Customer customer)
         {
             using (var db = new LapWebshopContext())
@@ -70,7 +64,6 @@ namespace Webshop.Services
 
         public async Task SetOrder(Order order, List<OrderLine> orderLines, string firstName, string lastName, string street, string zip, string city)
         {
-            Voucher voucher = new Voucher();
             List<Voucher> voucherList = new List<Voucher>();
 
             using (var db = new LapWebshopContext())
@@ -83,6 +76,7 @@ namespace Webshop.Services
                     {
                         for (int i = 0; i < item.Amount; i++)
                         {
+                            Voucher voucher = new Voucher();
                             voucher.Value = 200;
                             voucher.VoucherCode = CreateVoucherCode();
                             voucher.CustomerId = order.CustomerId;
@@ -90,8 +84,12 @@ namespace Webshop.Services
                         }
                     }
                 }
+                // Gutscheine in DB speichern
                 await SaveListToDB(voucherList);
-                
+
+                // TODO: Seite erstellen um Gutscheine mit Code zu übermitteln
+                //CreateVoucherFile(voucherList);
+
 
                 // Order für den Customer speichern
                 order.DateOrdered = DateTime.Now;
@@ -110,8 +108,7 @@ namespace Webshop.Services
         {
             using (var db = new LapWebshopContext())
             {
-                // TODO: Den neuen Gutschein in der DB speichern und weitere Gutscheine erstellen 
-                //await db.Vouchers.AddRangeAsync(voucherList);
+                // Liste mit Gutscheinen in DB speichern
                 foreach (var item in voucherList)
                 {
                     db.Vouchers.Add(item);

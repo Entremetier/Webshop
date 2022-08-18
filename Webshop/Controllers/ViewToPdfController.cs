@@ -23,9 +23,9 @@ namespace Webshop.Controllers
         private readonly OrderLineService _orderLineService;
 
         public ViewToPdfController(
-            UserService userService, 
-            OrderService orderService, 
-            PdfService pdfService, 
+            UserService userService,
+            OrderService orderService,
+            PdfService pdfService,
             OrderLineService orderLineService)
         {
             _userService = userService;
@@ -34,6 +34,7 @@ namespace Webshop.Controllers
             _orderLineService = orderLineService;
         }
 
+        // Rechnung senden und beim User bedanken
         [Authorize]
         public async Task<IActionResult> Checkout(string firstName, string lastName, string street, string zip, string city)
         {
@@ -52,6 +53,9 @@ namespace Webshop.Controllers
             }
 
             var customer = await _userService.GetCurrentUser(email);
+            customer.PwHash = null;
+            customer.Salt = null;
+
             var order = await _orderService.GetOrder(customer);
             var orderLinesWithProdAndManuf = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(order);
 
@@ -92,12 +96,7 @@ namespace Webshop.Controllers
             return RedirectToAction("UserCheckout", customerOrderVM);
         }
 
-        [Authorize]
-        public IActionResult UserCheckout(CustomerAndOrderIDViewModel customerAndOrderVM)
-        {
-            return View(customerAndOrderVM);
-        }
-
+        // Die Rechnung für den Kunden
         [Authorize]
         private static ViewAsPdf UserCheck(FinishedOrderContainerViewModel finishedOrderVM)
         {
@@ -106,6 +105,45 @@ namespace Webshop.Controllers
             return new ViewAsPdf(viewName, finishedOrderVM)
             {
                 FileName = "Rechnung",
+                PageOrientation = Orientation.Portrait,
+                PageSize = Size.A4,
+                PageMargins = new Margins(15, 20, 15, 25),
+            };
+        }
+
+        // Seite um beim Kunden für Einkauf zu bedanken
+        [Authorize]
+        public IActionResult UserCheckout(CustomerAndOrderIDViewModel customerAndOrderVM)
+        {
+            return View(customerAndOrderVM);
+        }
+
+        // TODO: Seite für Gutscheine aufrufen und Mail senden
+        [Authorize]
+        public async Task CreateVoucherFile(List<Voucher> voucherList)
+        {
+            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
+            string email = User.FindFirstValue(ClaimTypes.Email);
+
+            var customer = await _userService.GetCurrentUser(email);
+            customer.PwHash = null;
+            customer.Salt = null;
+
+            var viewAsPdf = VoucherWithCodesView(voucherList);
+            byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
+            Stream fileStream = new MemoryStream(pdfAsByteArray);
+            MailService.SendMailWithVoucherCodes(customer.FirstName, customer.LastName, email, fileStream);
+        }
+
+        // Die Ansicht mit den Gutscheinen 
+        [Authorize]
+        private static ViewAsPdf VoucherWithCodesView(List<Voucher> voucherList)
+        {
+            string viewName = "VoucherCode";
+
+            return new ViewAsPdf(viewName, voucherList)
+            {
+                FileName = "Gutscheine",
                 PageOrientation = Orientation.Portrait,
                 PageSize = Size.A4,
                 PageMargins = new Margins(15, 20, 15, 25),
