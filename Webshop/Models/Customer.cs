@@ -10,6 +10,7 @@ namespace Webshop.Models
         public Customer()
         {
             Orders = new HashSet<Order>();
+            Vouchers = new HashSet<Voucher>();
         }
 
         public int Id { get; set; }
@@ -22,7 +23,9 @@ namespace Webshop.Models
         public string City { get; set; }
         public byte[] PwHash { get; set; }
         public byte[] Salt { get; set; }
+        //public string Role { get; set; }
 
         public virtual ICollection<Order> Orders { get; set; }
+        public virtual ICollection<Voucher> Vouchers { get; set; }
     }
 }
