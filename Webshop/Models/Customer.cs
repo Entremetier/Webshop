@@ -9,6 +9,7 @@ namespace Webshop.Models
     {
         public Customer()
         {
+            Bewertungens = new HashSet<Bewertungen>();
             Orders = new HashSet<Order>();
         }
 
@@ -23,6 +24,7 @@ namespace Webshop.Models
         public byte[] PwHash { get; set; }
         public byte[] Salt { get; set; }
 
+        public virtual ICollection<Bewertungen> Bewertungens { get; set; }
         public virtual ICollection<Order> Orders { get; set; }
     }
 }

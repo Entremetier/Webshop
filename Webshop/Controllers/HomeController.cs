@@ -21,6 +21,7 @@ namespace Webshop.Controllers
         private readonly UserService _userService;
         private readonly OrderLineService _orderLineService;
         private readonly OrderService _orderService;
+        private readonly BewertungsService _bewertungsService;
 
         public HomeController(
             CategoryService categoryService,
@@ -28,7 +29,8 @@ namespace Webshop.Controllers
             ManufacturerService manufacturerService,
             UserService userService,
             OrderLineService orderLineService,
-            OrderService orderService)
+            OrderService orderService,
+            BewertungsService bewertungsService)
         {
             _categoryService = categoryService;
             _productService = productService;
@@ -36,6 +38,7 @@ namespace Webshop.Controllers
             _userService = userService;
             _orderLineService = orderLineService;
             _orderService = orderService;
+            _bewertungsService = bewertungsService;
         }
 
         public IActionResult Index()
@@ -46,19 +49,6 @@ namespace Webshop.Controllers
         [HttpPost]
         public async Task<IActionResult> Shop(string searchString, string categorie, string manufacturer)
         {
-            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
-            //string email = User.FindFirstValue(ClaimTypes.Email);
-
-            // Customer aus der DB holen
-            //var customer = await _userService.GetCurrentUser(email);
-
-            // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
-            //if (customer != null)
-            //{
-            //    var order = await _orderService.GetOrder(customer);
-            //    ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
-            //}
-
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(searchString, categorie, manufacturer);
 
@@ -105,19 +95,6 @@ namespace Webshop.Controllers
         [HttpGet]
         public async Task<IActionResult> Shop()
         {
-            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
-            //string email = User.FindFirstValue(ClaimTypes.Email);
-
-            // Customer aus der DB holen
-            //var customer = await _userService.GetCurrentUser(email);
-
-            // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
-            //if (customer != null)
-            //{
-            //    var order = await _orderService.GetOrder(customer);
-            //    ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
-            //}
-
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(null, null, null);
 

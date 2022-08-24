@@ -21,6 +21,9 @@ namespace Webshop.Models
         public int ManufacturerId { get; set; }
         public int CategoryId { get; set; }
         public List<Product> ProductList { get; set; }
+        public int Punkte { get; set; }
+        public List<string> Comments { get; set;}
+        public string CustomerFirstChar { get; set; }
         public virtual Category Category { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
         public virtual ICollection<OrderLine> OrderLines { get; set; }

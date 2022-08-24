@@ -17,6 +17,7 @@ namespace Webshop.Models
         {
         }
 
+        public virtual DbSet<Bewertungen> Bewertungens { get; set; }
         public virtual DbSet<Category> Categories { get; set; }
         public virtual DbSet<Customer> Customers { get; set; }
         public virtual DbSet<Manufacturer> Manufacturers { get; set; }
@@ -37,6 +38,23 @@ namespace Webshop.Models
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.HasAnnotation("Relational:Collation", "Latin1_General_CI_AS");
+
+            modelBuilder.Entity<Bewertungen>(entity =>
+            {
+                entity.ToTable("Bewertungen");
+
+                entity.Property(e => e.Comment).HasMaxLength(160);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.Bewertungens)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_Bewertungen_Customer");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.Bewertungens)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_Bewertungen_Product");
+            });
 
             modelBuilder.Entity<Category>(entity =>
             {

@@ -9,6 +9,7 @@ namespace Webshop.Models
     {
         public Product()
         {
+            Bewertungens = new HashSet<Bewertungen>();
             OrderLines = new HashSet<OrderLine>();
             ProduktAufruves = new HashSet<ProduktAufrufe>();
         }
@@ -23,6 +24,7 @@ namespace Webshop.Models
 
         public virtual Category Category { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
+        public virtual ICollection<Bewertungen> Bewertungens { get; set; }
         public virtual ICollection<OrderLine> OrderLines { get; set; }
         public virtual ICollection<ProduktAufrufe> ProduktAufruves { get; set; }
     }

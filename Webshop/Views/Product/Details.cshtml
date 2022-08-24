@@ -10,6 +10,16 @@
 </h1>
 <span style="font-size: 1.2rem">Preis:&nbsp;@ViewBag.BruttoPrice&nbsp;€</span>
 
+@if (TempData["DidntBuyItYet"] != null)
+{
+    <div class="row justify-content-center mt-3">
+
+        <div class="alert alert-danger col-6 text-center">
+            @TempData["DidntBuyItYet"]
+        </div>
+    </div>
+}
+
 @if (TempData["EnoughItemsInCart"] != null)
 {
     <div class="row justify-content-end mt-3">
@@ -63,8 +73,19 @@ else
     <div class="row mb-3">
         <a asp-controller="Bewertung" asp-action="Bewertungen" asp-route-id="@Model.Id" class="noTextDecoration">Bewertung für dieses Produkt abgeben</a>
     </div>
-    <div class="row">
+    <div class="row mb-3">
         <a asp-controller="Home" asp-action="Shop" class="noTextDecoration">Zurück zu den Produkten</a>
+    </div>
+    <div class="row mt-5">
+        <label style="font-size:1.3rem">Dieses Produkt hat @Model.Punkte/5 Punkten</label>
+    </div>
+    <div class="row mt-3 mb-3">
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="commentBox mb-3">
+                <label>@Model.CustomerFirstChar . sagt:<br /> @comment</label>
+            </div>
+        }
     </div>
 </div>
 

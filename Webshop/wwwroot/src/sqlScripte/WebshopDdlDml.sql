@@ -504,4 +504,12 @@ Calls int not null,
 constraint FK_ProduktAufrufe_Product foreign key (ProductId) references Product(Id)
 );
 
-drop table ProduktAufrufe;
+create table Bewertungen(
+Id int primary key identity(1,1),
+Comment nvarchar(160),
+Points int,
+CustomerId int, 
+ProductId int,
+constraint FK_Bewertungen_Product foreign key (ProductId) references Product(Id),
+constraint FK_Bewertungen_Customer foreign key (CustomerId) references Customer(Id)
+);
