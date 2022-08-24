@@ -1,0 +1,41 @@
+﻿@model Webshop.Models.Product
+
+@{
+    ViewData["Title"] = "Bewertung";
+}
+
+<h1>
+    Produkt bewerten
+</h1>
+
+@*@if (TempData["UserNotLoggedIn"] != null)
+    {
+        <div class="row justify-content-center mt-3">
+            <div class="alert alert-danger col-6 text-center">
+                @TempData["UserNotLoggedIn"]
+            </div>
+        </div>
+    }
+    else
+    {*@
+<div class="row mt-3">
+    <div class="col-12 d-inline-flex justify-content-center align-items-center">
+        <img src="@ViewBag.ImagePath" asp-append-version="true" alt="@Html.DisplayFor(model => model.Manufacturer.Name) @Html.DisplayFor(model => model.ProductName)" id="productDetailsImage" />
+    </div>
+</div>
+<form asp-controller="Bewertung" asp-action="Bewerten" asp-route-id="@Model.Id">
+    <div class="row mt-5 ">
+        <select name="amount" asp-items="@ViewBag.Punkte" class="form-control dropDownListSize d-inline btn btn-outline-dark"></select>
+        <p class="ml-3">/5 Punkten</p>
+    </div>
+    <div class="row mt-3">
+        <textarea placeholder="Hier können Sie eine Bertung eingeben, es stehen 160 Zeichen zur verfügung" rows="5" style="width: 100%;"></textarea>
+    </div>
+    <div class="row mt-3 justify-content-center">
+        <input type="submit" value="Senden" class="btn btn-outline-dark custom-btn-size" />
+    </div>
+</form>
+<div class="row mt-3">
+    <a asp-controller="Home" asp-action="Shop" class="noTextDecoration">Zurück zum Shop</a>
+</div>
+@* } *@

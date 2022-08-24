@@ -33,6 +33,7 @@ namespace Webshop
             services.AddScoped<OrderService>();
             services.AddScoped<OrderLineService>();
             services.AddScoped<PdfService>();
+            services.AddScoped<BewertungsService>();
 
             services.AddDbContext<LapWebshopContext>();
             services.AddControllersWithViews();

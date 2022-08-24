@@ -23,6 +23,7 @@ namespace Webshop.Models
         public virtual DbSet<Order> Orders { get; set; }
         public virtual DbSet<OrderLine> OrderLines { get; set; }
         public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProduktAufrufe> ProduktAufruves { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -179,6 +180,17 @@ namespace Webshop.Models
                     .HasForeignKey(d => d.ManufacturerId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_Product_Manufacturer");
+            });
+
+            modelBuilder.Entity<ProduktAufrufe>(entity =>
+            {
+                entity.ToTable("ProduktAufrufe");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProduktAufruves)
+                    .HasForeignKey(d => d.ProductId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("FK_ProduktAufrufe_Product");
             });
 
             OnModelCreatingPartial(modelBuilder);

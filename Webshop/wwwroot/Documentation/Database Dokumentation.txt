@@ -1,6 +1,6 @@
 Update-Database 
 -> in PM-Console eingeben um Datenbank über Änderungen im Code zu ändern
 
-Scaffold-DbContext "Server=PCDC53A0F88E97;Database=lapWebshop; Persist Security Info=True; User ID=SA;Password=Admin2019$;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
+Scaffold-DbContext "Server=PCDC53A0F88E97;Database=WebshopLapSim; Persist Security Info=True; User ID=SA;Password=Admin2019$;" Microsoft.EntityFrameworkCore.SqlServer -OutputDir Models -Force
 -> das wird aber alle Anpassungen in den Models überschreiben (außer in den ViewModels)
 -> anwenden wenn man änderungen an der Datenbank macht und diese in den Code übernehmen will

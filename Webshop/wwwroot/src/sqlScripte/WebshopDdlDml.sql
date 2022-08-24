@@ -494,3 +494,14 @@ Möglichkeiten richtet sich das vollständig erneuerte Lenovo ThinkPad T480 defini
 normaler Laptop daheim und unterwegs genutzt werden. Der leistungskräftige Intel Core i5-8350U arbeitet zuverlässig auch multiple
 Programme ab und bietet immer genügend Leistungsreserven!',
 5, 3);
+
+use WebshopLapSim;
+
+create table ProduktAufrufe(
+Id int primary key identity(1,1),
+ProductId int not null,
+Calls int not null,
+constraint FK_ProduktAufrufe_Product foreign key (ProductId) references Product(Id)
+);
+
+drop table ProduktAufrufe;

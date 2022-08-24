@@ -1,4 +1,4 @@
-﻿@model Webshop.Models.Product
+﻿@model Webshop.Models.ProductWithListOfChoosenProduct
 
 @{
     ViewData["Title"] = @Html.DisplayFor(model => model.ProductName);
@@ -39,11 +39,31 @@ else
 <div class="container">
     <div class="row">
         <div class="justify-content-center mt-3">
+            @* Aufrufe im ViewBag anzeigen *@
+            <p>@ViewBag.Calls&nbsp; Aufruf(e)</p>
             <p>@Html.DisplayFor(model => model.Description)</p>
         </div>
     </div>
+
+    <div class="row justify-content-center">
+        @foreach (var item in Model.ProductList)
+        {
+            @* Cards um die vorgeschlagenen Produkte anzuzeigen *@
+            <div class="card m-3" style="width: 8rem;">
+                <img class="card-img-top card-image-size" src="@item.ImagePath" asp-append-version="true" alt="@item.ProductName">
+                <div class="card-body">
+                    <h5 class="card-title card-text-size">@item.ProductName</h5>
+                    <a asp-controller="Product" asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-dark card-text-size">Zum Produkt</a>
+                </div>
+            </div>
+
+        }
+    </div>
+
+    <div class="row mb-3">
+        <a asp-controller="Bewertung" asp-action="Bewertungen" asp-route-id="@Model.Id" class="noTextDecoration">Bewertung für dieses Produkt abgeben</a>
+    </div>
     <div class="row">
-        @*<a asp-action="Edit" asp-route-id="@Model.Id">Edit</a> |*@
         <a asp-controller="Home" asp-action="Shop" class="noTextDecoration">Zurück zu den Produkten</a>
     </div>
 </div>

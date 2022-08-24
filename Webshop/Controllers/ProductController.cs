@@ -78,10 +78,36 @@ namespace Webshop.Controllers
                     TempData["EnoughItemsInCart"] = "Maximale Anzahl im Warenkorb!";
                 }
 
+                await _productService.IncreaseCounterByOne(product);
+
                 ViewBag.Amount = itemAmount;
                 ViewBag.ImagePath = product.ImagePath;
+                ViewBag.Calls = await _productService.GetAmountOfProductCalls(product);
 
-                return View(product);
+                List<Product> products = new List<Product>();
+                foreach (var item in await _productService.GetProductsFromSameManufacturer(product))
+                {
+                    products.Add(item);
+                } 
+
+                foreach (var item in await _productService.GetProductsFromSameCategory(product))
+                {
+                    products.Add(item);
+                }
+
+                ProductWithListOfChoosenProduct productWithListOfChoosenProduct = new ProductWithListOfChoosenProduct
+                    {
+                    Id = product.Id,
+                    ProductName = product.ProductName,
+                    NetUnitPrice = product.NetUnitPrice,
+                    ImagePath = product.ImagePath,
+                    Description = product.Description,
+                    ManufacturerId = product.ManufacturerId,
+                    CategoryId = product.CategoryId,
+                    ProductList = products
+                };
+
+                return View(productWithListOfChoosenProduct);
             }
         }
 

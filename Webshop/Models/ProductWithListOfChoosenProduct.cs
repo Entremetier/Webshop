@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-
-#nullable disable
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace Webshop.Models
 {
-    public partial class Product
+    public class ProductWithListOfChoosenProduct
     {
-        public Product()
+        public ProductWithListOfChoosenProduct()
         {
             OrderLines = new HashSet<OrderLine>();
             ProduktAufruves = new HashSet<ProduktAufrufe>();
@@ -20,7 +20,7 @@ namespace Webshop.Models
         public string Description { get; set; }
         public int ManufacturerId { get; set; }
         public int CategoryId { get; set; }
-
+        public List<Product> ProductList { get; set; }
         public virtual Category Category { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
         public virtual ICollection<OrderLine> OrderLines { get; set; }

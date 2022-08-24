@@ -21,13 +21,122 @@ namespace Webshop.Services
             _orderService = orderService;
             _userService = userService;
         }
+
+        // Hole Produkte aus der DB mit dem selben Hersteller, aber nicht das Produkt was wir gerade anschauen
+        public async Task<List<Product>> GetProductsFromSameManufacturer(Product product)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                List<Product> productList = await db.Products
+                    .Where(x => x.ManufacturerId == product.ManufacturerId && x.Id != product.Id)
+                    .ToListAsync();
+
+                List<Product> choosenProductsWithSameManufacturer = ChooseProductsFromList(productList);
+                return choosenProductsWithSameManufacturer;
+            }
+        }
+
+        // Wähle zufällig zwei Produkte aus der gleichen Kategorie (Hersteller ist egal) aus, wenn es nur ein Produkt nimm nur das
+        public async Task<List<Product>> GetProductsFromSameCategory(Product product)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                List<Product> productList = await db.Products
+                    .Where(x => x.CategoryId == product.CategoryId && x.Id != product.Id)
+                    .ToListAsync();
+
+                List<Product> choosenProductsWithSameCategory = ChooseProductsFromList(productList);
+                return choosenProductsWithSameCategory;
+            }
+        }
+
+        // Zufällig zwei Produkte auswählen
+        private List<Product> ChooseProductsFromList(List<Product> productList)
+        {
+            List<Product> choosenProductsWithSameManufacturer = new List<Product>();
+            Random random = new Random();
+
+            if (productList.Count < 2)
+            {
+                Product product = productList.First();
+                choosenProductsWithSameManufacturer.Add(product);
+            }
+            else
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    List<int> usedNumbers = new List<int>();
+                    int randomNumber = random.Next(1, productList.Count());
+
+                    Product product = productList[randomNumber];
+                    choosenProductsWithSameManufacturer.Add(product);
+                    usedNumbers.Add(randomNumber);
+                }
+            }
+
+            return choosenProductsWithSameManufacturer;
+        }
+
+        public async Task IncreaseCounterByOne(Product product)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                // Produkt aus DB holen
+                var productFromDb = await db.ProduktAufruves.Where(x => x.ProductId == product.Id)
+                    .FirstOrDefaultAsync();
+
+                // Wenn das Produkt nicht vorhanden ist
+                if (productFromDb == null)
+                {
+                    // Produkt in die neue Tabelle schreiben
+                    await AddProductToProduktAufrufe(product);
+                    await IncreaseCounterByOne(product);
+                }
+                else
+                {
+                    // Produkt in der AnzahlAufrufe Tabelle suchen und um eins erhöhen
+                    productFromDb.Calls = productFromDb.Calls + 1;
+
+                    db.Update(productFromDb);
+                    await db.SaveChangesAsync();
+                }
+            }
+        }
+
+        private async Task AddProductToProduktAufrufe(Product product)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                ProduktAufrufe aufruf = new ProduktAufrufe()
+                {
+                    ProductId = product.Id,
+                    Calls = 0,
+                };
+
+                await db.AddAsync(aufruf);
+                await db.SaveChangesAsync();
+            }
+        }
+
+        public async Task<int> GetAmountOfProductCalls(Product product)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                var calls = await db.ProduktAufruves.Where(x => x.ProductId == product.Id)
+                    .Select(x => x.Calls)
+                    .FirstOrDefaultAsync();
+
+                return calls;
+            }
+        }
+
         public async Task<Product> GetProductWithManufacturerAndCategory(int id)
         {
             using (var db = new LapWebshopContext())
             {
                 var product = await db.Products.Include(m => m.Manufacturer)
                     .Include(c => c.Category)
-                    .FirstOrDefaultAsync(x => x.Id == id);                    
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 return product;
             }
@@ -102,7 +211,7 @@ namespace Webshop.Services
                         itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
                     }
                 }
-                    return itemAmount;
+                return itemAmount;
             }
         }
 
