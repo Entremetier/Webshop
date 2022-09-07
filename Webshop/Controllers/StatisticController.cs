@@ -19,7 +19,7 @@ namespace Webshop.Controllers
             _productService = productService;
         }
 
-        // TODO: Liste der Produkte holen und an die View übergeben
+        // Liste der Produkte holen und an die View übergeben
         public async Task<IActionResult> BestProductsWithGraph()
         {
             List<ProductsWithAmount> products = await _productService.GetProductsWithAmount();
