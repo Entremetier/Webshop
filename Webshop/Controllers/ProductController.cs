@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -92,6 +93,7 @@ namespace Webshop.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles="Admin")]
         public async Task<IActionResult> AddProduct()
         {
             List<SelectListItem> allManufacturer = _manufacturerService.GetAllManufacturersAsSelectListItem();
@@ -107,6 +109,7 @@ namespace Webshop.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> AddProduct(string productName, string netUnitPrice, IFormFile imageName, string description, string manufacturer, string categorie)
         {
             string imagePath = "";
@@ -147,6 +150,7 @@ namespace Webshop.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeProductDetails(int? id)
         {
             if (id == null)
@@ -194,6 +198,7 @@ namespace Webshop.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> ChangeProductDetails(int id, string productName, string netUnitPrice, string imagePath, string description, string manufacturer, string categorie)
         {
             if (
@@ -213,6 +218,7 @@ namespace Webshop.Controllers
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             await _productService.DeleteProduct(id);
