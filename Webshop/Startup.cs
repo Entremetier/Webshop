@@ -45,6 +45,7 @@ namespace Webshop
                     opts.LoginPath = "/Customer/Login";
                     // Zeit wann der Cookie abläuft
                     opts.ExpireTimeSpan = TimeSpan.FromMinutes(15);
+                    //opts.AccessDeniedPath = "/Home/Shop";
                     // der Cookie kann, nach der Hälfte, seiner Zeitspanne erneuert werden
                     opts.SlidingExpiration = true;
                 });

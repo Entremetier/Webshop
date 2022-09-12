@@ -37,9 +37,13 @@
                     <ul class="navbar-nav ml-auto">
                         @if (User.Identity.IsAuthenticated)
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Cart">Warenkorb</a>
-                            </li>
+                            if (User.IsInRole("Customer"))
+                            {
+                                <li class="nav-item">
+                                    <a class="nav-link text-dark" asp-area="" asp-controller="ShoppingCart" asp-action="Cart">Warenkorb</a>
+                                </li>
+
+                            }
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-area="" asp-controller="Customer" asp-action="Logout">Logout</a>
                             </li>
