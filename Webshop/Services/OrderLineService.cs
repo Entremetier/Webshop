@@ -103,6 +103,15 @@ namespace Webshop.Services
 
                 orderLine.Amount = newAmount;
 
+                // Das aktuelle Produkt holen
+                var product = await _productService.GetProductWithManufacturer(productId);
+
+                // Die Menge kann nicht größer sein als der Lagerbestand, wenn doch auf Menge im Lager setzen
+                if (orderLine.Amount > product.Lagerstand.Value)
+                {
+                    orderLine.Amount = product.Lagerstand.Value;
+                }
+
                 db.Update(orderLine);
                 await db.SaveChangesAsync();
 

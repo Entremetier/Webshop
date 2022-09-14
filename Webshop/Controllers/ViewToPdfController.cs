@@ -68,6 +68,7 @@ namespace Webshop.Controllers
 
             var completeOrder = await _pdfService.GetPdfData(finishedOrder);
 
+            // Producte mit Menge
             List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrderWithProductAndManufacturer(completeOrder);
 
             decimal fullNettoPrice = _orderService.GetFullNettoPriceOfOrderLines(orderLines);
@@ -80,15 +81,29 @@ namespace Webshop.Controllers
             finishedOrderContainerVM.FullNettoPrice = fullNettoPrice;
             finishedOrderContainerVM.Taxes = order.PriceTotal - fullNettoPrice;
 
-            //Task.Run(async () =>
-            //{
             var viewAsPdf = UserCheck(finishedOrderContainerVM);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);
             Stream fileStream = new MemoryStream(pdfAsByteArray);
             MailService.SendMail(customer.FirstName, customer.LastName, customer.Email, fileStream);
-            //});
+
+            // Lagerbestand verringern aufrufen
+            ChangeLagerbestand(orderLines);
 
             return RedirectToAction("UserCheckout", customerOrderVM);
+        }
+
+        // Lagerbestand verringern 
+        public void ChangeLagerbestand(List<OrderLine> orderLines)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                foreach (var orderLine in orderLines)
+                {
+                    orderLine.Product.Lagerstand -= orderLine.Amount;
+                    db.Update(orderLine);
+                    db.SaveChanges();
+                }
+            }
         }
 
         [Authorize]

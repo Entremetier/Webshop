@@ -48,6 +48,23 @@
                         <span class="">Produktnummer:&nbsp;@item.ProductNumber</span>
                         <span class="">Stückpreis:&nbsp;@item.BruttoPrice&nbsp;€</span>
                         <span class="">Gesamt:&nbsp;@item.RowPrice&nbsp;€</span>
+                        @if (item.Lagerstand > 0)
+                        {
+                            <div class="row mt-3">
+                                <div class="alert ml-3 alert-success col-6 text-center">
+                                    <p>Artikel vorrätig</p>
+                                </div>
+                            </div>
+                        }
+                        else if (item.Lagerstand == 0 || item.Lagerstand < 0)
+                        {
+                            <div class="row mt-3">
+                                <div class="alert ml-3 alert-warning col-6 text-center">
+                                    <p>Kontaktieren Sie uns für diesen Artikel.</p>
+                                    <a class="noTextDecoration" href="mailto:tronwebshop@gmx.com">E-Mail senden</a>
+                                </div>
+                            </div>
+                        }
                         <span>
                             Menge:&nbsp;
                             <a asp-controller="ShoppingCart"

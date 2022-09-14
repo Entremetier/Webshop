@@ -10,6 +10,7 @@ namespace Webshop.Models
         public Order()
         {
             OrderLines = new HashSet<OrderLine>();
+            OrderPayments = new HashSet<OrderPayment>();
         }
 
         public int Id { get; set; }
@@ -24,5 +25,6 @@ namespace Webshop.Models
 
         public virtual Customer Customer { get; set; }
         public virtual ICollection<OrderLine> OrderLines { get; set; }
+        public virtual ICollection<OrderPayment> OrderPayments { get; set; }
     }
 }

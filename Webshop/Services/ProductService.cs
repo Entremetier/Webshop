@@ -27,7 +27,7 @@ namespace Webshop.Services
             {
                 var product = await db.Products.Include(m => m.Manufacturer)
                     .Include(c => c.Category)
-                    .FirstOrDefaultAsync(x => x.Id == id);                    
+                    .FirstOrDefaultAsync(x => x.Id == id);
 
                 return product;
             }
@@ -80,17 +80,35 @@ namespace Webshop.Services
                         .Select(x => x.Amount)
                         .FirstOrDefaultAsync();
 
+                    int mengeDieHinzugefuegtWerdenKann = product.Lagerstand.Value - productAmountInCart;
+
                     // Wenn schon 10 Stk von einem Product im Warenkorb sind
                     if (productAmountInCart >= MaxItemsInCart.MaxItemsInShoppingCart)
                     {
-                        //itemAmount.Add(new SelectListItem { Value = "0", Text = "0" });
+                        // nichts zurück für TempData
+                    }
+                    // Die im Lager befindliche Menge wurde hinzugefügt
+                    else if (mengeDieHinzugefuegtWerdenKann <= 0)
+                    {
+                        itemAmount.Add(new SelectListItem { Value = 0.ToString(), Text = 0.ToString() });
                     }
                     else
                     {
                         int amountCustomerCanAdd = MaxItemsInCart.MaxItemsInShoppingCart - productAmountInCart;
-                        for (int i = 1; i <= amountCustomerCanAdd; i++)
+
+                        if (amountCustomerCanAdd >= product.Lagerstand)
                         {
-                            itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                            for (int i = 1; i <= mengeDieHinzugefuegtWerdenKann; i++)
+                            {
+                                itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                            }
+                        }
+                        else
+                        {
+                            for (int i = 1; i <= amountCustomerCanAdd; i++)
+                            {
+                                itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
+                            }
                         }
                     }
                 }
@@ -102,7 +120,7 @@ namespace Webshop.Services
                         itemAmount.Add(new SelectListItem { Value = i.ToString(), Text = i.ToString() });
                     }
                 }
-                    return itemAmount;
+                return itemAmount;
             }
         }
 
@@ -183,8 +201,20 @@ namespace Webshop.Services
                     .Include(p => p.Category)
                     .Include(p => p.Manufacturer);
             }
-
             return products;
+        }
+
+        public async Task<int> GetLagerstand(int ProductId)
+        {
+            using (var db = new LapWebshopContext())
+            {
+                var lagerbestand = await db.Products
+                    .Where(x => x.Id == ProductId)
+                    .Select(x => x.Lagerstand)
+                    .FirstOrDefaultAsync();
+
+                return lagerbestand.Value;
+            }
         }
     }
 }

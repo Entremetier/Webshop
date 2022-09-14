@@ -17,6 +17,7 @@ namespace Webshop.ViewModels
         public decimal? BruttoPrice { get; set; }
         public decimal? RowPrice { get; set; }
         public string ImagePath { get; set; }
+        public int Lagerstand { get; set; }
         public List<SelectListItem> SelectList { get; set; }
     }
 }

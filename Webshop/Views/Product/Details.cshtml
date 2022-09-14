@@ -20,13 +20,37 @@
 }
 else
 {
-    <div class="row justify-content-end mr-2 mt-3">
-        <span class="pt-2 mr-3">Menge:</span>
-        <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@Model.Id" method="post" class="ml-3">
-            <select name="amount" asp-items="@ViewBag.Amount" class="form-control dropDownListSize d-inline btn btn-outline-dark"></select>
-            <input type="submit" name="addToCartButton" value="In den Warenkorb legen" class="btn btn-outline-dark" />
-        </form>
-    </div>
+    @if (User.IsInRole("Customer") || !User.Identity.IsAuthenticated)
+    {
+        @if (Model.Lagerstand > 0)
+        {
+            <div class="row mt-3">
+                <div class="alert ml-3 alert-success col-5 text-center">
+                    <p>Vorrätig: @Model.Lagerstand Stück</p>
+                </div>
+            </div>
+        }
+        else if (Model.Lagerstand <= 0)
+        {
+            <div class="row mt-3">
+                <div class="alert ml-3 alert-warning col-5 text-center">
+                    <p>Kontaktieren Sie unseren Kundenservice für diesen Artikel.</p>
+                    <a class="noTextDecoration" href="mailto:tronwebshop@gmx.com">E-Mail senden</a>
+                </div>
+            </div>
+        }
+
+        @if (Model.Lagerstand > 0)
+        {
+            <div class="row justify-content-end mr-2 mt-3">
+                <span class="pt-2 mr-3">Menge:</span>
+                <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@Model.Id" method="post" class="ml-3">
+                    <select name="amount" asp-items="@ViewBag.Amount" class="form-control dropDownListSize d-inline btn btn-outline-dark"></select>
+                    <input type="submit" name="addToCartButton" value="In den Warenkorb legen" class="btn btn-outline-dark" />
+                </form>
+            </div>
+        }
+    }
 }
 
 <hr class="mt-3" />

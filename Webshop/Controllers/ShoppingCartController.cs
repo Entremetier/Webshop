@@ -113,6 +113,7 @@ namespace Webshop.Controllers
                         ImagePath = product.ImagePath,
                         Orderline = item,
                         RowPrice = item.Amount * _productService.CalcPrice(product, categoryAndTaxRate),
+                        Lagerstand = await _productService.GetLagerstand(item.ProductId),
                         SelectList = _orderLineService.FillSelectList(item.Amount)
                     });
                 }

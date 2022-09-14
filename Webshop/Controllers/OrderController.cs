@@ -50,6 +50,17 @@ namespace Webshop.Controllers
             var categoryAndTaxRate = await _categoryService.GetAllCategoriesAndTaxRates();
             List<OrderLine> orderLines = await _orderLineService.GetOrderLinesOfOrder(order);
 
+            // Wenn in der Zwischenzeit jemand den Artikel im Warenkorb gekauft hat, oder weniger im Lager ist als gewollt die
+            // Menge anpassen
+            foreach (var item in orderLines)
+            {
+                var product = await _productService.GetProductWithManufacturer(item.ProductId);
+                if (item.Amount > product.Lagerstand.Value)
+                {
+                    item.Amount = product.Lagerstand.Value;
+                }
+            }
+
             // Wenn der Gesamtpreis der Waren im Warenkorb kleiner gleich 0 ist in den Shop umleiten
             if (order.PriceTotal <= 0)
             {
@@ -76,7 +87,7 @@ namespace Webshop.Controllers
                         ImagePath = product.ImagePath,
                         Orderline = item,
                         RowPrice = item.Amount * _productService.CalcPrice(product, categoryAndTaxRate),
-                        SelectList = _orderLineService.FillSelectList(item.Amount)
+                        SelectList = _orderLineService.FillSelectList(item.Amount),
                     });
                 }
 

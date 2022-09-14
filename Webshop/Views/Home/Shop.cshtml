@@ -32,6 +32,7 @@
     </div>
 </div>
 
+
 @foreach (var item in Model)
 {
     <hr />
@@ -60,19 +61,23 @@
                         <p>Mehr anzeigen...</p>
                     </a>
                     @{
-                        if (User.Identity.IsAuthenticated)
+                        if (User.IsInRole("Customer"))
                         {
-                            @* Kein Formular, damit die Methode nicht die Seite neu lädt *@
-                            <input type="submit" data-id="@item.Id" value="In den Warenkorb legen"
-                                   class="btn btn-outline-dark addToCartButton mt-3" />
-                        }
-                        else
-                        {
-                            @* Wenn der User nicht angemeldet ist, die Methode durchlaufen um zum Login zu schicken *@
-                            <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id"
-                                  method="post">
-                                <input type="submit" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
-                            </form>
+
+                            if (User.Identity.IsAuthenticated && item.Lagerstand > 0)
+                            {
+                                @* Kein Formular, damit die Methode nicht die Seite neu lädt *@
+                                <input type="submit" data-id="@item.Id" value="In den Warenkorb legen"
+                                       class="btn btn-outline-dark addToCartButton mt-3" />
+                            }
+                            else if (item.Lagerstand > 0)
+                            {
+                                @* Wenn der User nicht angemeldet ist, die Methode durchlaufen um zum Login zu schicken *@
+                                <form asp-controller="ShoppingCart" asp-action="AddToShoppingCart" asp-route-id="@item.Id"
+                                      method="post">
+                                    <input type="submit" value="In den Warenkorb legen" class="btn btn-outline-dark mt-3" />
+                                </form>
+                            }
                         }
                     }
                 </div>

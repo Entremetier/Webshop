@@ -46,19 +46,6 @@ namespace Webshop.Controllers
         [HttpPost]
         public async Task<IActionResult> Shop(string searchString, string categorie, string manufacturer)
         {
-            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
-            //string email = User.FindFirstValue(ClaimTypes.Email);
-
-            // Customer aus der DB holen
-            //var customer = await _userService.GetCurrentUser(email);
-
-            // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
-            //if (customer != null)
-            //{
-            //    var order = await _orderService.GetOrder(customer);
-            //    ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
-            //}
-
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(searchString, categorie, manufacturer);
 
@@ -105,19 +92,6 @@ namespace Webshop.Controllers
         [HttpGet]
         public async Task<IActionResult> Shop()
         {
-            // Die E-Mail des angemeldeten User mittels E-Mail-Claim bekommen
-            //string email = User.FindFirstValue(ClaimTypes.Email);
-
-            // Customer aus der DB holen
-            //var customer = await _userService.GetCurrentUser(email);
-
-            // Wenn der Customer angemeldet ist seine offene Order suchen oder eine neue erstellen
-            //if (customer != null)
-            //{
-            //    var order = await _orderService.GetOrder(customer);
-            //    ViewBag.OrderLines = await _orderLineService.GetOrderLinesOfOrder(order);
-            //}
-
             // Produktliste befüllen
             IQueryable<Product> products = _productService.FilterList(null, null, null);
 
@@ -157,6 +131,14 @@ namespace Webshop.Controllers
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+
+        public IActionResult Lagerbestand()
+        {
+            // Produktliste befüllen
+            IQueryable<Product> products = _productService.FilterList(null, null, null);
+
+            return View(products);
         }
     }
 }

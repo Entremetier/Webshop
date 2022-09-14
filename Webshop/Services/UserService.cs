@@ -85,13 +85,21 @@ namespace Webshop.Services
             return hashedPasswordBytes;
         }
 
-        public ClaimsIdentity GetClaimsIdentity(string email, int userId)
+        public ClaimsIdentity GetClaimsIdentity(string email, Customer user)
         {
             // Claims erstellen um im späteren Verlauf den Benutzer zu identifizieren
             var emailClaim = new Claim(ClaimTypes.Email, email);
-            var idClaim = new Claim(ClaimTypes.NameIdentifier, userId.ToString());
+            var idClaim = new Claim(ClaimTypes.NameIdentifier, user.Id.ToString());
 
-            var claims = new List<Claim>() { emailClaim, idClaim };
+            // Wenn in der Datenbank noch User sind die keine Rolle haben werden sie auf Customer gesetzt
+            if (user.Role == null)
+            {
+                user.Role = "Customer";
+            }
+
+            var roleClaim = new Claim(ClaimTypes.Role, user.Role);
+
+            var claims = new List<Claim>() { emailClaim, idClaim, roleClaim };
 
             // Die Identität des Users zurückschicken
             var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -115,5 +123,7 @@ namespace Webshop.Services
                 return customer;
             }
         }
+
+
     }
 }
