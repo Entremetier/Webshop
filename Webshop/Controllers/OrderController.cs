@@ -54,11 +54,11 @@ namespace Webshop.Controllers
             // Menge anpassen
             foreach (var item in orderLines)
             {
-                var product = await _productService.GetProductWithManufacturer(item.ProductId);
-                if (item.Amount > product.Lagerstand.Value)
-                {
-                    item.Amount = product.Lagerstand.Value;
-                }
+                //var product = await _productService.GetProductWithManufacturer(item.ProductId);
+                //if (item.Amount > product.Lagerstand.Value)
+                //{
+                //    item.Amount = product.Lagerstand.Value;
+                //}
             }
 
             // Wenn der Gesamtpreis der Waren im Warenkorb kleiner gleich 0 ist in den Shop umleiten

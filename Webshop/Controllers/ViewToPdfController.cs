@@ -79,7 +79,7 @@ namespace Webshop.Controllers
             finishedOrderContainerVM.Order = order;
             finishedOrderContainerVM.FinishedOrderViewModels = finishedOrderVMList;
             finishedOrderContainerVM.FullNettoPrice = fullNettoPrice;
-            finishedOrderContainerVM.Taxes = order.PriceTotal - fullNettoPrice;
+            finishedOrderContainerVM.Taxes = order.PriceTotal.Value - fullNettoPrice;
 
             var viewAsPdf = UserCheck(finishedOrderContainerVM);
             byte[] pdfAsByteArray = await viewAsPdf.BuildFile(ControllerContext);

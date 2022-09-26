@@ -1,4 +1,4 @@
--- drop database LapWebshop;
+ --drop database LapWebshop;
 
 create database LapWebshop;
 
@@ -27,6 +27,7 @@ Email nvarchar(50) not null,
 Street nvarchar(80) not null,
 Zip char(4) not null,
 City nvarchar(50) not null,
+[Role] nvarchar(10),
 PwHash varbinary(max) not null,
 Salt varbinary(max) not null,
 );
@@ -47,6 +48,9 @@ CategoryId int not null,
 constraint FK_Product_Manufacturer foreign key (ManufacturerId) references Manufacturer(Id),
 constraint FK_Product_Category foreign key (CategoryId) references Category(Id)
 );
+
+alter table Product
+add Lagerstand int not null default 20;
 
 create table [Order] (
 Id int identity(1,1) primary key,

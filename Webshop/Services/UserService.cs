@@ -43,7 +43,8 @@ namespace Webshop.Services
                 Street = customer.Street.Trim(),
                 Zip = customer.Zip.Trim(),
                 PwHash = hash,
-                Salt = saltBytes
+                Salt = saltBytes,
+                Role = "Customer"
             };
 
             _context.Customers.Add(newCustomer);
@@ -92,10 +93,10 @@ namespace Webshop.Services
             var idClaim = new Claim(ClaimTypes.NameIdentifier, user.Id.ToString());
 
             // Wenn in der Datenbank noch User sind die keine Rolle haben werden sie auf Customer gesetzt
-            if (user.Role == null)
-            {
-                user.Role = "Customer";
-            }
+            //if (user.Role == null)
+            //{
+            //    user.Role = "Customer";
+            //}
 
             var roleClaim = new Claim(ClaimTypes.Role, user.Role);
 

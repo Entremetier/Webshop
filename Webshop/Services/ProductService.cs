@@ -80,7 +80,7 @@ namespace Webshop.Services
                         .Select(x => x.Amount)
                         .FirstOrDefaultAsync();
 
-                    int mengeDieHinzugefuegtWerdenKann = product.Lagerstand.Value - productAmountInCart;
+                    int mengeDieHinzugefuegtWerdenKann = product.Lagerstand - productAmountInCart;
 
                     // Wenn schon 10 Stk von einem Product im Warenkorb sind
                     if (productAmountInCart >= MaxItemsInCart.MaxItemsInShoppingCart)
@@ -213,7 +213,7 @@ namespace Webshop.Services
                     .Select(x => x.Lagerstand)
                     .FirstOrDefaultAsync();
 
-                return lagerbestand.Value;
+                return lagerbestand;
             }
         }
     }

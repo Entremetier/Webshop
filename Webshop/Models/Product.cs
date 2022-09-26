@@ -19,7 +19,7 @@ namespace Webshop.Models
         public string Description { get; set; }
         public int ManufacturerId { get; set; }
         public int CategoryId { get; set; }
-        public int? Lagerstand { get; set; }
+        public int Lagerstand { get; set; }
 
         public virtual Category Category { get; set; }
         public virtual Manufacturer Manufacturer { get; set; }
